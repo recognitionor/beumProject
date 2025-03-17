@@ -5,6 +5,7 @@ package com.kal.beum
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
@@ -19,6 +20,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -68,7 +71,14 @@ fun App() {
 
 @Composable
 fun BottomNavigationBar(navController: NavController, currentRoute: String?) {
-    NavigationBar {
+    NavigationBar(
+        modifier = Modifier.clip(
+            RoundedCornerShape(
+                topStart = 32.dp,
+                topEnd = 32.dp
+            )
+        )
+    ) {
         NavigationBarItem(selected = currentRoute == Route.Home.toRoute(), // 상태 업데이트 필요
             onClick = { navController.navigate(Route.Home.toRoute()) },
             label = { Text("Home") },
