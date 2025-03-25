@@ -1,0 +1,26 @@
+package com.kal.beum.core.presentation
+
+import androidx.compose.ui.graphics.Color
+
+object BeumColors {
+    val DarkBlue = Color(0xFF0B405E)
+    val DesertWhite = Color(0xFFF7F7F7)
+    val SandYellow = Color(0xFFFFBD64)
+    val LightBlue = Color(0xFF9AD9FF)
+    val PrimarySkyBlue = Color(0x0CBAF5)
+    val White = Color(0xFFFFFFFF)
+    val Gray_800 = Color(0xFF282828)
+    val Gray_400 = Color(0xFFAEB1B8)
+    val KaKaoColor = Color(0xFFFEE500)
+    val Black = Color(0xFF111111)
+    val baseAlphaBlackDarkBlack200A: Color = Color(0x33000000)
+    val baseGrayLightGray800: Color = Color(0xFF282828)
+
+    val baseGrayLightGray600: Color = Color(0xFF666666)
+    val baseGrayLightGray500: Color = Color(0xFF8E8E8E)
+    val baseGrayLightGray100: Color = Color(0xFFEEEEEE)
+    val baseGrayLightGray400: Color = Color(0xFFAEAEAE)
+
+    val primaryPrimarySkyblue: Color = Color(0xFF0CBAF5)
+}
+

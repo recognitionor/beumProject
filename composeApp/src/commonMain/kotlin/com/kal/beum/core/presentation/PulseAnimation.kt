@@ -13,7 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
-import com.kal.beum.core.presentation.SandYellow
+import com.kal.beum.core.presentation.BeumColors.SandYellow
 
 @Composable
 fun PulseAnimation(modifier: Modifier = Modifier) {

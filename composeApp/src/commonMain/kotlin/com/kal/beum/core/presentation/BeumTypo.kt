@@ -1,0 +1,17 @@
+package com.kal.beum.core.presentation
+
+import androidx.compose.ui.unit.sp
+
+object BeumTypo {
+    val TypoScaleText700 = 28.sp
+    val TypoScaleText600 = 24.sp
+    val TypoLineHeight700 = 36.sp
+    val TypoScaleText300 = 16.sp
+    val baseLineheightTextLineheight300 = 22.sp
+    val TypoScaleText200 = 15.sp
+    val lineHeightBody4 = 17.sp
+
+    val TypoScaleText150 = 14.sp
+    val TypoScaleText500 = 20.sp
+
+}
