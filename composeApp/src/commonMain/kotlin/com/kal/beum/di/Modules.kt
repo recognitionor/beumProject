@@ -10,6 +10,8 @@ import com.kal.beum.home.domain.HomeRepository
 import com.kal.beum.home.presentation.HomeViewModel
 import com.kal.beum.main.data.DefaultAppRepository
 import com.kal.beum.main.data.database.AppDatabase
+import com.kal.beum.main.data.network.MockLoginDataSource
+import com.kal.beum.main.data.network.RemoteLoginDataSource
 import com.kal.beum.main.domain.AppRepository
 import com.kal.beum.main.presentation.MainViewModel
 import org.koin.core.module.Module
@@ -28,8 +30,8 @@ val sharedModules = module {
     single {
         get<DatabaseFactory>().create().setDriver(BundledSQLiteDriver()).build()
     }
-
     singleOf(::MockHomeDataSource).bind<RemoteHomeDataSource>()
+    singleOf(::MockLoginDataSource).bind<RemoteLoginDataSource>()
 //    singleOf(::KtorRemoteHomeDataSource).bind<RemoteHomeDataSource>()
 
     singleOf(::DefaultHomeRepository).bind<HomeRepository>()

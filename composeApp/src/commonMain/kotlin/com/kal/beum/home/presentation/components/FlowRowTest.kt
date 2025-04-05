@@ -71,7 +71,7 @@ fun FlowRowTest(viewModel: HomeViewModel, modifier: Modifier = Modifier) {
         }
     }
     Column(
-        modifier = Modifier.fillMaxSize().horizontalScroll(scrollState)
+        modifier = Modifier.horizontalScroll(scrollState)
     ) {
         val halfSize = (state.homeCommentList.size + 1) / 2 // 아이템 개수를 반으로 나누기
 

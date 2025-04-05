@@ -17,9 +17,7 @@ class MockHomeDataSource(
                 HomeCommentDto(5, "얍!!!"),
                 HomeCommentDto(6, "로운이의 시간표 월요일, 화요일, 수요일, 목요일, 금요일, 토요일, 일요일"),
                 HomeCommentDto(7, "난늘 코딩이야 다른짓하지말고 코딩이야")
-
             )
         )
     }
-
 }

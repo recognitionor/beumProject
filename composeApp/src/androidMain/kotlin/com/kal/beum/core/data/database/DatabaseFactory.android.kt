@@ -10,7 +10,7 @@ actual class DatabaseFactory(
         val appContext = context.applicationContext
         val dbFile = appContext.getDatabasePath(AppDatabase.DB_NAME)
 
-        return _root_ide_package_.androidx.room.Room.databaseBuilder(
+        return _root_ide_package_.androidx.room.Room.databaseBuilder<AppDatabase>(
             context = appContext,
             name = dbFile.absolutePath
         )

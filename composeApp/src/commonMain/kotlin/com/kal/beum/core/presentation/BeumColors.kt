@@ -22,5 +22,11 @@ object BeumColors {
     val baseGrayLightGray400: Color = Color(0xFFAEAEAE)
 
     val primaryPrimarySkyblue: Color = Color(0xFF0CBAF5)
+    val baseGrayLightGray900: Color = Color(0xFF111111)
+    val baseCoolGrayLightGray100: Color = Color(0xFFEBEDF2)
+    val baseAlphaBlackLightBlack: Color = Color(0xFF000000)
+    val baseAlphaWhiteDarkWhite: Color = Color(0xFFFFFFFF)
+    val surfaceGray100_2: Color = Color(0xFF000000)
+
 }
 

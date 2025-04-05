@@ -8,6 +8,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -33,6 +35,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import beumproject.composeapp.generated.resources.Res
 import beumproject.composeapp.generated.resources.apple
 import beumproject.composeapp.generated.resources.google
@@ -44,8 +47,10 @@ import com.kal.beum.core.presentation.BeumColors.White
 import com.kal.beum.core.presentation.BeumDimen
 import com.kal.beum.core.presentation.BeumDimen.Px1RemSpacing07
 import com.kal.beum.core.presentation.BeumTypo
+import com.kal.beum.main.domain.SocialType
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
@@ -55,6 +60,9 @@ fun SplashScreen() {
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+
+        val viewModel = koinViewModel<MainViewModel>()
+        val state by viewModel.state.collectAsStateWithLifecycle()
 
         val topSpacerHeight = remember { Animatable(300f) } // 시작은 250.dp
         val titleAlpha = remember { Animatable(0f) }
@@ -117,38 +125,46 @@ fun SplashScreen() {
             ), modifier = Modifier.alpha(descriptionAlpha.value)
         )
 
-        Column(
-            modifier = Modifier.fillMaxWidth().height(844.dp).background(color = White)
-                .alpha(buttonAlpha.value).padding(start = 20.dp, end = 20.dp, bottom = 45.dp),
-            verticalArrangement = Arrangement.Bottom,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            SocialLoginBtn(
-                BeumColors.KaKaoColor,
-                BeumColors.KaKaoColor,
-                "카카오",
-                painterResource(Res.drawable.kakao),
-                BeumColors.Black
+        if (state.userInfo == null) {
+            Column(
+                modifier = Modifier.fillMaxWidth().height(844.dp).background(color = White)
+                    .alpha(buttonAlpha.value).padding(start = 20.dp, end = 20.dp, bottom = 45.dp),
+                verticalArrangement = Arrangement.Bottom,
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                SocialLoginBtn(
+                    BeumColors.KaKaoColor,
+                    BeumColors.KaKaoColor,
+                    SocialType.KAKAO,
+                    painterResource(Res.drawable.kakao),
+                    BeumColors.Black
+                ) {
+                    viewModel.socialLogin(SocialType.KAKAO_CODE)
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+                SocialLoginBtn(
+                    White,
+                    BeumColors.baseAlphaBlackDarkBlack200A,
+                    SocialType.GOOGLE,
+                    painterResource(Res.drawable.google),
+                    BeumColors.Black
+                ) {
+                    viewModel.socialLogin(SocialType.GOOGLE_CODE)
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+                SocialLoginBtn(
+                    BeumColors.Black,
+                    BeumColors.Black,
+                    SocialType.APPLE,
+                    painterResource(Res.drawable.apple),
+                    White
+                ) {
+                    viewModel.socialLogin(SocialType.APPLE_CODE)
+                }
 
             }
-            Spacer(modifier = Modifier.height(10.dp))
-            SocialLoginBtn(
-                White,
-                BeumColors.baseAlphaBlackDarkBlack200A,
-                "구글",
-                painterResource(Res.drawable.google),
-                BeumColors.Black
-            ) {
-
-            }
-            Spacer(modifier = Modifier.height(10.dp))
-            SocialLoginBtn(
-                BeumColors.Black, BeumColors.Black, "애플", painterResource(Res.drawable.apple), White
-            ) {
-
-            }
-
+        } else {
+            Spacer(modifier = Modifier.height(844.dp).fillMaxWidth())
         }
     }
 }

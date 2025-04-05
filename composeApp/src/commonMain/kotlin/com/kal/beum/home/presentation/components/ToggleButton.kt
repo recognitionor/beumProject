@@ -2,6 +2,7 @@ package com.kal.beum.home.presentation.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -22,20 +23,26 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontVariation.width
 import androidx.compose.ui.unit.dp
 import beumproject.composeapp.generated.resources.Res
 import beumproject.composeapp.generated.resources.angel_abled
 import beumproject.composeapp.generated.resources.angel_disabled
 import beumproject.composeapp.generated.resources.devil_abled
 import beumproject.composeapp.generated.resources.devil_disabled
+import com.kal.beum.core.presentation.BeumColors
+import com.kal.beum.core.presentation.BeumColors.surfaceGray100_2
+import com.kal.beum.core.presentation.BeumDimen
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun ToggleButton(modifier: Modifier = Modifier, toggle: (Boolean) -> Unit) {
+fun ToggleButton(toggle: (Boolean) -> Unit) {
     var isToggled by remember { mutableStateOf(false) }
 
     Box(
-        modifier = modifier.clip(RoundedCornerShape(50)).width(136.dp).height(72.dp)
+        modifier = Modifier.border(
+            width = 0.dp, color = Color.Transparent, shape = RoundedCornerShape(size = 100.dp)
+        ).clip(RoundedCornerShape(size = 100.dp))
             .wrapContentSize(Alignment.Center)
             .background(if (isToggled) Color.Black else Color.White).clickable {
                 isToggled = !isToggled
@@ -48,7 +55,7 @@ fun ToggleButton(modifier: Modifier = Modifier, toggle: (Boolean) -> Unit) {
         ) {
 
             Box(
-                modifier.clip(RoundedCornerShape(90))
+                Modifier.clip(RoundedCornerShape(90))
                     .background(if (isToggled) Color.Transparent else Color.Black).width(64.dp)
             ) {
                 Image(
@@ -61,7 +68,7 @@ fun ToggleButton(modifier: Modifier = Modifier, toggle: (Boolean) -> Unit) {
             }
 
             Box(
-                modifier.clip(RoundedCornerShape(90))
+                Modifier.clip(RoundedCornerShape(90))
                     .background(if (isToggled) Color.White else Color.Transparent).width(64.dp)
             ) {
                 Image(

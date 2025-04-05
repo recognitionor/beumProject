@@ -27,6 +27,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.home.presentation.HomeScreen
 import com.kal.beum.home.presentation.components.OnboardingScreen
 import com.kal.beum.main.presentation.MainScreen
@@ -36,8 +37,12 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Preview
 fun App() {
     MaterialTheme {
-        MainScreen()
-
+        androidx.compose.material3.Surface( // 여기서 Surface 추가!
+            modifier = Modifier.fillMaxSize(),
+            color = BeumColors.baseCoolGrayLightGray100
+        ) {
+            MainScreen()
+        }
     }
 }
 

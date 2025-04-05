@@ -7,7 +7,7 @@ import androidx.room.TypeConverters
 import com.kal.beum.core.data.database.StringListTypeConverter
 
 @Database(
-    entities = [AppEntity::class], version = 1
+    entities = [AppEntity::class, UserInfoEntity::class], version = 1
 )
 @TypeConverters(
     StringListTypeConverter::class

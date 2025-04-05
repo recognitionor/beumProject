@@ -12,4 +12,10 @@ interface AppDao {
 
     @Query("SELECT isOnBoardingDone FROM AppEntity WHERE id = 1 LIMIT 1")
     suspend fun getOnBoardingStatus(): Boolean
+
+    @Query("SELECT * FROM UserInfoEntity WHERE id = 1 LIMIT 1")
+    suspend fun getLoginInfo(): UserInfoEntity?
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun setLoginInfo(userInfoEntity: UserInfoEntity)
 }

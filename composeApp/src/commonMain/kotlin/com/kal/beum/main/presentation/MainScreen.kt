@@ -2,6 +2,7 @@ package com.kal.beum.main.presentation
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
@@ -11,6 +12,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,8 +27,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.kal.beum.Route
+import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.home.presentation.HomeScreen
-import com.kal.beum.home.presentation.components.OnboardingScreen
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -37,43 +39,47 @@ fun MainScreen() {
 
     val navController = rememberNavController()
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+    if (!state.isSplashDone) {
+        SplashScreen()
+    } else {
+        Scaffold(topBar = {}, bottomBar = {
+            BottomNavigationBar(navController = navController, currentRoute)
+        }) { innerPadding ->
 
-//    SplashScreen()
+            // NavHost 내에서 시작 화면을 정의합니다.
 
-    PermissionScreen()
+            Surface(
+                modifier = Modifier.fillMaxSize(),
+                color = BeumColors.baseCoolGrayLightGray100
+            ) {
+                NavHost(
+                    navController = navController,
+                    startDestination = Route.Home.toRoute(), // Home이 NavGraph의 시작점으로 정의됩니다.
+                    modifier = Modifier.fillMaxSize().padding(innerPadding)
+                ) {
+                    composable(Route.Home.toRoute()) {
+                        HomeScreen()
+                    }
+                    composable(Route.Community.toRoute()) {
+                        CommunityScreen(navController)
+                    }
+                    composable(Route.Level("1").toRoute()) { backStackEntry ->
+                        val levelId = backStackEntry.arguments?.getString("id")
+                        LevelScreen(levelId)
+                    }
+                    composable(Route.MyInfo("userId").toRoute()) { backStackEntry ->
+                        val myInfoId = backStackEntry.arguments?.getString("id")
+                        MyInfoScreen(myInfoId)
+                    }
+                }
+            }
+        }
+    }
 
 
-//    if (false) {
-//        Box(modifier = Modifier.fillMaxSize()) {
-//            OnboardingScreen { }
-//        }
-//    } else {
-//        Scaffold(topBar = {}, bottomBar = {
-//            BottomNavigationBar(navController = navController, currentRoute)
-//        }) {
-//            // NavHost 내에서 시작 화면을 정의합니다.
-//            NavHost(
-//                navController = navController,
-//                startDestination = Route.Home.toRoute(), // Home이 NavGraph의 시작점으로 정의됩니다.
-//                modifier = Modifier.fillMaxSize()
-//            ) {
-//                composable(Route.Home.toRoute()) {
-//                    HomeScreen()
-//                }
-//                composable(Route.Community.toRoute()) {
-//                    CommunityScreen(navController)
-//                }
-//                composable(Route.Level("1").toRoute()) { backStackEntry ->
-//                    val levelId = backStackEntry.arguments?.getString("id")
-//                    LevelScreen(levelId)
-//                }
-//                composable(Route.MyInfo("userId").toRoute()) { backStackEntry ->
-//                    val myInfoId = backStackEntry.arguments?.getString("id")
-//                    MyInfoScreen(myInfoId)
-//                }
-//            }
-//        }
-//    }
+//    PermissionScreen()
+
+
 }
 
 @Composable
