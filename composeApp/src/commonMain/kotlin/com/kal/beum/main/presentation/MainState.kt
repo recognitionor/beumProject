@@ -6,4 +6,5 @@ data class MainState(
     val isOnboardingDone: Boolean = false,
     val isSplashDone: Boolean = false,
     val userInfo: UserInfo? = null,
+    val isDevil: Boolean = false,
 )

@@ -35,8 +35,8 @@ import org.koin.compose.viewmodel.koinViewModel
 fun MainScreen() {
     val viewModel = koinViewModel<MainViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
-    println("MainScreen : " + state.isOnboardingDone)
-
+    println("MainScreen state.isOnboardingDone : " + state.isOnboardingDone)
+    println("MainScreen state.isDevil : " + state.isDevil)
     val navController = rememberNavController()
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
     if (!state.isSplashDone) {
@@ -50,7 +50,7 @@ fun MainScreen() {
 
             Surface(
                 modifier = Modifier.fillMaxSize(),
-                color = BeumColors.baseCoolGrayLightGray100
+                color = if (state.isDevil) BeumColors.baseGrayLightGray800 else BeumColors.baseCoolGrayLightGray100
             ) {
                 NavHost(
                     navController = navController,
@@ -58,7 +58,9 @@ fun MainScreen() {
                     modifier = Modifier.fillMaxSize().padding(innerPadding)
                 ) {
                     composable(Route.Home.toRoute()) {
-                        HomeScreen()
+                        HomeScreen(state.isDevil) { isDevil ->
+                            viewModel.devilToggle(isDevil)
+                        }
                     }
                     composable(Route.Community.toRoute()) {
                         CommunityScreen(navController)

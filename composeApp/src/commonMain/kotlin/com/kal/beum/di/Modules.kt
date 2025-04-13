@@ -10,6 +10,7 @@ import com.kal.beum.home.domain.HomeRepository
 import com.kal.beum.home.presentation.HomeViewModel
 import com.kal.beum.main.data.DefaultAppRepository
 import com.kal.beum.main.data.database.AppDatabase
+import com.kal.beum.main.data.database.MIGRATION_1_2
 import com.kal.beum.main.data.network.MockLoginDataSource
 import com.kal.beum.main.data.network.RemoteLoginDataSource
 import com.kal.beum.main.domain.AppRepository
@@ -28,7 +29,9 @@ val sharedModules = module {
     }
 
     single {
-        get<DatabaseFactory>().create().setDriver(BundledSQLiteDriver()).build()
+        get<DatabaseFactory>().create().setDriver(BundledSQLiteDriver())
+            .addMigrations(MIGRATION_1_2).build()
+//            .fallbackToDestructiveMigration(true).build()
     }
     singleOf(::MockHomeDataSource).bind<RemoteHomeDataSource>()
     singleOf(::MockLoginDataSource).bind<RemoteLoginDataSource>()

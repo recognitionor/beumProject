@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -22,12 +21,15 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.home.domain.HomeData
 import com.kal.beum.home.presentation.HomeViewModel
 import com.kal.beum.utils.pxToDp
@@ -40,7 +42,7 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun FlowRowTest(viewModel: HomeViewModel, modifier: Modifier = Modifier) {
+fun FlowRow(isDevil: Boolean, viewModel: HomeViewModel) {
 
     val state by viewModel.state.collectAsStateWithLifecycle()
     val scrollState = rememberScrollState()
@@ -77,12 +79,12 @@ fun FlowRowTest(viewModel: HomeViewModel, modifier: Modifier = Modifier) {
 
         // 🔥 첫 번째 줄 (상위 FlowRow)
         FlowRow(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().height(40.dp),
             horizontalArrangement = Arrangement.spacedBy(pxToDp(16f)),
             verticalArrangement = Arrangement.Center // 위쪽 정렬,
         ) {
             state.homeCommentList.take(halfSize).forEach { item -> // 첫 번째 줄 아이템
-                FlowBox(item)
+                FlowBox(item, isDevil)
             }
         }
 
@@ -90,30 +92,46 @@ fun FlowRowTest(viewModel: HomeViewModel, modifier: Modifier = Modifier) {
 
         // 🔥 두 번째 줄 (하위 FlowRow)
         FlowRow(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth().height(40.dp),
             horizontalArrangement = Arrangement.spacedBy(pxToDp(16f)),
             verticalArrangement = Arrangement.Top // 위쪽 정렬
         ) {
             state.homeCommentList.drop(halfSize).forEach { item -> // 두 번째 줄 아이템
-                FlowBox(item)
+                FlowBox(item, isDevil)
             }
         }
     }
 }
 
 @Composable
-fun FlowBox(item: HomeData) {
+fun FlowBox(item: HomeData, isDevilMode: Boolean) {
+    val devilColor = Brush.linearGradient(
+        colors = listOf(
+            Color(0xFF696C70), Color(0xFF33383E), Color(0xFF2B3036)
+        ), start = Offset(0f, 0f),          // 좌상단
+        end = Offset(1000f, 1000f)       // 우하단 방향
+    )
+
+    val angelColor = Brush.verticalGradient(
+        colors = listOf(
+            Color(0xFFFFFFFF), Color(0xFFF2EFED), Color(0xFFF3F3F3)
+        )
+    )
+
     Box(
-        modifier = Modifier.clip(RoundedCornerShape(pxToDp(100f))).background(Color.White)
-            .height(40.dp).padding(end = 16.dp, bottom = 2.dp, start = 16.dp) // 간격 최소화
+        modifier = Modifier.height(40.dp).clip(RoundedCornerShape(pxToDp(100f)))
+            .background(brush = if (isDevilMode) devilColor else angelColor)
+            .padding(end = 16.dp, bottom = 2.dp, start = 16.dp) // 간격 최소화
             .wrapContentWidth(Alignment.CenterHorizontally), contentAlignment = Alignment.Center
     ) {
         Text(
-            text = item.concernMsg, style = TextStyle(
+            text = item.concernMsg,
+            style = TextStyle(
                 fontWeight = FontWeight.Medium, // ✅ 500 (Medium)
                 lineHeight = 19.sp, // ✅ 줄 높이 (1.0x 비율)
                 letterSpacing = 0.sp // ✅ 글자 간격 0
-            )
+            ),
+            color = if (isDevilMode) BeumColors.baseAlphaWhiteLightWhite700A else BeumColors.baseGrayLightGray600
         )
     }
 }

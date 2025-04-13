@@ -7,8 +7,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -23,21 +21,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontVariation.width
 import androidx.compose.ui.unit.dp
 import beumproject.composeapp.generated.resources.Res
 import beumproject.composeapp.generated.resources.angel_abled
 import beumproject.composeapp.generated.resources.angel_disabled
 import beumproject.composeapp.generated.resources.devil_abled
 import beumproject.composeapp.generated.resources.devil_disabled
-import com.kal.beum.core.presentation.BeumColors
-import com.kal.beum.core.presentation.BeumColors.surfaceGray100_2
-import com.kal.beum.core.presentation.BeumDimen
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun ToggleButton(toggle: (Boolean) -> Unit) {
-    var isToggled by remember { mutableStateOf(false) }
+fun ToggleButton(toggle: Boolean, toggleClicked: (Boolean) -> Unit) {
+    var isToggled by remember { mutableStateOf(toggle) }
 
     Box(
         modifier = Modifier.border(
@@ -46,7 +40,7 @@ fun ToggleButton(toggle: (Boolean) -> Unit) {
             .wrapContentSize(Alignment.Center)
             .background(if (isToggled) Color.Black else Color.White).clickable {
                 isToggled = !isToggled
-                toggle.invoke(isToggled)
+                toggleClicked.invoke(isToggled)
             }.padding(4.dp), contentAlignment = Alignment.Center
     ) {
         Row(

@@ -1,7 +1,5 @@
 package com.kal.beum.main.data
 
-import com.kal.beum.core.domain.Result
-import com.kal.beum.home.data.network.RemoteHomeDataSource
 import com.kal.beum.main.data.database.AppDao
 import com.kal.beum.main.data.database.AppEntity
 import com.kal.beum.main.data.database.UserInfoEntity
@@ -42,7 +40,33 @@ class DefaultAppRepository(
         emit(appDao.getOnBoardingStatus())
     }
 
+    override fun isDevil(): Flow<Boolean> = flow {
+        emit(appDao.getAppEntity()?.isDevil == false)
+    }
+
+    override fun getAppEntity(): Flow<AppEntity> = flow {
+        println("getAppEntity()")
+        appDao.getAppEntity()?.let {
+            emit(it)
+        }
+    }
+
+    override suspend fun setIsDevil(isDevil: Boolean) {
+        val appEntity: AppEntity? = appDao.getAppEntity()
+        if (appEntity == null) {
+            appDao.insertAppEntity(AppEntity(isOnBoardingDone = false, isDevil = isDevil))
+        } else {
+            appDao.updateIsDevil(isDevil = isDevil)
+        }
+    }
+
     override suspend fun setOnBoardingDone(isOnBoardingDone: Boolean) {
-        appDao.insertOnBoardingStatus(AppEntity(isOnBoardingDone = isOnBoardingDone))
+        println("setOnBoardingDone : $isOnBoardingDone")
+        val appEntity: AppEntity? = appDao.getAppEntity()
+        if (appEntity == null) {
+            appDao.insertAppEntity(AppEntity(isOnBoardingDone = isOnBoardingDone, isDevil = false))
+        } else {
+            appDao.insertAppEntity(appEntity.copy(isOnBoardingDone = isOnBoardingDone))
+        }
     }
 }

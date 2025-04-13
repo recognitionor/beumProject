@@ -5,5 +5,5 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class AppEntity(
-    @PrimaryKey(autoGenerate = false) val id: Int = 1, val isOnBoardingDone: Boolean
+    @PrimaryKey(autoGenerate = false) val id: Int = 1, val isOnBoardingDone: Boolean, val isDevil: Boolean = false
 )

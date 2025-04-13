@@ -1,6 +1,6 @@
 package com.kal.beum.home.presentation
 
-import FlowRowTest
+import FlowRow
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,9 +14,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -31,8 +30,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import beumproject.composeapp.generated.resources.Res
-import beumproject.composeapp.generated.resources.alarm
 import beumproject.composeapp.generated.resources.angel
+import beumproject.composeapp.generated.resources.devil
+import beumproject.composeapp.generated.resources.icon_arrow_right
 import beumproject.composeapp.generated.resources.sf_pro
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumDimen
@@ -43,22 +43,17 @@ import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(toggle: Boolean, toggleClicked: (isDevil: Boolean) -> Unit) {
     val viewModel = koinViewModel<HomeViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
-    println("~~~HomeScreen ${state.homeCommentList}")
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(64.dp),
-            contentAlignment = Alignment.Center
+            modifier = Modifier.fillMaxWidth().height(64.dp), contentAlignment = Alignment.Center
         ) {
-            ToggleButton { isDevil ->
-                println("isDevil : $isDevil")
-            }
+            ToggleButton(toggle, toggleClicked)
 
             Row(
                 modifier = Modifier.fillMaxSize(),
@@ -66,7 +61,8 @@ fun HomeScreen() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Spacer(modifier = Modifier.weight(1f))
-                AlarmButton()
+                AlarmButton(toggle)
+                Spacer(modifier = Modifier.width(20.dp))
             }
         }
 
@@ -77,7 +73,7 @@ fun HomeScreen() {
             modifier = Modifier.fillMaxWidth().padding(start = 120.dp, end = 120.dp)
                 .padding(start = 9.5.dp, top = 28.dp, end = 9.5.dp, bottom = 29.dp),
             painter = painterResource(
-                Res.drawable.angel
+                if (toggle) Res.drawable.devil else Res.drawable.angel
             ),
             contentScale = ContentScale.Fit,
             contentDescription = ""
@@ -85,13 +81,13 @@ fun HomeScreen() {
 
         Text(
             modifier = Modifier.width(272.dp).height(72.dp),
-            text = "직장인들의 \n응원과 위로가 필요하다면?",
+            text = if (toggle) "직장인들이여\n함께 분노합시다!" else "직장인들의 \n응원과 위로가 필요하다면?",
             style = TextStyle(
                 fontSize = 22.sp,
                 lineHeight = 36.08.sp,
                 fontFamily = FontFamily(Font(Res.font.sf_pro)),
                 fontWeight = FontWeight(700),
-                color = BeumColors.baseGrayLightGray800,
+                color = if (toggle) BeumColors.baseGrayDarkGray700 else BeumColors.baseGrayLightGray800,
                 textAlign = TextAlign.Center,
             )
         )
@@ -99,12 +95,12 @@ fun HomeScreen() {
         Spacer(modifier = Modifier.height(60.dp).fillMaxWidth())
 
 
-        FlowRowTest(viewModel)
+        FlowRow(toggle, viewModel)
 
         Spacer(modifier = Modifier.weight(1f))
         Row(
             modifier = Modifier.width(350.dp).height(52.dp).background(
-                color = BeumColors.baseGrayLightGray900,
+                color = if (toggle) BeumColors.baseAlphaWhiteLightWhite else BeumColors.baseGrayLightGray900,
                 shape = RoundedCornerShape(size = BeumDimen.radius100)
             ).padding(start = BeumDimen.Px15RemSpacing09, end = BeumDimen.Px15RemSpacing09)
                 .clickable {
@@ -118,11 +114,19 @@ fun HomeScreen() {
                     fontSize = BeumDimen.TypoScaleText300,
                     fontFamily = FontFamily(Font(Res.font.sf_pro)),
                     fontWeight = FontWeight(700),
-                    color = BeumColors.White,
+                    color = if (toggle) BeumColors.Black else BeumColors.White,
                     textAlign = TextAlign.Center,
                 )
             )
-        }
+//
+            Spacer(modifier = Modifier.width(6.dp))
 
+            Icon(
+                painter = painterResource(Res.drawable.icon_arrow_right),
+                tint = if (toggle) BeumColors.Black else BeumColors.White,
+                contentDescription = ""
+            )
+        }
+        Spacer(modifier = Modifier.height(20.dp))
     }
 }
