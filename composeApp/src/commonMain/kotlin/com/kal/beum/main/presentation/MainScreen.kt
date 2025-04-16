@@ -4,13 +4,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -19,31 +16,48 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import beumproject.composeapp.generated.resources.Res
+import beumproject.composeapp.generated.resources.home
+import beumproject.composeapp.generated.resources.home_selected
+import beumproject.composeapp.generated.resources.info
+import beumproject.composeapp.generated.resources.info_selected
+import beumproject.composeapp.generated.resources.level
+import beumproject.composeapp.generated.resources.level_selected
+import beumproject.composeapp.generated.resources.sf_pro
+import beumproject.composeapp.generated.resources.wing
+import beumproject.composeapp.generated.resources.wing_selected
 import com.kal.beum.Route
 import com.kal.beum.core.presentation.BeumColors
+import com.kal.beum.core.presentation.BeumTypo
 import com.kal.beum.home.presentation.HomeScreen
+import org.jetbrains.compose.resources.Font
+import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun MainScreen() {
     val viewModel = koinViewModel<MainViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
-    println("MainScreen state.isOnboardingDone : " + state.isOnboardingDone)
-    println("MainScreen state.isDevil : " + state.isDevil)
     val navController = rememberNavController()
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
     if (!state.isSplashDone) {
         SplashScreen()
     } else {
         Scaffold(topBar = {}, bottomBar = {
-            BottomNavigationBar(navController = navController, currentRoute)
+            BottomNavigationBar(navController = navController, currentRoute, state.isDevil)
         }) { innerPadding ->
 
             // NavHost 내에서 시작 화면을 정의합니다.
@@ -85,30 +99,116 @@ fun MainScreen() {
 }
 
 @Composable
-fun BottomNavigationBar(navController: NavController, currentRoute: String?) {
+fun BottomNavigationBar(navController: NavController, currentRoute: String?, devil: Boolean) {
     NavigationBar(
+
         modifier = Modifier.clip(
             RoundedCornerShape(
                 topStart = 32.dp, topEnd = 32.dp
             )
-        )
+        ), containerColor = if (devil) BeumColors.baseGrayLightGray800 else Color.White // 여기 추가
     ) {
+        val selectedTintColor = if (devil) Color.White else BeumColors.baseGrayLightGray800
+        val unSelectedTintColor = if (devil) BeumColors.transparentWhite else Color.Unspecified
         NavigationBarItem(selected = currentRoute == Route.Home.toRoute(), // 상태 업데이트 필요
             onClick = { navController.navigate(Route.Home.toRoute()) },
-            label = { Text("Home") },
-            icon = { Icon(Icons.Filled.Home, contentDescription = "Home") })
+            colors = NavigationBarItemDefaults.colors(
+                indicatorColor = Color.Transparent
+            ),
+            label = {
+                Text(
+                    "홈", style = TextStyle(
+                        fontSize = BeumTypo.TypoScaleText25,
+                        lineHeight = 10.sp,
+                        fontFamily = FontFamily(Font(Res.font.sf_pro)),
+                        fontWeight = FontWeight(500),
+                        color = BeumColors.baseGrayLightGray500,
+                        textAlign = TextAlign.Center,
+                    )
+                )
+            },
+            icon = {
+                val isSelected = currentRoute == Route.Home.toRoute()
+                Icon(
+                    painter = if (isSelected) painterResource(Res.drawable.home_selected) else painterResource(
+                        Res.drawable.home
+                    ),
+                    tint = if (isSelected) selectedTintColor else unSelectedTintColor,
+                    contentDescription = "Home"
+                )
+            })
         NavigationBarItem(selected = currentRoute == Route.Community.toRoute(), // 상태 업데이트 필요
-            onClick = { navController.navigate(Route.Community.toRoute()) },
-            label = { Text("Community") },
-            icon = { Icon(Icons.Filled.Home, contentDescription = "Community") })
+            onClick = { navController.navigate(Route.Community.toRoute()) }, label = {
+                Text(
+                    "커뮤니티", style = TextStyle(
+                        fontSize = BeumTypo.TypoScaleText25,
+                        lineHeight = 10.sp,
+                        fontFamily = FontFamily(Font(Res.font.sf_pro)),
+                        fontWeight = FontWeight(500),
+                        color = BeumColors.baseGrayLightGray500,
+                        textAlign = TextAlign.Center,
+                    )
+                )
+            }, colors = NavigationBarItemDefaults.colors(
+                indicatorColor = Color.Transparent
+            ), icon = {
+                val isSelected = currentRoute == Route.Community.toRoute()
+                Icon(
+                    painter = if (isSelected) painterResource(Res.drawable.wing_selected) else painterResource(
+                        Res.drawable.wing
+                    ),
+                    tint = if (isSelected) selectedTintColor else unSelectedTintColor,
+                    contentDescription = "Community"
+                )
+            })
         NavigationBarItem(selected = currentRoute == Route.Level("1").toRoute(), // 상태 업데이트 필요
-            onClick = { navController.navigate(Route.Level("1").toRoute()) },
-            label = { Text("Level") },
-            icon = { Icon(Icons.Filled.Favorite, contentDescription = "Level") })
+            onClick = { navController.navigate(Route.Level("1").toRoute()) }, label = {
+                Text(
+                    "레벨", style = TextStyle(
+                        fontSize = BeumTypo.TypoScaleText25,
+                        lineHeight = 10.sp,
+                        fontFamily = FontFamily(Font(Res.font.sf_pro)),
+                        fontWeight = FontWeight(500),
+                        color = BeumColors.baseGrayLightGray500,
+                        textAlign = TextAlign.Center,
+                    )
+                )
+            }, colors = NavigationBarItemDefaults.colors(
+                indicatorColor = Color.Transparent
+            ), icon = {
+                val isSelected = currentRoute == Route.Level("1").toRoute()
+                Icon(
+                    painter = if (isSelected) painterResource(Res.drawable.level_selected) else painterResource(
+                        Res.drawable.level
+                    ),
+                    tint = if (isSelected) selectedTintColor else unSelectedTintColor,
+                    contentDescription = "Level"
+                )
+            })
         NavigationBarItem(selected = currentRoute == Route.MyInfo("userId").toRoute(), // 상태 업데이트 필요
-            onClick = { navController.navigate(Route.MyInfo("userId").toRoute()) },
-            label = { Text("My Info") },
-            icon = { Icon(Icons.Filled.Person, contentDescription = "My Info") })
+            onClick = { navController.navigate(Route.MyInfo("userId").toRoute()) }, label = {
+                Text(
+                    "마이", style = TextStyle(
+                        fontSize = BeumTypo.TypoScaleText25,
+                        lineHeight = 10.sp,
+                        fontFamily = FontFamily(Font(Res.font.sf_pro)),
+                        fontWeight = FontWeight(500),
+                        color = BeumColors.baseGrayLightGray500,
+                        textAlign = TextAlign.Center,
+                    )
+                )
+            }, colors = NavigationBarItemDefaults.colors(
+                indicatorColor = Color.Transparent
+            ), icon = {
+                val isSelected = currentRoute == Route.MyInfo("userId").toRoute()
+                Icon(
+                    painter = if (isSelected) painterResource(
+                        Res.drawable.info_selected
+                    ) else painterResource(Res.drawable.info),
+                    tint = if (isSelected) selectedTintColor else unSelectedTintColor,
+                    contentDescription = "My Info"
+                )
+            })
     }
 }
 

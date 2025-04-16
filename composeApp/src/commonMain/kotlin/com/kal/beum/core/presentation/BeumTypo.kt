@@ -14,4 +14,6 @@ object BeumTypo {
     val TypoScaleText150 = 14.sp
     val TypoScaleText500 = 20.sp
 
+    val TypoScaleText25 = 9.sp
+
 }

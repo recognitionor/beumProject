@@ -112,6 +112,7 @@ fun HomeScreen(toggle: Boolean, toggleClicked: (isDevil: Boolean) -> Unit) {
             Text(
                 text = "고민을 남겨보세요", style = TextStyle(
                     fontSize = BeumDimen.TypoScaleText300,
+                    lineHeight = BeumDimen.baseLineheightTextLineheight300,
                     fontFamily = FontFamily(Font(Res.font.sf_pro)),
                     fontWeight = FontWeight(700),
                     color = if (toggle) BeumColors.Black else BeumColors.White,

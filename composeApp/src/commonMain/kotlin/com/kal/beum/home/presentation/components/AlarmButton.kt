@@ -14,8 +14,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import beumproject.composeapp.generated.resources.Res
 import beumproject.composeapp.generated.resources.alarm
-import beumproject.composeapp.generated.resources.alarm_black
-import beumproject.composeapp.generated.resources.framsssse
 import com.kal.beum.core.presentation.BeumColors
 import org.jetbrains.compose.resources.painterResource
 
@@ -30,7 +28,7 @@ fun AlarmButton(toggle: Boolean) {
         contentAlignment = Alignment.Center // 가운데 정렬 (좌우 + 상하)
     ) {
         Icon(
-            painter = painterResource(if (toggle) Res.drawable.framsssse else Res.drawable.alarm),
+            painter = painterResource(if (toggle) Res.drawable.alarm else Res.drawable.alarm),
             tint = if (toggle) Color.Unspecified else BeumColors.Black,
             contentDescription = null
         )

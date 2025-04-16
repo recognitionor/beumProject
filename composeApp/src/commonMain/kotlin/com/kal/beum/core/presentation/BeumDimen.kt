@@ -15,6 +15,8 @@ object BeumDimen {
     val radius200: Dp = 16.dp
     val TypoScaleText300 = 16.sp
     val Px025RemSpacing02: Dp = 4.dp
+    val baseLineheightTextLineheight300 = 22.sp
+
 
 }
 
