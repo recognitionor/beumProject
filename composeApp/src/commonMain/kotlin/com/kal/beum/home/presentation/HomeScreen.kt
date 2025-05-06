@@ -1,6 +1,6 @@
 package com.kal.beum.home.presentation
 
-import FlowRow
+import com.kal.beum.home.presentation.components.FlowRow
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

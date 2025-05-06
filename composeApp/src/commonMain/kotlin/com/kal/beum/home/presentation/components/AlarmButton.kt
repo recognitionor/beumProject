@@ -29,7 +29,7 @@ fun AlarmButton(toggle: Boolean) {
     ) {
         Icon(
             painter = painterResource(if (toggle) Res.drawable.alarm else Res.drawable.alarm),
-            tint = if (toggle) Color.Unspecified else BeumColors.Black,
+            tint = if (toggle) Color.White else BeumColors.Black,
             contentDescription = null
         )
     }

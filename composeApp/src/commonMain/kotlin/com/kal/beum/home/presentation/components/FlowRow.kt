@@ -1,3 +1,5 @@
+package com.kal.beum.home.presentation.components
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.animateScrollBy
 import androidx.compose.foundation.horizontalScroll
@@ -77,7 +79,7 @@ fun FlowRow(isDevil: Boolean, viewModel: HomeViewModel) {
     ) {
         val halfSize = (state.homeCommentList.size + 1) / 2 // 아이템 개수를 반으로 나누기
 
-        // 🔥 첫 번째 줄 (상위 FlowRow)
+        // 🔥 첫 번째 줄 (상위 com.kal.beum.home.presentation.components.FlowRow)
         FlowRow(
             modifier = Modifier.fillMaxWidth().height(40.dp),
             horizontalArrangement = Arrangement.spacedBy(pxToDp(16f)),
@@ -90,7 +92,7 @@ fun FlowRow(isDevil: Boolean, viewModel: HomeViewModel) {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // 🔥 두 번째 줄 (하위 FlowRow)
+        // 🔥 두 번째 줄 (하위 com.kal.beum.home.presentation.components.FlowRow)
         FlowRow(
             modifier = Modifier.fillMaxWidth().height(40.dp),
             horizontalArrangement = Arrangement.spacedBy(pxToDp(16f)),

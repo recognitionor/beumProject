@@ -50,7 +50,8 @@ fun ToggleButton(toggle: Boolean, toggleClicked: (Boolean) -> Unit) {
 
             Box(
                 Modifier.clip(RoundedCornerShape(90))
-                    .background(if (isToggled) Color.Transparent else Color.Black).width(64.dp)
+                    .background(if (isToggled) Color.Transparent else Color.Black).width(64.dp),
+                contentAlignment = Alignment.Center
             ) {
                 Image(
                     modifier = Modifier.size(48.dp),
@@ -63,7 +64,8 @@ fun ToggleButton(toggle: Boolean, toggleClicked: (Boolean) -> Unit) {
 
             Box(
                 Modifier.clip(RoundedCornerShape(90))
-                    .background(if (isToggled) Color.White else Color.Transparent).width(64.dp)
+                    .background(if (isToggled) Color.White else Color.Transparent).width(64.dp),
+                contentAlignment = Alignment.Center
             ) {
                 Image(
                     modifier = Modifier.size(48.dp),
