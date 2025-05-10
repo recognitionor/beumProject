@@ -1,6 +1,5 @@
 package com.kal.beum.home.presentation
 
-import com.kal.beum.home.presentation.components.FlowRow
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -37,6 +36,7 @@ import beumproject.composeapp.generated.resources.sf_pro
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumDimen
 import com.kal.beum.home.presentation.components.AlarmButton
+import com.kal.beum.home.presentation.components.FlowRow
 import com.kal.beum.home.presentation.components.ToggleButton
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
@@ -93,7 +93,6 @@ fun HomeScreen(toggle: Boolean, toggleClicked: (isDevil: Boolean) -> Unit) {
         )
 
         Spacer(modifier = Modifier.height(60.dp).fillMaxWidth())
-
 
         FlowRow(toggle, viewModel)
 

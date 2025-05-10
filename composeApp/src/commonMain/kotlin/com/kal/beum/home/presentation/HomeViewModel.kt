@@ -33,4 +33,11 @@ class HomeViewModel(
             }
         }.start()
     }
+
+    fun updateHomeCommentList() {
+        viewModelScope.launch {
+
+        }
+
+    }
 }

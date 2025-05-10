@@ -1,24 +1,34 @@
 package com.kal.beum.home.presentation.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.animateScrollBy
+import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,87 +36,124 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import beumproject.composeapp.generated.resources.Res
+import beumproject.composeapp.generated.resources.sf_pro
 import com.kal.beum.core.presentation.BeumColors
+import com.kal.beum.core.presentation.BeumTypo
 import com.kal.beum.home.domain.HomeData
 import com.kal.beum.home.presentation.HomeViewModel
 import com.kal.beum.utils.pxToDp
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.map
+import org.jetbrains.compose.resources.Font
 
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun FlowRow(isDevil: Boolean, viewModel: HomeViewModel) {
-
+fun FlowRow(
+    isDevil: Boolean, viewModel: HomeViewModel
+) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val scrollState = rememberScrollState()
+    val repeatedList = state.homeCommentList
+    repeatedList.forEach {
+        println(it)
+    }
+    MarqueeLazyRowStyled(isDevil, repeatedList.map { it.concernMsg }) {
+        viewModel.updateHomeCommentList()
+    }
+}
 
-    LaunchedEffect(scrollState) {
-        // 🚀 1. 마지막 아이템 도착 감지 (무한 스크롤)
-        launch {
-            snapshotFlow { scrollState.value }.distinctUntilChanged().collectLatest { scrollX ->
-                if (scrollX >= scrollState.maxValue) { // 끝까지 스크롤 됐는지 확인
-                    delay(500)
-                    scrollState.scrollTo(0)
-                    delay(500)
-                }
-            }
-        }
+@Composable
+fun MarqueeLazyRowStyled(isDevil: Boolean, texts: List<String>, loadMore: () -> Unit) {
+    if (texts.isEmpty()) return
 
-        // 🚀 2. 스크롤 멈춤 감지
-        launch {
-            snapshotFlow { scrollState.isScrollInProgress }.distinctUntilChanged()
-                .filter { isScrolling -> !isScrolling } // 스크롤이 멈춘 순간
-                .collectLatest { isScrolling ->
-                    if (!isScrolling) { // 스크롤이 멈춘 순간
-                        launch {
-                            scrollState.animateScrollBy(30f) // 자동 스크롤 실행
-                        }
-                    }
-                }
+    val repeatedTexts = remember { texts }
+    val listState = rememberLazyListState()
+
+    val fullContentWidth = remember { mutableStateOf(0f) }
+    val viewportWidth = remember { mutableStateOf(0f) }
+
+    // 자동 스크롤 활성화 여부
+    var autoScrollEnabled by remember { mutableStateOf(true) }
+
+    // 사용자가 스크롤 중이면 자동 스크롤 멈춤
+    LaunchedEffect(listState.isScrollInProgress) {
+        if (listState.isScrollInProgress) {
+            autoScrollEnabled = false
+        } else {
+            delay(1000) // 손 떼고 1초 후 자동 스크롤 재개
+            autoScrollEnabled = true
         }
     }
-    Column(
-        modifier = Modifier.horizontalScroll(scrollState)
-    ) {
-        val halfSize = (state.homeCommentList.size + 1) / 2 // 아이템 개수를 반으로 나누기
 
-        // 🔥 첫 번째 줄 (상위 com.kal.beum.home.presentation.components.FlowRow)
-        FlowRow(
-            modifier = Modifier.fillMaxWidth().height(40.dp),
-            horizontalArrangement = Arrangement.spacedBy(pxToDp(16f)),
-            verticalArrangement = Arrangement.Center // 위쪽 정렬,
-        ) {
-            state.homeCommentList.take(halfSize).forEach { item -> // 첫 번째 줄 아이템
-                FlowBox(item, isDevil)
+    var isLoading by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        snapshotFlow {
+            val ratio =
+                listState.firstVisibleItemScrollOffset.toFloat() / (fullContentWidth.value - viewportWidth.value).coerceAtLeast(
+                    1f
+                )
+            ratio
+        }.map { (it * 100).toInt() / 5 * 5 } // 5% 단위로 그룹핑
+            .distinctUntilChanged().filter { it >= 95 } // 95% 이상일 때만
+            .collect {
+                loadMore()
+                if (!isLoading) {
+                    isLoading = true
+                    println("스크롤 비율: $it%")
+                    loadMore()
+                    // 가짜 로딩 딜레이 예시 — 실제 로직 완료 후 false 처리
+                    delay(2000)
+                    isLoading = false
+                }
             }
+    }
+
+    // 자동 스크롤
+    LaunchedEffect(autoScrollEnabled) {
+        while (autoScrollEnabled) {
+            listState.scrollBy(3f)
+            delay(16L)
         }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // 🔥 두 번째 줄 (하위 com.kal.beum.home.presentation.components.FlowRow)
-        FlowRow(
-            modifier = Modifier.fillMaxWidth().height(40.dp),
-            horizontalArrangement = Arrangement.spacedBy(pxToDp(16f)),
-            verticalArrangement = Arrangement.Top // 위쪽 정렬
+    }
+    Box(modifier = Modifier.onGloballyPositioned {
+        viewportWidth.value = it.size.width.toFloat()
+    }) {
+        LazyRow(
+            state = listState,
+            modifier = Modifier.fillMaxWidth().height(200.dp),
+            userScrollEnabled = true, // 손가락 스크롤 방지
+            verticalAlignment = Alignment.Top,
         ) {
-            state.homeCommentList.drop(halfSize).forEach { item -> // 두 번째 줄 아이템
-                FlowBox(item, isDevil)
+            // 두 줄로 나누기
+            val line1 = repeatedTexts.filterIndexed { i, _ -> i % 2 == 0 }
+            val line2 = repeatedTexts.filterIndexed { i, _ -> i % 2 == 1 }
+
+            item {
+                Column(modifier = Modifier.onGloballyPositioned {
+                    fullContentWidth.value = it.size.width.toFloat()
+                }) {
+                    MarqueeStyledRow(line1, isDevil)
+                    Spacer(modifier = Modifier.height(10.dp))
+                    MarqueeStyledRow(line2, isDevil)
+                }
             }
         }
     }
 }
 
 @Composable
-fun FlowBox(item: HomeData, isDevilMode: Boolean) {
+private fun MarqueeStyledRow(texts: List<String>, isDevil: Boolean) {
     val devilColor = Brush.linearGradient(
         colors = listOf(
             Color(0xFF696C70), Color(0xFF33383E), Color(0xFF2B3036)
@@ -120,20 +167,31 @@ fun FlowBox(item: HomeData, isDevilMode: Boolean) {
         )
     )
 
-    Box(
-        modifier = Modifier.height(40.dp).clip(RoundedCornerShape(pxToDp(100f)))
-            .background(brush = if (isDevilMode) devilColor else angelColor)
-            .padding(end = 16.dp, bottom = 2.dp, start = 16.dp) // 간격 최소화
-            .wrapContentWidth(Alignment.CenterHorizontally), contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = item.concernMsg,
-            style = TextStyle(
-                fontWeight = FontWeight.Medium, // ✅ 500 (Medium)
-                lineHeight = 19.sp, // ✅ 줄 높이 (1.0x 비율)
-                letterSpacing = 0.sp // ✅ 글자 간격 0
-            ),
-            color = if (isDevilMode) BeumColors.baseAlphaWhiteLightWhite700A else BeumColors.baseGrayLightGray600
-        )
+    Row {
+        texts.forEach { msg ->
+            Box(
+                modifier = Modifier.height(40.dp).clip(RoundedCornerShape(pxToDp(100f)))
+                    .background(brush = if (isDevil) devilColor else angelColor)
+                    .padding(end = 16.dp, bottom = 2.dp, start = 16.dp) // 간격 최소화
+                    .wrapContentWidth(Alignment.CenterHorizontally),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = msg,
+                    maxLines = 1,
+                    fontSize = 14.sp,
+                    style = TextStyle(
+                        fontSize = BeumTypo.TypoScaleText150,
+                        lineHeight = BeumTypo.TypoLienheigtLineheight100,
+                        fontFamily = FontFamily(Font(Res.font.sf_pro)),
+                        fontWeight = FontWeight(500),
+                        color = if (isDevil) BeumColors.baseAlphaWhiteLightWhite700A else BeumColors.baseGrayLightGray600
+                    ),
+                    modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
+                        .widthIn(min = 50.dp, max = 240.dp)
+                )
+            }
+            Spacer(modifier = Modifier.width(10.dp))
+        }
     }
 }
