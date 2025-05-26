@@ -7,6 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -34,10 +35,9 @@ fun ToggleButton(toggle: Boolean, toggleClicked: (Boolean) -> Unit) {
     var isToggled by remember { mutableStateOf(toggle) }
 
     Box(
-        modifier = Modifier.border(
+        modifier = Modifier.height(48.dp).border(
             width = 0.dp, color = Color.Transparent, shape = RoundedCornerShape(size = 100.dp)
-        ).clip(RoundedCornerShape(size = 100.dp))
-            .wrapContentSize(Alignment.Center)
+        ).clip(RoundedCornerShape(size = 100.dp)).wrapContentSize(Alignment.Center)
             .background(if (isToggled) Color.Black else Color.White).clickable {
                 isToggled = !isToggled
                 toggleClicked.invoke(isToggled)

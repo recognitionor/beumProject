@@ -40,6 +40,7 @@ import beumproject.composeapp.generated.resources.sf_pro
 import beumproject.composeapp.generated.resources.wing
 import beumproject.composeapp.generated.resources.wing_selected
 import com.kal.beum.Route
+import com.kal.beum.community.presentation.CommunityScreen
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumTypo
 import com.kal.beum.home.presentation.HomeScreen
@@ -77,7 +78,9 @@ fun MainScreen() {
                         }
                     }
                     composable(Route.Community.toRoute()) {
-                        CommunityScreen(navController)
+                        CommunityScreen(state.isDevil) { isDevil ->
+                            viewModel.devilToggle(isDevil)
+                        }
                     }
                     composable(Route.Level("1").toRoute()) { backStackEntry ->
                         val levelId = backStackEntry.arguments?.getString("id")
@@ -212,13 +215,6 @@ fun BottomNavigationBar(navController: NavController, currentRoute: String?, dev
     }
 }
 
-
-@Composable
-fun CommunityScreen(navController: NavController) {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text("Community Screen")
-    }
-}
 
 @Composable
 fun LevelScreen(levelId: String?) {

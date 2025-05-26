@@ -53,7 +53,7 @@ fun HomeScreen(toggle: Boolean, toggleClicked: (isDevil: Boolean) -> Unit) {
         Box(
             modifier = Modifier.fillMaxWidth().height(64.dp), contentAlignment = Alignment.Center
         ) {
-            ToggleButton(toggle, toggleClicked)
+            ToggleButton(toggle, toggleClicked = toggleClicked)
 
             Row(
                 modifier = Modifier.fillMaxSize(),

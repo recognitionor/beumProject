@@ -47,7 +47,6 @@ import beumproject.composeapp.generated.resources.Res
 import beumproject.composeapp.generated.resources.sf_pro
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumTypo
-import com.kal.beum.home.domain.HomeData
 import com.kal.beum.home.presentation.HomeViewModel
 import com.kal.beum.utils.pxToDp
 import kotlinx.coroutines.delay

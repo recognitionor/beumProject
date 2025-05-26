@@ -1,6 +1,12 @@
 package com.kal.beum.di
 
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
+import com.kal.beum.community.data.network.MockCommunityDataSource
+import com.kal.beum.community.data.network.RemoteCommunityDataSource
+import com.kal.beum.community.data.repository.DefaultCommunityRepository
+import com.kal.beum.community.domain.CommunityRepository
+import com.kal.beum.community.presentation.CommunityScreen
+import com.kal.beum.community.presentation.CommunityViewModel
 import com.kal.beum.core.data.HttpClientFactory
 import com.kal.beum.core.data.database.DatabaseFactory
 import com.kal.beum.home.data.network.MockHomeDataSource
@@ -35,13 +41,16 @@ val sharedModules = module {
     }
     singleOf(::MockHomeDataSource).bind<RemoteHomeDataSource>()
     singleOf(::MockLoginDataSource).bind<RemoteLoginDataSource>()
-//    singleOf(::KtorRemoteHomeDataSource).bind<RemoteHomeDataSource>()
+    singleOf(::MockCommunityDataSource).bind<RemoteCommunityDataSource>()
 
-    singleOf(::DefaultHomeRepository).bind<HomeRepository>()
     singleOf(::DefaultAppRepository).bind<AppRepository>()
+    singleOf(::DefaultHomeRepository).bind<HomeRepository>()
+    singleOf(::DefaultCommunityRepository).bind<CommunityRepository>()
+
 
     viewModelOf(::HomeViewModel)
     viewModelOf(::MainViewModel)
+    viewModelOf(::CommunityViewModel)
 
     single { get<AppDatabase>().appDao }
 
