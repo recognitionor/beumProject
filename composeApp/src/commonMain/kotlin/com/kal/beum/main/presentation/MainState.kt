@@ -1,5 +1,6 @@
 package com.kal.beum.main.presentation
 
+import androidx.compose.runtime.Composable
 import com.kal.beum.main.domain.UserInfo
 
 data class MainState(
@@ -7,4 +8,7 @@ data class MainState(
     val isSplashDone: Boolean = false,
     val userInfo: UserInfo? = null,
     val isDevil: Boolean = false,
+    val fullScreen: (@Composable () -> Unit)? = null,
+    val isFullScreen: Boolean = false
+
 )

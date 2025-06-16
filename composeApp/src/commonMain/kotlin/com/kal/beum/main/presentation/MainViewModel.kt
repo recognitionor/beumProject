@@ -1,5 +1,6 @@
 package com.kal.beum.main.presentation
 
+import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kal.beum.main.domain.AppRepository
@@ -27,14 +28,13 @@ class MainViewModel(private val appRepository: AppRepository) : ViewModel() {
             println("getAppEntity : $result")
             _state.update {
                 it.copy(
-                    isDevil = result.isDevil,
-                    isOnboardingDone = result.isOnBoardingDone
+                    isDevil = result.isDevil, isOnboardingDone = result.isOnBoardingDone
                 )
             }
         }.launchIn(viewModelScope)
     }
 
-    fun devilToggle(isDevil: Boolean) {
+    private fun devilToggle(isDevil: Boolean) {
         println("devilToggle ")
         viewModelScope.launch {
             appRepository.setIsDevil(isDevil)
@@ -57,11 +57,28 @@ class MainViewModel(private val appRepository: AppRepository) : ViewModel() {
         }.launchIn(viewModelScope)
     }
 
+    fun setFullScreen(screen: (@Composable () -> Unit)? = null) {
+        println("setFullScreen")
+        _state.update { it.copy(fullScreen = screen) }
+    }
+
+    fun toggleFullScreen() {
+        println("toggleFullScreen")
+        _state.update { it.copy(isFullScreen = !it.isFullScreen) }
+    }
+
     fun socialLogin(socialCode: Int) {
         println("socialLogin : $socialCode")
         appRepository.login(socialCode).onEach { result ->
             println("socialLogin~~~~ : $result")
             _state.update { it.copy(userInfo = result, isSplashDone = true) }
         }.launchIn(viewModelScope)
+    }
+
+    fun onAction(action: MainAction) {
+        when (action) {
+            is MainAction.ToggleDevil -> devilToggle(action.isDevil)
+            is MainAction.SetFullScreen -> setFullScreen(action.screen)
+        }
     }
 }

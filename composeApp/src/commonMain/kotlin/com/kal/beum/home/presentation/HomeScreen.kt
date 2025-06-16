@@ -38,12 +38,15 @@ import com.kal.beum.core.presentation.BeumDimen
 import com.kal.beum.home.presentation.components.AlarmButton
 import com.kal.beum.home.presentation.components.FlowRow
 import com.kal.beum.home.presentation.components.ToggleButton
+import com.kal.beum.main.presentation.MainAction
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun HomeScreen(toggle: Boolean, toggleClicked: (isDevil: Boolean) -> Unit) {
+fun HomeScreen(
+    toggle: Boolean, onAction: (MainAction) -> Unit
+) {
     val viewModel = koinViewModel<HomeViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -53,7 +56,9 @@ fun HomeScreen(toggle: Boolean, toggleClicked: (isDevil: Boolean) -> Unit) {
         Box(
             modifier = Modifier.fillMaxWidth().height(64.dp), contentAlignment = Alignment.Center
         ) {
-            ToggleButton(toggle, toggleClicked = toggleClicked)
+            ToggleButton(toggle) {
+                onAction(MainAction.ToggleDevil(it))
+            }
 
             Row(
                 modifier = Modifier.fillMaxSize(),

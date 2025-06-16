@@ -1,5 +1,6 @@
 package com.kal.beum.main.presentation
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -13,6 +14,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -54,6 +58,7 @@ fun MainScreen() {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val navController = rememberNavController()
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+
     if (!state.isSplashDone) {
         SplashScreen()
     } else {
@@ -73,14 +78,10 @@ fun MainScreen() {
                     modifier = Modifier.fillMaxSize().padding(innerPadding)
                 ) {
                     composable(Route.Home.toRoute()) {
-                        HomeScreen(state.isDevil) { isDevil ->
-                            viewModel.devilToggle(isDevil)
-                        }
+                        HomeScreen(state.isDevil, viewModel::onAction)
                     }
                     composable(Route.Community.toRoute()) {
-                        CommunityScreen(state.isDevil) { isDevil ->
-                            viewModel.devilToggle(isDevil)
-                        }
+                        CommunityScreen(state.isDevil, viewModel::onAction)
                     }
                     composable(Route.Level("1").toRoute()) { backStackEntry ->
                         val levelId = backStackEntry.arguments?.getString("id")
@@ -95,6 +96,14 @@ fun MainScreen() {
         }
     }
 
+    println("state.isFullScreen ${state.isFullScreen}")
+    // ✅ 여기에 전역 fullScreen 처리!
+    println("state.fullScreen ${state.fullScreen}")
+    if (state.fullScreen != null) {
+        println("~~~~~~~~~~~~~~~~~~r")
+        state.fullScreen?.invoke()
+
+    }
 
 //    PermissionScreen()
 

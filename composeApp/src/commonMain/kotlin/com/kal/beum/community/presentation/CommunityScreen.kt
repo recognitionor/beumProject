@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,13 +16,16 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -38,13 +40,17 @@ import beumproject.composeapp.generated.resources.sf_pro
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumTypo
 import com.kal.beum.home.presentation.components.ToggleButton
+import com.kal.beum.main.presentation.MainAction
+import com.kal.beum.main.presentation.MainViewModel
+import com.kal.beum.write.presentation.WritingScreen
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
-fun CommunityScreen(isDevil: Boolean, toggleClicked: (isDevil: Boolean) -> Unit) {
+fun CommunityScreen(isDevil: Boolean, onAction: (MainAction) -> Unit) {
+    val mainViewModel = koinViewModel<MainViewModel>()
     val viewModel = koinViewModel<CommunityViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
     val listState = rememberLazyListState()
@@ -58,12 +64,17 @@ fun CommunityScreen(isDevil: Boolean, toggleClicked: (isDevil: Boolean) -> Unit)
         listState.scrollToItem(0)
     }
 
+
+
+
     Column {
         Box(
             modifier = Modifier.fillMaxWidth().height(64.dp).padding(start = 26.dp),
             contentAlignment = Alignment.CenterStart
         ) {
-            ToggleButton(toggle = isDevil, toggleClicked = toggleClicked)
+            ToggleButton(toggle = isDevil) {
+                onAction(MainAction.ToggleDevil(it))
+            }
         }
 
         Spacer(modifier = Modifier.height(12.dp))
@@ -143,14 +154,23 @@ fun CommunityScreen(isDevil: Boolean, toggleClicked: (isDevil: Boolean) -> Unit)
                 Box(
                     modifier = Modifier.padding(12.dp).align(Alignment.BottomEnd)
                 ) {
-                    Box(
-                        modifier = Modifier.width(52.dp).height(52.dp).background(
-                            color = BeumColors.primaryPrimarySkyblue,
-                            shape = RoundedCornerShape(size = 100.dp)
-                        ).clickable {
-                            //
-                        }
-                    ) {
+                    Box(modifier = Modifier.width(52.dp).height(52.dp).background(
+                        color = BeumColors.primaryPrimarySkyblue,
+                        shape = RoundedCornerShape(size = 100.dp)
+                    ).clip(shape = RoundedCornerShape(size = 100.dp)).clickable {
+                        onAction(MainAction.SetFullScreen {
+                            DraftDialog(onNewClick = {
+                                onAction(MainAction.SetFullScreen {
+                                    WritingScreen(onAction)
+                                })
+                            }, onContinueClick = {
+                                onAction(MainAction.SetFullScreen(null))
+                            }, onDismiss = {
+
+                                onAction(MainAction.SetFullScreen(null))
+                            })
+                        })
+                    }) {
                         Image(
                             painter = painterResource(Res.drawable.ic_add_medium),
                             modifier = Modifier.align(Alignment.Center),
