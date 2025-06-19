@@ -151,12 +151,13 @@ fun WritingScreen(onAction: (MainAction) -> Unit) {
             }
             Spacer(modifier = Modifier.height(12.dp))
             WriteEditText(
-                96.dp, state.content, "태그", "# 입력후 키워드를 입력해주세요.",
+                96.dp, state.tags, "태그", "# 입력후 키워드를 입력해주세요.",
                 infoClick = {
                     currentInfoBottomSheetType = InfoBottomSheetType.TagInfo()
                 },
             ) {
-                viewModel.onAction(WritingAction.OnTitleChanged(it))
+                println("viewModel.onAction : $it")
+                viewModel.onAction(WritingAction.OnTagChanged(it))
             }
             Spacer(modifier = Modifier.height(12.dp))
             WriteEditText(
@@ -180,7 +181,7 @@ fun WritingScreen(onAction: (MainAction) -> Unit) {
             }
             Spacer(modifier = Modifier.height(12.dp))
             WriteEditText(
-                115.dp, state.content, "포인트", "포인트 걸기",
+                115.dp, state.rewardPoint.toString(), "포인트", "포인트 걸기",
                 click = {
                     showPointSettingSheet = true
                 },
@@ -188,13 +189,20 @@ fun WritingScreen(onAction: (MainAction) -> Unit) {
                     currentInfoBottomSheetType = InfoBottomSheetType.PointInfo()
                 },
             ) {
-                viewModel.onAction(WritingAction.OnTitleChanged(it))
+                var point = 0
+                try {
+                    point = it.toInt()
+                } catch (_: Exception) {
+                }
+                viewModel.onAction(WritingAction.OnPointChanged(point))
             }
             Spacer(modifier = Modifier.height(12.dp))
 
             Button(
                 onClick = { },
-                modifier = Modifier.fillMaxWidth().height(52.dp).padding(start = 20.dp, end = 20.dp),
+                enabled = checkValidContent(state),
+                modifier = Modifier.fillMaxWidth().height(52.dp)
+                    .padding(start = 20.dp, end = 20.dp),
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = BeumColors.primaryPrimarySkyblue, contentColor = Color.White
@@ -231,8 +239,9 @@ fun WritingScreen(onAction: (MainAction) -> Unit) {
                     modifier = Modifier.wrapContentHeight().fillMaxWidth()
                 ) {
                     // 아래에 들어가는 UI가 이미지랑 비슷하게 작성
-                    PointSettingBottomSheet(state.rewardPoint) {
+                    PointSettingBottomSheet(state.rewardPoint, 1000) {
                         viewModel.onAction(WritingAction.OnPointChanged(it))
+                        showPointSettingSheet = false
                     }
                 }
             }
@@ -254,4 +263,14 @@ fun WritingScreen(onAction: (MainAction) -> Unit) {
         }
     }
 
+}
+
+fun checkValidContent(state: WritingState): Boolean {
+    val result =
+        state.content.isNotEmpty() && state.title.isNotEmpty() && state.selectedCategory != null && state.tags.isNotEmpty()
+    println("state.content : ${state.content}")
+    println("state.title : ${state.title}")
+    println("state.selectedCategory : ${state.selectedCategory}")
+    println("state.tags : ${state.tags}")
+    return result
 }

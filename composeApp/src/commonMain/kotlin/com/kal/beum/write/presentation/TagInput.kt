@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -12,9 +14,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.sp
 import beumproject.composeapp.generated.resources.Res
 import beumproject.composeapp.generated.resources.sf_pro
@@ -29,6 +33,7 @@ fun TagInput(
 ) {
     var text by remember { mutableStateOf("") }
     var tagList by remember { mutableStateOf(listOf<String>()) }
+    var prevText by remember { mutableStateOf("") }
 
     Row(verticalAlignment = Alignment.CenterVertically) {
         tagList.forEach {
@@ -45,7 +50,9 @@ fun TagInput(
         if (tagList.size < 3) {
             Box {
                 BasicTextField(
-                    value = text, onValueChange = { input ->
+                    value = text,
+                    onValueChange = { input ->
+                        println(input)
                         val delimiters = listOf(' ', ',', '\n')
                         if (input.isNotEmpty() && delimiters.any { input.last() == it }) {
                             // 구분자 앞의 텍스트(공백, 쉼표, 개행 제거)
@@ -63,7 +70,30 @@ fun TagInput(
                         } else {
                             text = input
                         }
-                    }, singleLine = true, modifier = Modifier.fillMaxWidth()
+                        prevText = text
+                    },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth().onKeyEvent { keyEvent ->
+                        if (tagList.isNotEmpty()) {
+                            tagList = tagList - tagList[tagList.lastIndex]
+                        }
+                        false
+                    },
+                    keyboardOptions = KeyboardOptions.Default.copy(
+                        imeAction = ImeAction.Done
+                    ),
+                    keyboardActions = KeyboardActions(onDone = {
+                        val newTag = text.trim()
+                        if (newTag.isNotEmpty()) {
+                            tagList = if (!newTag.startsWith("#")) {
+                                tagList + "#$newTag"
+                            } else {
+                                tagList + newTag
+                            }
+                            onTagsChanged(tagList)
+                            text = ""
+                        }
+                    })
                 )
 
                 if (text.isEmpty()) {

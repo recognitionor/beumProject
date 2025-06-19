@@ -27,6 +27,7 @@ object BeumColors {
     val baseAlphaBlackLightBlack: Color = Color(0xFF000000)
     val baseAlphaWhiteDarkWhite: Color = Color(0xFFFFFFFF)
     val surfaceGray100_2: Color = Color(0xFF000000)
+    val warningColor: Color = Color(0xFFFE5B58)
 
 
     val transparentWhite = Color(0x33FFFFFF)
@@ -43,6 +44,8 @@ object BeumColors {
     val baseAlphaWhiteLightWhite: Color = Color(0xFFFFFFFF)
     val baseAlphaWhiteLightWhite700A: Color = Color(0xE5FFFFFF)
     val baseAlphaBlackLightBlack50A: Color = Color(0x0A000000)
+    val baseCoolGrayLightGray700: Color = Color(0xFF45474F)
+    val baseAlphaBlackDarkBlack50A: Color = Color(0x0A000000)
 
 
 }

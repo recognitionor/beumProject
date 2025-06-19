@@ -36,6 +36,9 @@ import androidx.compose.ui.unit.sp
 import beumproject.composeapp.generated.resources.Res
 import beumproject.composeapp.generated.resources.angel_abled
 import beumproject.composeapp.generated.resources.devil_abled
+import beumproject.composeapp.generated.resources.heart
+import beumproject.composeapp.generated.resources.ic_clear
+import beumproject.composeapp.generated.resources.ic_close
 import beumproject.composeapp.generated.resources.icon_arrow_right
 import beumproject.composeapp.generated.resources.icon_arrow_right_black
 import beumproject.composeapp.generated.resources.sf_pro
@@ -101,7 +104,11 @@ fun WriteEditText(
 
                     "태그" -> {
                         TagInput {
-                            println("tagInput : $it")
+                            var tags = ""
+                            it.forEach { str ->
+                                tags += str
+                            }
+                            onTextChange.invoke(tags)
                         }
                     }
 
@@ -218,35 +225,71 @@ fun WriteEditText(
                             modifier = Modifier.padding(3.dp).width(318.dp).height(48.dp)
                                 .clickable {
                                     click?.invoke()
-                                }
-                                .background(
+                                }.background(
                                     color = BeumColors.baseGrayLightGray75,
                                     shape = RoundedCornerShape(size = 8.dp)
                                 ).padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp)
                         ) {
-                            Text(
-                                text = "포인트 걸기", style = TextStyle(
-                                    fontSize = BeumTypo.TypoScaleText300,
-                                    lineHeight = BeumDimen.TypoLienheigtLineheight200,
-                                    fontFamily = FontFamily(Font(Res.font.sf_pro)),
-                                    fontWeight = FontWeight(500),
-                                    color = BeumColors.baseGrayLightGray400,
+                            if (content.toInt() > 0) {
+
+                                Text(
+                                    text = content, style = TextStyle(
+                                        fontSize = BeumTypo.TypoScaleText500,
+                                        lineHeight = 32.8.sp,
+                                        fontFamily = FontFamily(Font(Res.font.sf_pro)),
+                                        fontWeight = FontWeight(500),
+                                        color = BeumColors.baseGrayLightGray900,
+                                    )
                                 )
-                            )
-                            Spacer(modifier = Modifier.weight(1f))
 
-                            Image(
-                                modifier = Modifier.width(8.dp).height(16.dp)
-                                    .align(Alignment.CenterVertically),
-                                painter = painterResource(Res.drawable.icon_arrow_right),
-                                colorFilter = ColorFilter.tint(color = BeumColors.Gray_400),
-                                contentDescription = "image description"
-                            )
+                                Spacer(modifier = Modifier.width(4.dp))
 
+                                Image(
+                                    modifier = Modifier.width(16.dp).height(16.dp).background(
+                                        color = BeumColors.baseCoolGrayLightGray700,
+                                        shape = RoundedCornerShape(size = 66.66668.dp)
+                                    ).padding(
+                                        start = 2.66667.dp,
+                                        top = 2.66667.dp,
+                                        end = 2.66667.dp,
+                                        bottom = 2.66667.dp
+                                    ).align(Alignment.CenterVertically),
+                                    painter = painterResource(Res.drawable.heart),
+                                    contentDescription = ""
+                                )
+                                Spacer(modifier = Modifier.weight(1f))
+                                Image(
+                                    modifier = Modifier.width(16.dp).height(16.dp)
+                                        .align(Alignment.CenterVertically).clickable {
+                                            onTextChange.invoke("")
+                                        },
+                                    painter = painterResource(Res.drawable.ic_clear),
+                                    contentDescription = ""
+                                )
+
+                            } else {
+                                Text(
+                                    text = "포인트 걸기", style = TextStyle(
+                                        fontSize = BeumTypo.TypoScaleText300,
+                                        lineHeight = BeumDimen.TypoLienheigtLineheight200,
+                                        fontFamily = FontFamily(Font(Res.font.sf_pro)),
+                                        fontWeight = FontWeight(500),
+                                        color = BeumColors.baseGrayLightGray400,
+                                    )
+                                )
+                                Spacer(modifier = Modifier.weight(1f))
+
+                                Image(
+                                    modifier = Modifier.width(8.dp).height(16.dp)
+                                        .align(Alignment.CenterVertically),
+                                    painter = painterResource(Res.drawable.icon_arrow_right),
+                                    colorFilter = ColorFilter.tint(color = BeumColors.Gray_400),
+                                    contentDescription = "image description"
+                                )
+                            }
                         }
                     }
                 }
-
             }
         }
         if (infoClick != null) {
