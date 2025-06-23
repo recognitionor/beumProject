@@ -48,7 +48,6 @@ import beumproject.composeapp.generated.resources.ic_close
 import beumproject.composeapp.generated.resources.icon_arrow_right
 import beumproject.composeapp.generated.resources.sf_pro
 import com.kal.beum.core.presentation.BeumColors
-import com.kal.beum.core.presentation.Toast
 import com.kal.beum.core.presentation.ToastInfo
 import com.kal.beum.main.presentation.MainAction
 import org.jetbrains.compose.resources.Font
@@ -79,7 +78,9 @@ fun WritingScreen(onAction: (MainAction) -> Unit) {
     var showPointSettingSheet by remember { mutableStateOf(false) }
 
     if (state.isClose) {
-        onAction(MainAction.ToastMessage(ToastInfo("게시글이 등록되었습니다.")))
+        if (state.closeMessage?.isNotEmpty() == true) {
+            onAction(MainAction.ToastMessage(ToastInfo("게시글이 등록되었습니다.")))
+        }
         onAction(MainAction.SetFullScreen(null))
         viewModel.onAction(WritingAction.Reset)
     }

@@ -74,16 +74,16 @@ class WritingViewModel(
                 _state.update { it.copy(rewardPoint = action.point) }
             }
 
-            WritingAction.Reset -> {
-                _state.update { WritingState(it.writeCategoryMap) }
+            is WritingAction.Reset -> {
+                _state.update { WritingState(it.writeCategoryMap, closeMessage = null) }
             }
 
-            WritingAction.Submit -> {
+            is WritingAction.Submit -> {
                 submit()
             }
 
-            WritingAction.Close -> {
-                _state.update { it.copy(isClose = true) }
+            is WritingAction.Close -> {
+                _state.update { it.copy(isClose = true, closeMessage = null) }
             }
         }
     }
