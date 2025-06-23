@@ -9,5 +9,9 @@ data class WritingState(
     val tags: String = "",
     val isDevil: Boolean = false,
     val selectedCategory: WritingCategory? = null,
-    val rewardPoint: Int = 0
+    val rewardPoint: Int = 0,
+    val submitProgress: Boolean = false,
+    val submitError: String = "",
+    val isClose: Boolean = false,
+    val closeMessage: String? = null
 )

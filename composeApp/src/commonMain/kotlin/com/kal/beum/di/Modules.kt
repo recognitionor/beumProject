@@ -21,9 +21,13 @@ import com.kal.beum.main.data.network.RemoteLoginDataSource
 import com.kal.beum.main.domain.AppRepository
 import com.kal.beum.main.presentation.MainViewModel
 import com.kal.beum.write.data.network.MockWriteCategoryDataSource
+import com.kal.beum.write.data.network.MockWriteDataSource
 import com.kal.beum.write.data.network.RemoteWriteCategoryDataSource
+import com.kal.beum.write.data.network.RemoteWriteDataSource
 import com.kal.beum.write.data.repository.DefaultWriteCategoryRepository
+import com.kal.beum.write.data.repository.DefaultWritingRepository
 import com.kal.beum.write.domain.WritingCategoryRepository
+import com.kal.beum.write.domain.WritingRepository
 import com.kal.beum.write.presentation.WritingViewModel
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
@@ -47,11 +51,13 @@ val sharedModules = module {
     singleOf(::MockLoginDataSource).bind<RemoteLoginDataSource>()
     singleOf(::MockCommunityDataSource).bind<RemoteCommunityDataSource>()
     singleOf(::MockWriteCategoryDataSource).bind<RemoteWriteCategoryDataSource>()
+    singleOf(::MockWriteDataSource).bind<RemoteWriteDataSource>()
 
     singleOf(::DefaultAppRepository).bind<AppRepository>()
     singleOf(::DefaultHomeRepository).bind<HomeRepository>()
     singleOf(::DefaultCommunityRepository).bind<CommunityRepository>()
     singleOf(::DefaultWriteCategoryRepository).bind<WritingCategoryRepository>()
+    singleOf(::DefaultWritingRepository).bind<WritingRepository>()
 
     viewModelOf(::HomeViewModel)
     viewModelOf(::MainViewModel)

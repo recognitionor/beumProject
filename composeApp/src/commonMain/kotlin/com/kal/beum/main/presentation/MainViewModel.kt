@@ -3,6 +3,7 @@ package com.kal.beum.main.presentation
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kal.beum.core.presentation.ToastInfo
 import com.kal.beum.main.domain.AppRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -57,7 +58,7 @@ class MainViewModel(private val appRepository: AppRepository) : ViewModel() {
         }.launchIn(viewModelScope)
     }
 
-    fun setFullScreen(screen: (@Composable () -> Unit)? = null) {
+    private fun setFullScreen(screen: (@Composable () -> Unit)? = null) {
         println("setFullScreen")
         _state.update { it.copy(fullScreen = screen) }
     }
@@ -79,6 +80,9 @@ class MainViewModel(private val appRepository: AppRepository) : ViewModel() {
         when (action) {
             is MainAction.ToggleDevil -> devilToggle(action.isDevil)
             is MainAction.SetFullScreen -> setFullScreen(action.screen)
+            is MainAction.ToastMessage -> {
+                _state.update { it.copy(showToast = action.toastInfo) }
+            }
         }
     }
 }

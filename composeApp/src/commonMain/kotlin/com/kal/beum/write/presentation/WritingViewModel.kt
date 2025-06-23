@@ -1,9 +1,12 @@
 package com.kal.beum.write.presentation
 
+import androidx.lifecycle.VIEW_MODEL_STORE_OWNER_KEY
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kal.beum.core.domain.onError
 import com.kal.beum.core.domain.onSuccess
 import com.kal.beum.write.domain.WritingCategoryRepository
+import com.kal.beum.write.domain.WritingRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart
@@ -11,8 +14,10 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class WritingViewModel(private val writeCategoryRepository: WritingCategoryRepository) :
-    ViewModel() {
+class WritingViewModel(
+    private val writingRepository: WritingRepository,
+    private val writeCategoryRepository: WritingCategoryRepository
+) : ViewModel() {
     private val _state = MutableStateFlow(WritingState())
     val state = _state.onStart {
         getWriteCategoryList()
@@ -28,7 +33,19 @@ class WritingViewModel(private val writeCategoryRepository: WritingCategoryRepos
                 _state.update { it.copy(writeCategoryMap = result) }
             }
         }.start()
+    }
 
+    private fun submit() {
+        viewModelScope.launch {
+            _state.update { it.copy(submitProgress = true) }
+            writingRepository.submitWriting().onSuccess { result ->
+                if (result) {
+                    _state.update { it.copy(submitProgress = false, isClose = true, closeMessage = "게시글이 등록되었습니다.") }
+                }
+            }.onError { error->
+                _state.update { it.copy(submitProgress = false, isClose = true, closeMessage = error.name) }
+            }
+        }.start()
     }
 
     fun onAction(action: WritingAction) { // 이름을 onEvent 대신 onAction으로 변경
@@ -55,6 +72,18 @@ class WritingViewModel(private val writeCategoryRepository: WritingCategoryRepos
 
             is WritingAction.OnPointChanged -> {
                 _state.update { it.copy(rewardPoint = action.point) }
+            }
+
+            WritingAction.Reset -> {
+                _state.update { WritingState(it.writeCategoryMap) }
+            }
+
+            WritingAction.Submit -> {
+                submit()
+            }
+
+            WritingAction.Close -> {
+                _state.update { it.copy(isClose = true) }
             }
         }
     }

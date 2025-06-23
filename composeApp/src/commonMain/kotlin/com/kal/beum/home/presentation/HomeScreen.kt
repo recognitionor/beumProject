@@ -35,6 +35,7 @@ import beumproject.composeapp.generated.resources.icon_arrow_right
 import beumproject.composeapp.generated.resources.sf_pro
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumDimen
+import com.kal.beum.core.presentation.ToastInfo
 import com.kal.beum.home.presentation.components.AlarmButton
 import com.kal.beum.home.presentation.components.FlowRow
 import com.kal.beum.home.presentation.components.ToggleButton
@@ -49,7 +50,6 @@ fun HomeScreen(
 ) {
     val viewModel = koinViewModel<HomeViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
-
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

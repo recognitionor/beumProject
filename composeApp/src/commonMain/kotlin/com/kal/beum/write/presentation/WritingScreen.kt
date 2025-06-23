@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
@@ -20,11 +21,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,6 +48,8 @@ import beumproject.composeapp.generated.resources.ic_close
 import beumproject.composeapp.generated.resources.icon_arrow_right
 import beumproject.composeapp.generated.resources.sf_pro
 import com.kal.beum.core.presentation.BeumColors
+import com.kal.beum.core.presentation.Toast
+import com.kal.beum.core.presentation.ToastInfo
 import com.kal.beum.main.presentation.MainAction
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
@@ -54,8 +59,12 @@ import org.koin.compose.viewmodel.koinViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WritingScreen(onAction: (MainAction) -> Unit) {
-    println("WritingScreen")
     val viewModel = koinViewModel<WritingViewModel>()
+    // 진입할 때 상태 초기화
+    LaunchedEffect(Unit) {
+        viewModel.onAction(WritingAction.Reset)
+    }
+
     val state by viewModel.state.collectAsStateWithLifecycle()
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = false // <- 이게 포인트!
@@ -68,6 +77,12 @@ fun WritingScreen(onAction: (MainAction) -> Unit) {
 
     var showCategorySheet by remember { mutableStateOf(true) }
     var showPointSettingSheet by remember { mutableStateOf(false) }
+
+    if (state.isClose) {
+        onAction(MainAction.ToastMessage(ToastInfo("게시글이 등록되었습니다.")))
+        onAction(MainAction.SetFullScreen(null))
+        viewModel.onAction(WritingAction.Reset)
+    }
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier.fillMaxSize().background(Color.White).padding(top = 40.dp)
@@ -84,7 +99,7 @@ fun WritingScreen(onAction: (MainAction) -> Unit) {
                     painter = painterResource(Res.drawable.ic_close),
                     contentDescription = "",
                     Modifier.clickable {
-                        onAction(MainAction.SetFullScreen(null))
+                        viewModel.onAction(WritingAction.Close)
                     }.width(24.dp).height(24.dp).padding(1.dp)
                 )
                 Spacer(modifier = Modifier.width(20.dp))
@@ -169,8 +184,7 @@ fun WritingScreen(onAction: (MainAction) -> Unit) {
                 viewModel.onAction(WritingAction.OnCommunityChanged(it.toBoolean()))
             }
             Spacer(modifier = Modifier.height(12.dp))
-            WriteEditText(
-                115.dp,
+            WriteEditText(115.dp,
                 state.selectedCategory?.category ?: "",
                 "카테고리",
                 "카테고리를 선택해주세요",
@@ -199,7 +213,9 @@ fun WritingScreen(onAction: (MainAction) -> Unit) {
             Spacer(modifier = Modifier.height(12.dp))
 
             Button(
-                onClick = { },
+                onClick = {
+                    viewModel.onAction(WritingAction.Submit)
+                },
                 enabled = checkValidContent(state),
                 modifier = Modifier.fillMaxWidth().height(52.dp)
                     .padding(start = 20.dp, end = 20.dp),
@@ -208,9 +224,18 @@ fun WritingScreen(onAction: (MainAction) -> Unit) {
                     containerColor = BeumColors.primaryPrimarySkyblue, contentColor = Color.White
                 )
             ) {
-                Text(
-                    text = "등록", fontSize = 18.sp, fontWeight = FontWeight.Bold
-                )
+                if (state.submitProgress) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(24.dp),
+                        color = Color.White,
+                        strokeWidth = 2.dp
+                    )
+                } else {
+                    Text(
+                        text = "등록", fontSize = 18.sp, fontWeight = FontWeight.Bold
+                    )
+                }
+
             }
 
             Spacer(modifier = Modifier.height(30.dp))

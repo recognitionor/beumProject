@@ -1,6 +1,5 @@
 package com.kal.beum.main.presentation
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -14,9 +13,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -47,6 +43,8 @@ import com.kal.beum.Route
 import com.kal.beum.community.presentation.CommunityScreen
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumTypo
+import com.kal.beum.core.presentation.Toast
+import com.kal.beum.core.presentation.ToastInfo
 import com.kal.beum.home.presentation.HomeScreen
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
@@ -67,31 +65,37 @@ fun MainScreen() {
         }) { innerPadding ->
 
             // NavHost 내에서 시작 화면을 정의합니다.
-
-            Surface(
-                modifier = Modifier.fillMaxSize(),
-                color = if (state.isDevil) BeumColors.baseGrayLightGray800 else BeumColors.baseCoolGrayLightGray100
-            ) {
-                NavHost(
-                    navController = navController,
-                    startDestination = Route.Home.toRoute(), // Home이 NavGraph의 시작점으로 정의됩니다.
-                    modifier = Modifier.fillMaxSize().padding(innerPadding)
+            Box(modifier = Modifier.fillMaxSize()) {
+                Surface(
+                    modifier = Modifier.fillMaxSize(),
+                    color = if (state.isDevil) BeumColors.baseGrayLightGray800 else BeumColors.baseCoolGrayLightGray100
                 ) {
-                    composable(Route.Home.toRoute()) {
-                        HomeScreen(state.isDevil, viewModel::onAction)
-                    }
-                    composable(Route.Community.toRoute()) {
-                        CommunityScreen(state.isDevil, viewModel::onAction)
-                    }
-                    composable(Route.Level("1").toRoute()) { backStackEntry ->
-                        val levelId = backStackEntry.arguments?.getString("id")
-                        LevelScreen(levelId)
-                    }
-                    composable(Route.MyInfo("userId").toRoute()) { backStackEntry ->
-                        val myInfoId = backStackEntry.arguments?.getString("id")
-                        MyInfoScreen(myInfoId)
+                    NavHost(
+                        navController = navController,
+                        startDestination = Route.Home.toRoute(), // Home이 NavGraph의 시작점으로 정의됩니다.
+                        modifier = Modifier.fillMaxSize().padding(innerPadding)
+                    ) {
+                        composable(Route.Home.toRoute()) {
+                            HomeScreen(state.isDevil, viewModel::onAction)
+                        }
+                        composable(Route.Community.toRoute()) {
+                            CommunityScreen(state.isDevil, viewModel::onAction)
+                        }
+                        composable(Route.Level("1").toRoute()) { backStackEntry ->
+                            val levelId = backStackEntry.arguments?.getString("id")
+                            LevelScreen(levelId)
+                        }
+                        composable(Route.MyInfo("userId").toRoute()) { backStackEntry ->
+                            val myInfoId = backStackEntry.arguments?.getString("id")
+                            MyInfoScreen(myInfoId)
+                        }
                     }
                 }
+            }
+        }
+        state.showToast?.let {
+            Toast(it) {
+                viewModel.onAction(MainAction.ToastMessage())
             }
         }
     }

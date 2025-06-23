@@ -14,6 +14,8 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.key
 import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -47,66 +49,74 @@ fun TagInput(
                 )
             )
         }
-        if (tagList.size < 3) {
-            Box {
-                BasicTextField(
-                    value = text,
-                    onValueChange = { input ->
-                        println(input)
-                        val delimiters = listOf(' ', ',', '\n')
-                        if (input.isNotEmpty() && delimiters.any { input.last() == it }) {
-                            // 구분자 앞의 텍스트(공백, 쉼표, 개행 제거)
-                            val newTag = input.dropLast(1).trim()
-                            tagList = if (!input.startsWith("#")) {
-                                tagList + "#${newTag}"
-                            } else {
-                                tagList + newTag
-                            }
-                            if (newTag.isNotEmpty()) {
-                                // 중복 방지 등도 추가 가능
-                                onTagsChanged(tagList)
-                            }
-                            text = ""
-                        } else {
-                            text = input
-                        }
-                        prevText = text
-                    },
-                    singleLine = true,
-                    modifier = Modifier.fillMaxWidth().onKeyEvent { keyEvent ->
-                        if (tagList.isNotEmpty()) {
-                            tagList = tagList - tagList[tagList.lastIndex]
-                        }
-                        false
-                    },
-                    keyboardOptions = KeyboardOptions.Default.copy(
-                        imeAction = ImeAction.Done
-                    ),
-                    keyboardActions = KeyboardActions(onDone = {
-                        val newTag = text.trim()
-                        if (newTag.isNotEmpty()) {
-                            tagList = if (!newTag.startsWith("#")) {
-                                tagList + "#$newTag"
-                            } else {
-                                tagList + newTag
-                            }
-                            onTagsChanged(tagList)
-                            text = ""
-                        }
-                    })
-                )
+        Box {
+            BasicTextField(
+                value = text,
+                onValueChange = { input ->
+                    println(input)
+                    val delimiters = listOf(' ', ',', '\n')
+                    if (input.isNotEmpty() && delimiters.any { input.last() == it }) {
+                        // 구분자 앞의 텍스트(공백, 쉼표, 개행 제거)
+                        val newTag = input.dropLast(1).trim()
 
-                if (text.isEmpty()) {
-                    Text(
-                        text = "#입력 후 키워드를 적어주세요.", style = TextStyle(
-                            fontSize = BeumTypo.TypoScaleText150,
-                            lineHeight = BeumDimen.TypoLienheigtLineheight200,
-                            fontFamily = FontFamily(Font(Res.font.sf_pro)),
-                            fontWeight = FontWeight(500),
-                            color = BeumColors.baseGrayLightGray500,
-                        )
+                        tagList = if (!input.startsWith("#")) {
+                            if (tagList.contains("#${newTag}")) {
+                                tagList
+                            } else {
+                                tagList + "#${newTag}"
+                            }
+                        } else {
+                            if (tagList.contains(newTag)) {
+                                tagList
+                            } else {
+                                tagList + newTag
+                            }
+                        }
+                        if (newTag.isNotEmpty()) {
+                            // 중복 방지 등도 추가 가능
+                            onTagsChanged(tagList)
+                        }
+                        text = ""
+                    } else {
+                        text = if (tagList.size >= 3) prevText else input
+                    }
+                    prevText = text
+                },
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth().onKeyEvent { keyEvent ->
+                    if (keyEvent.key == Key.Backspace )
+                    if (tagList.isNotEmpty()) {
+                        tagList = tagList - tagList[tagList.lastIndex]
+                    }
+                    false
+                },
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(onDone = {
+                    val newTag = text.trim()
+                    if (newTag.isNotEmpty()) {
+                        tagList = if (!newTag.startsWith("#")) {
+                            tagList + "#$newTag"
+                        } else {
+                            tagList + newTag
+                        }
+                        onTagsChanged(tagList)
+                        text = ""
+                    }
+                })
+            )
+
+            if (text.isEmpty()) {
+                Text(
+                    text = "#입력 후 키워드를 적어주세요.", style = TextStyle(
+                        fontSize = BeumTypo.TypoScaleText150,
+                        lineHeight = BeumDimen.TypoLienheigtLineheight200,
+                        fontFamily = FontFamily(Font(Res.font.sf_pro)),
+                        fontWeight = FontWeight(500),
+                        color = BeumColors.baseGrayLightGray500,
                     )
-                }
+                )
             }
         }
     }
