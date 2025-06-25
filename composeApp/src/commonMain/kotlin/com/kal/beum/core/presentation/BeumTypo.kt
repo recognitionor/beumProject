@@ -17,7 +17,10 @@ object BeumTypo {
     val TypoScaleText25 = 9.sp
     val TypoScaleText100 = 13.sp
     val TypoLienheigtLineheight100 = 17.sp
-
+    val TypoScaleText75 = 12.sp
+    val lineHeightCaption1 = 16.sp
+    val TypoScaleText400 = 18.sp
+    val lineHeightBody3 = 18.sp
 
 
 }

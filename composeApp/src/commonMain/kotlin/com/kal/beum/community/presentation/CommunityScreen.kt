@@ -20,12 +20,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -37,11 +35,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import beumproject.composeapp.generated.resources.Res
 import beumproject.composeapp.generated.resources.ic_add_medium
 import beumproject.composeapp.generated.resources.sf_pro
+import com.kal.beum.content.presentation.ContentDetailScreen
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumTypo
 import com.kal.beum.home.presentation.components.ToggleButton
 import com.kal.beum.main.presentation.MainAction
-import com.kal.beum.main.presentation.MainViewModel
 import com.kal.beum.write.presentation.WritingScreen
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
@@ -50,7 +48,6 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun CommunityScreen(isDevil: Boolean, onAction: (MainAction) -> Unit) {
-    val mainViewModel = koinViewModel<MainViewModel>()
     val viewModel = koinViewModel<CommunityViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
     val listState = rememberLazyListState()
@@ -63,9 +60,6 @@ fun CommunityScreen(isDevil: Boolean, onAction: (MainAction) -> Unit) {
     LaunchedEffect(state.selectedCategoryId) {
         listState.scrollToItem(0)
     }
-
-
-
 
     Column {
         Box(
@@ -101,13 +95,28 @@ fun CommunityScreen(isDevil: Boolean, onAction: (MainAction) -> Unit) {
             val communityList = state.communityList[state.selectedCategoryId]
             Box {
                 LazyColumn(
-                    modifier = Modifier.fillMaxSize(), state = listState
+                    modifier = Modifier.fillMaxSize()
+                        .padding(start = 20.dp, end = 20.dp, top = 16.dp, bottom = 24.dp),
+                    state = listState
                 ) {
                     items(communityList.size) {
                         val item = communityList[it]
                         Column(
-                            modifier = Modifier.height(130.dp).fillMaxWidth()
-                                .padding(start = 20.dp, end = 20.dp, top = 16.dp, bottom = 24.dp)
+                            modifier = Modifier.shadow(
+                                elevation = 20.dp,
+                                spotColor = Color(0x0D000000),
+                                ambientColor = Color(0x0D000000)
+                            ).clip(RoundedCornerShape(9.dp)).clickable {
+                                onAction(MainAction.SetFullScreen {
+                                    ContentDetailScreen(item) {
+                                        onAction(MainAction.SetFullScreen(null))
+                                    }
+                                })
+                            }.background(
+                                color = BeumColors.baseGrayLightGray50,
+                                shape = RoundedCornerShape(9.dp)
+                            ).padding(start = 20.dp, top = 16.dp, end = 20.dp, bottom = 24.dp)
+                                .fillMaxWidth()
                         ) {
                             Row(modifier = Modifier.fillMaxWidth().height(20.dp)) {
                                 if (item.isPopular) {
@@ -148,6 +157,7 @@ fun CommunityScreen(isDevil: Boolean, onAction: (MainAction) -> Unit) {
                                 )
                             )
                         }
+                        Spacer(modifier = Modifier.height(16.dp))
                     }
                 }
 

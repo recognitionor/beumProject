@@ -9,6 +9,7 @@ object BeumColors {
     val LightBlue = Color(0xFF9AD9FF)
     val PrimarySkyBlue = Color(0x0CBAF5)
     val White = Color(0xFFFFFFFF)
+
     val Gray_800 = Color(0xFF282828)
     val Gray_400 = Color(0xFFAEB1B8)
     val KaKaoColor = Color(0xFFFEE500)
@@ -46,6 +47,10 @@ object BeumColors {
     val baseAlphaBlackLightBlack50A: Color = Color(0x0A000000)
     val baseCoolGrayLightGray700: Color = Color(0xFF45474F)
     val baseAlphaBlackDarkBlack50A: Color = Color(0x0A000000)
+    val baseGrayLightGray50: Color = Color(0xFFFAFAFA)
+    val baseAlphaWhiteLightWhite500A: Color = Color(0xA6FFFFFF)
+
+
 
 
 }

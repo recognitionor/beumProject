@@ -9,5 +9,6 @@ data class CommunityItemDto(
     val content: String,
     val writer: String,
     val categoryName: String,
-    val isPopular: Boolean
+    val isPopular: Boolean,
+    val lastModifiedTime: Long
 )

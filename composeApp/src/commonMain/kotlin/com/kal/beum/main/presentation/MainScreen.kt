@@ -56,7 +56,6 @@ fun MainScreen() {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val navController = rememberNavController()
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
-
     if (!state.isSplashDone) {
         SplashScreen()
     } else {
@@ -75,6 +74,7 @@ fun MainScreen() {
                         startDestination = Route.Home.toRoute(), // Home이 NavGraph의 시작점으로 정의됩니다.
                         modifier = Modifier.fillMaxSize().padding(innerPadding)
                     ) {
+
                         composable(Route.Home.toRoute()) {
                             HomeScreen(state.isDevil, viewModel::onAction)
                         }

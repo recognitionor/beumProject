@@ -19,6 +19,7 @@ fun CommunityItemDto.toCommunityItem(): CommunityItem {
         content = this.content,
         writer = this.writer,
         categoryName = this.categoryName,
-        isPopular = this.isPopular
+        isPopular = this.isPopular,
+        lastModifiedTime = this.lastModifiedTime
     )
 }
