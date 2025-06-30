@@ -108,7 +108,7 @@ fun CommunityScreen(isDevil: Boolean, onAction: (MainAction) -> Unit) {
                                 ambientColor = Color(0x0D000000)
                             ).clip(RoundedCornerShape(9.dp)).clickable {
                                 onAction(MainAction.SetFullScreen {
-                                    ContentDetailScreen(item) {
+                                    ContentDetailScreen(item.id) {
                                         onAction(MainAction.SetFullScreen(null))
                                     }
                                 })

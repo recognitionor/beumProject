@@ -18,7 +18,7 @@ object BeumDimen {
     val baseLineheightTextLineheight300 = 22.sp
     val TypoLienheigtLineheight200 = 21.sp
     val radius75: Dp = 6.dp
-
+    val lineHeightBody3 = 18.sp
 
 
 }

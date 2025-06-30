@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -19,9 +18,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -31,6 +33,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import beumproject.composeapp.generated.resources.Res
 import beumproject.composeapp.generated.resources.ic_angel_emoji
 import beumproject.composeapp.generated.resources.ic_heart_empty
@@ -39,14 +42,23 @@ import beumproject.composeapp.generated.resources.ic_reply
 import beumproject.composeapp.generated.resources.icon_arrow_right_black
 import beumproject.composeapp.generated.resources.sf_pro
 import com.kal.beum.community.domain.CommunityItem
+import com.kal.beum.community.presentation.CommunityViewModel
+import com.kal.beum.community.presentation.ContentDetailViewModel
+import com.kal.beum.content.domain.ContentsRepository
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumTypo
 import com.kal.beum.utils.formatTimeAgo
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun ContentDetailScreen(item: CommunityItem, backBtnClick: () -> Unit) {
+fun ContentDetailScreen(id: Int, backBtnClick: () -> Unit) {
+    val viewModel = koinViewModel<ContentDetailViewModel>()
+    val state by viewModel.state.collectAsStateWithLifecycle()
+    LaunchedEffect(Unit) {
+        viewModel.getContentDetail(id)
+    }
     Box(
         modifier = Modifier.fillMaxSize().background(Color.White)
             .padding(top = WindowInsets.systemBars.asPaddingValues().calculateTopPadding())
@@ -98,7 +110,7 @@ fun ContentDetailScreen(item: CommunityItem, backBtnClick: () -> Unit) {
                     Spacer(modifier = Modifier.width(8.dp))
                     Column {
                         Text(
-                            text = item.writer, style = TextStyle(
+                            text = state.contentDetail?.writer ?: "", style = TextStyle(
                                 fontSize = BeumTypo.TypoScaleText150,
                                 fontFamily = FontFamily(Font(Res.font.sf_pro)),
                                 fontWeight = FontWeight(600),
@@ -106,14 +118,17 @@ fun ContentDetailScreen(item: CommunityItem, backBtnClick: () -> Unit) {
                             )
                         )
                         Spacer(modifier = Modifier.height(2.dp))
-                        Text(
-                            text = formatTimeAgo(item.lastModifiedTime), style = TextStyle(
-                                fontSize = BeumTypo.TypoScaleText75,
-                                fontFamily = FontFamily(Font(Res.font.sf_pro)),
-                                fontWeight = FontWeight(400),
-                                color = BeumColors.baseGrayLightGray500,
+                        state.contentDetail?.lastModifiedTime?.let {
+                            Text(
+                                text = formatTimeAgo(it), style = TextStyle(
+                                    fontSize = BeumTypo.TypoScaleText75,
+                                    fontFamily = FontFamily(Font(Res.font.sf_pro)),
+                                    fontWeight = FontWeight(400),
+                                    color = BeumColors.baseGrayLightGray500,
+                                )
                             )
-                        )
+                        }
+
                     }
                 }
                 Spacer(modifier = Modifier.height(20.dp).fillMaxWidth())
@@ -125,7 +140,7 @@ fun ContentDetailScreen(item: CommunityItem, backBtnClick: () -> Unit) {
                     ).padding(start = 4.dp, top = 2.dp, end = 4.dp, bottom = 2.dp)
                 ) {
                     Text(
-                        text = item.categoryName, style = TextStyle(
+                        text = state.contentDetail?.categoryName ?: "", style = TextStyle(
                             fontSize = 9.sp,
                             lineHeight = BeumTypo.lineHeightCaption1,
                             fontFamily = FontFamily(Font(Res.font.sf_pro)),
@@ -138,7 +153,7 @@ fun ContentDetailScreen(item: CommunityItem, backBtnClick: () -> Unit) {
                 Spacer(modifier = Modifier.height(16.dp))
 
                 Text(
-                    text = item.title, style = TextStyle(
+                    text = state.contentDetail?.title ?: "", style = TextStyle(
                         fontSize = BeumTypo.TypoScaleText400,
                         lineHeight = BeumTypo.TypoScaleText400,
                         fontFamily = FontFamily(Font(Res.font.sf_pro)),
@@ -149,7 +164,7 @@ fun ContentDetailScreen(item: CommunityItem, backBtnClick: () -> Unit) {
                 Spacer(modifier = Modifier.height(12.dp))
 
                 Text(
-                    text = item.content, style = TextStyle(
+                    text = state.contentDetail?.content ?: "", style = TextStyle(
                         fontSize = 14.sp,
                         lineHeight = 22.sp,
                         fontFamily = FontFamily(Font(Res.font.sf_pro)),
@@ -180,7 +195,7 @@ fun ContentDetailScreen(item: CommunityItem, backBtnClick: () -> Unit) {
                         contentDescription = ""
                     )
                     Text(
-                        text = "10", style = TextStyle(
+                        text = state.contentDetail?.likeCount?.toString() ?: "0", style = TextStyle(
                             fontSize = 13.sp,
                             lineHeight = 20.sp,
                             fontFamily = FontFamily(Font(Res.font.sf_pro)),
@@ -193,7 +208,8 @@ fun ContentDetailScreen(item: CommunityItem, backBtnClick: () -> Unit) {
                         painter = painterResource(Res.drawable.ic_reply), contentDescription = ""
                     )
                     Text(
-                        text = "10", style = TextStyle(
+                        text = state.contentDetail?.replyList?.size?.toString() ?: "0",
+                        style = TextStyle(
                             fontSize = 13.sp,
                             lineHeight = 20.sp,
                             fontFamily = FontFamily(Font(Res.font.sf_pro)),
@@ -205,7 +221,7 @@ fun ContentDetailScreen(item: CommunityItem, backBtnClick: () -> Unit) {
                     Spacer(modifier = Modifier.weight(1f))
 
                     Text(
-                        text = "조회 38회", style = TextStyle(
+                        text = "조회 ${state.contentDetail?.viewCount ?: "0"}회", style = TextStyle(
                             fontSize = BeumTypo.TypoScaleText75,
                             fontFamily = FontFamily(Font(Res.font.sf_pro)),
                             fontWeight = FontWeight(400),
@@ -229,10 +245,17 @@ fun ContentDetailScreen(item: CommunityItem, backBtnClick: () -> Unit) {
                         color = BeumColors.baseGrayLightGray800,
                     )
                 )
-                Spacer(modifier = Modifier.height(24.dp))
+
+                LazyColumn {
+                    items(state.contentDetail?.replyList?.size ?: 0) { index ->
+                        val reply = state.contentDetail?.replyList?.get(index)
+                        reply?.let {
+                            Spacer(modifier = Modifier.height(16.dp))
+                            ReplyView(it)
+                        }
+                    }
+                }
             }
         }
-
-
     }
 }

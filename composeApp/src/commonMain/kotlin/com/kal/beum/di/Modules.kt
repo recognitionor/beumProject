@@ -6,6 +6,11 @@ import com.kal.beum.community.data.network.RemoteCommunityDataSource
 import com.kal.beum.community.data.repository.DefaultCommunityRepository
 import com.kal.beum.community.domain.CommunityRepository
 import com.kal.beum.community.presentation.CommunityViewModel
+import com.kal.beum.community.presentation.ContentDetailViewModel
+import com.kal.beum.content.data.network.MockContentDataSource
+import com.kal.beum.content.data.network.RemoteContentDataSource
+import com.kal.beum.content.data.repository.DefaultContentDetailRepository
+import com.kal.beum.content.domain.ContentsRepository
 import com.kal.beum.core.data.HttpClientFactory
 import com.kal.beum.core.data.database.DatabaseFactory
 import com.kal.beum.home.data.network.MockHomeDataSource
@@ -52,16 +57,19 @@ val sharedModules = module {
     singleOf(::MockCommunityDataSource).bind<RemoteCommunityDataSource>()
     singleOf(::MockWriteCategoryDataSource).bind<RemoteWriteCategoryDataSource>()
     singleOf(::MockWriteDataSource).bind<RemoteWriteDataSource>()
+    singleOf(::MockContentDataSource).bind<RemoteContentDataSource>()
 
     singleOf(::DefaultAppRepository).bind<AppRepository>()
     singleOf(::DefaultHomeRepository).bind<HomeRepository>()
     singleOf(::DefaultCommunityRepository).bind<CommunityRepository>()
     singleOf(::DefaultWriteCategoryRepository).bind<WritingCategoryRepository>()
     singleOf(::DefaultWritingRepository).bind<WritingRepository>()
+    singleOf(::DefaultContentDetailRepository).bind<ContentsRepository>()
 
     viewModelOf(::HomeViewModel)
     viewModelOf(::MainViewModel)
     viewModelOf(::CommunityViewModel)
+    viewModelOf(::ContentDetailViewModel)
     viewModelOf(::WritingViewModel)
 
 
