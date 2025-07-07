@@ -3,6 +3,7 @@ package com.kal.beum.content.presentation
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -39,7 +40,7 @@ import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun ReplyView(replyInfo: ReplyInfo) {
+fun ReplyView(replyInfo: ReplyInfo, selectedDetailReview: (ReplyInfo) -> Unit) {
     Row {
 
         Box(
@@ -110,8 +111,6 @@ fun ReplyView(replyInfo: ReplyInfo) {
                         color = BeumColors.primaryPrimarySkyblue,
                     )
                 )
-
-
             }
             Spacer(modifier = Modifier.height(5.dp))
             Text(
@@ -132,8 +131,7 @@ fun ReplyView(replyInfo: ReplyInfo) {
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = replyInfo.likeCount.toString(),
-                    style = TextStyle(
+                    text = replyInfo.likeCount.toString(), style = TextStyle(
                         fontSize = 13.sp,
                         lineHeight = 20.sp,
                         fontFamily = FontFamily(Font(Res.font.sf_pro)),
@@ -146,8 +144,7 @@ fun ReplyView(replyInfo: ReplyInfo) {
                 Image(painter = painterResource(Res.drawable.ic_reply), contentDescription = "")
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = replyInfo.replyList.size.toString(),
-                    style = TextStyle(
+                    text = replyInfo.replyList.size.toString(), style = TextStyle(
                         fontSize = 13.sp,
                         lineHeight = 20.sp,
                         fontFamily = FontFamily(Font(Res.font.sf_pro)),
@@ -159,8 +156,9 @@ fun ReplyView(replyInfo: ReplyInfo) {
             }
             Spacer(modifier = Modifier.height(12.dp))
             Text(
-                text = "답글 ${replyInfo.replyList.size}개 더 보기",
-                style = TextStyle(
+                modifier = Modifier.clickable {
+                    selectedDetailReview.invoke(replyInfo)
+                }, text = "답글 ${replyInfo.replyList.size}개 더 보기", style = TextStyle(
                     fontSize = BeumTypo.TypoScaleText150,
                     lineHeight = 20.sp,
                     fontFamily = FontFamily(Font(Res.font.sf_pro)),
@@ -170,7 +168,10 @@ fun ReplyView(replyInfo: ReplyInfo) {
             )
 
             Spacer(modifier = Modifier.height(16.dp))
-            Box(modifier = Modifier.fillMaxWidth().height(1.dp).background(BeumColors.baseGrayLightGray100))
+            Box(
+                modifier = Modifier.fillMaxWidth().height(1.dp)
+                    .background(BeumColors.baseGrayLightGray100)
+            )
         }
     }
 }

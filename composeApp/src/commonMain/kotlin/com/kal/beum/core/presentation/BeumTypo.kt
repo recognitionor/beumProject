@@ -21,6 +21,8 @@ object BeumTypo {
     val lineHeightCaption1 = 16.sp
     val TypoScaleText400 = 18.sp
     val lineHeightBody3 = 18.sp
+    val baseTextWeightTextWeight700: Int = 700
+
 
 
 }

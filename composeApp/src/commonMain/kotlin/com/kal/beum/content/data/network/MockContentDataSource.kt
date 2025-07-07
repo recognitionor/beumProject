@@ -6,53 +6,93 @@ import com.kal.beum.core.domain.DataError
 import com.kal.beum.core.domain.Result
 
 class MockContentDataSource : RemoteContentDataSource {
+    val reReplyList = listOf(
+        ReplyInfoDto(
+            writer = "유저1",
+            content = "첫 번째 대댓글 댓글입니다.",
+            isLiked = 1,
+            isSelected = false,
+            replyList = emptyList(),
+            lastModifiedTime = 1717245296000L
+        ), ReplyInfoDto(
+            writer = "유저2",
+            content = "두 번째 대댓글 댓글입니다.",
+            isLiked = 0,
+            isSelected = false,
+            replyList = emptyList(),
+            lastModifiedTime = 1717245396000L
+        ), ReplyInfoDto(
+            writer = "유저3",
+            content = "세 번째 대댓글 댓글입니다.",
+            isLiked = 1,
+            isSelected = true,
+            replyList = emptyList(),
+            lastModifiedTime = 1717245496000L
+        ), ReplyInfoDto(
+            writer = "유저4",
+            content = "네 번째 대댓글 댓글입니다.",
+            isLiked = 0,
+            isSelected = false,
+            replyList = emptyList(),
+            lastModifiedTime = 1717245596000L
+        ), ReplyInfoDto(
+            writer = "유저5",
+            content = "다섯 번째 대댓글 댓글입니다.",
+            isLiked = 1,
+            isSelected = false,
+            replyList = emptyList(),
+            lastModifiedTime = 1717245696000L
+        ), ReplyInfoDto(
+            writer = "유저6",
+            content = "여섯 번째 댓글입니다.",
+            isLiked = 0,
+            isSelected = false,
+            replyList = emptyList(),
+            lastModifiedTime = 1717245796000L
+        )
+    )
     val replyList = listOf(
         ReplyInfoDto(
             writer = "유저1",
             content = "첫 번째 댓글입니다.",
             isLiked = 1,
             isSelected = false,
-            replyList = emptyList(),
+            replyList = reReplyList,
             lastModifiedTime = 1717245296000L
-        ),
-        ReplyInfoDto(
+        ), ReplyInfoDto(
             writer = "유저2",
             content = "두 번째 댓글입니다.",
             isLiked = 0,
             isSelected = false,
-            replyList = emptyList(),
+            replyList = reReplyList,
             lastModifiedTime = 1717245396000L
-        ),
-        ReplyInfoDto(
+        ), ReplyInfoDto(
             writer = "유저3",
             content = "세 번째 댓글입니다.",
             isLiked = 1,
             isSelected = true,
-            replyList = emptyList(),
+            replyList = reReplyList,
             lastModifiedTime = 1717245496000L
-        ),
-        ReplyInfoDto(
+        ), ReplyInfoDto(
             writer = "유저4",
             content = "네 번째 댓글입니다.",
             isLiked = 0,
             isSelected = false,
-            replyList = emptyList(),
+            replyList = reReplyList,
             lastModifiedTime = 1717245596000L
-        ),
-        ReplyInfoDto(
+        ), ReplyInfoDto(
             writer = "유저5",
             content = "다섯 번째 댓글입니다.",
             isLiked = 1,
             isSelected = false,
-            replyList = emptyList(),
+            replyList = reReplyList,
             lastModifiedTime = 1717245696000L
-        ),
-        ReplyInfoDto(
+        ), ReplyInfoDto(
             writer = "유저6",
             content = "여섯 번째 댓글입니다.",
             isLiked = 0,
             isSelected = false,
-            replyList = emptyList(),
+            replyList = reReplyList,
             lastModifiedTime = 1717245796000L
         )
     )
