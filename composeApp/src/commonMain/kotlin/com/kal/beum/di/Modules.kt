@@ -18,6 +18,11 @@ import com.kal.beum.home.data.network.RemoteHomeDataSource
 import com.kal.beum.home.data.repository.DefaultHomeRepository
 import com.kal.beum.home.domain.HomeRepository
 import com.kal.beum.home.presentation.HomeViewModel
+import com.kal.beum.level.data.network.MockRankerUserInfoDataSource
+import com.kal.beum.level.data.network.RemoteRankerUserInfoDataSource
+import com.kal.beum.level.data.repository.DefaultRankerUserInfoRepository
+import com.kal.beum.level.domain.RankerUserInfoRepository
+import com.kal.beum.level.presentaion.RankingViewModel
 import com.kal.beum.main.data.DefaultAppRepository
 import com.kal.beum.main.data.database.AppDatabase
 import com.kal.beum.main.data.database.MIGRATION_1_2
@@ -58,6 +63,7 @@ val sharedModules = module {
     singleOf(::MockWriteCategoryDataSource).bind<RemoteWriteCategoryDataSource>()
     singleOf(::MockWriteDataSource).bind<RemoteWriteDataSource>()
     singleOf(::MockContentDataSource).bind<RemoteContentDataSource>()
+    singleOf(::MockRankerUserInfoDataSource).bind<RemoteRankerUserInfoDataSource>()
 
     singleOf(::DefaultAppRepository).bind<AppRepository>()
     singleOf(::DefaultHomeRepository).bind<HomeRepository>()
@@ -65,12 +71,14 @@ val sharedModules = module {
     singleOf(::DefaultWriteCategoryRepository).bind<WritingCategoryRepository>()
     singleOf(::DefaultWritingRepository).bind<WritingRepository>()
     singleOf(::DefaultContentDetailRepository).bind<ContentsRepository>()
+    singleOf(::DefaultRankerUserInfoRepository).bind<RankerUserInfoRepository>()
 
     viewModelOf(::HomeViewModel)
     viewModelOf(::MainViewModel)
     viewModelOf(::CommunityViewModel)
     viewModelOf(::ContentDetailViewModel)
     viewModelOf(::WritingViewModel)
+    viewModelOf(::RankingViewModel)
 
 
     single { get<AppDatabase>().appDao }

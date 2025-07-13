@@ -46,6 +46,7 @@ import com.kal.beum.core.presentation.BeumTypo
 import com.kal.beum.core.presentation.Toast
 import com.kal.beum.core.presentation.ToastInfo
 import com.kal.beum.home.presentation.HomeScreen
+import com.kal.beum.level.presentaion.RankingScreen
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -82,8 +83,7 @@ fun MainScreen() {
                             CommunityScreen(state.isDevil, viewModel::onAction)
                         }
                         composable(Route.Level("1").toRoute()) { backStackEntry ->
-                            val levelId = backStackEntry.arguments?.getString("id")
-                            LevelScreen(levelId)
+                            RankingScreen(state.isDevil, viewModel::onAction)
                         }
                         composable(Route.MyInfo("userId").toRoute()) { backStackEntry ->
                             val myInfoId = backStackEntry.arguments?.getString("id")
@@ -225,14 +225,6 @@ fun BottomNavigationBar(navController: NavController, currentRoute: String?, dev
                     contentDescription = "My Info"
                 )
             })
-    }
-}
-
-
-@Composable
-fun LevelScreen(levelId: String?) {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text("Level Screen: $levelId")
     }
 }
 
