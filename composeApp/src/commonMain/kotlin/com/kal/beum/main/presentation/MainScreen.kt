@@ -13,7 +13,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -44,9 +43,9 @@ import com.kal.beum.community.presentation.CommunityScreen
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumTypo
 import com.kal.beum.core.presentation.Toast
-import com.kal.beum.core.presentation.ToastInfo
 import com.kal.beum.home.presentation.HomeScreen
 import com.kal.beum.level.presentaion.RankingScreen
+import com.kal.beum.myinfo.presentaion.MyInfoScreen
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -86,8 +85,7 @@ fun MainScreen() {
                             RankingScreen(state.isDevil, viewModel::onAction)
                         }
                         composable(Route.MyInfo("userId").toRoute()) { backStackEntry ->
-                            val myInfoId = backStackEntry.arguments?.getString("id")
-                            MyInfoScreen(myInfoId)
+                            MyInfoScreen(state.isDevil, viewModel::onAction)
                         }
                     }
                 }
@@ -225,13 +223,6 @@ fun BottomNavigationBar(navController: NavController, currentRoute: String?, dev
                     contentDescription = "My Info"
                 )
             })
-    }
-}
-
-@Composable
-fun MyInfoScreen(myInfoId: String?) {
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Text("My Info Screen: $myInfoId")
     }
 }
 

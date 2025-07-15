@@ -95,7 +95,7 @@ fun RankingScreen(isDevil: Boolean, onAction: (MainAction) -> Unit) {
                 onDismissRequest = {
                     showDetailInfoIndex = -1
                 }, // 닫힐 때 None으로 초기화
-                containerColor = if (isDevil) Color(0xCC000000) else Color(0xCCFFFFFF	),
+                containerColor = if (isDevil) Color(0xCC000000) else Color(0xCCFFFFFF),
             ) {
                 RankDetailInfo(isDevil, state.rankerUserList[showDetailInfoIndex]) {}
             }
