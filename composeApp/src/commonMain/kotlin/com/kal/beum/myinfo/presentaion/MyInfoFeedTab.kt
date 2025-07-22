@@ -2,6 +2,7 @@ package com.kal.beum.myinfo.presentaion
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -42,12 +43,17 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun MyInfoFeedTab(
-    devil: Boolean, list: List<MyContent>, selectedTabIndex: Int, onTabSelected: (Int) -> Unit
+    devil: Boolean,
+    list: List<MyContent>,
+    selectedTabIndex: Int,
+    onItemClick: (MyContent) -> Unit,
+    onTabSelected: (Int) -> Unit
 ) {
     val tabs = listOf("작성한 글", "댓글단 글")
 
     Column {
-        TabRow(selectedTabIndex = selectedTabIndex,
+        TabRow(
+            selectedTabIndex = selectedTabIndex,
             containerColor = Color.White,
             indicator = { tabPositions ->
                 val tabPosition = tabPositions[selectedTabIndex]
@@ -125,7 +131,9 @@ fun MyInfoFeedTab(
                                     elevation = 20.dp,
                                     spotColor = Color(0x0D000000),
                                     ambientColor = Color(0x0D000000)
-                                ).fillMaxWidth().height(180.dp).background(
+                                ).clickable {
+                                    onItemClick.invoke(item)
+                                }.fillMaxWidth().height(180.dp).background(
                                     color = BeumColors.White,
                                     shape = RoundedCornerShape(size = BeumDimen.radius100)
                                 ).padding(start = 20.dp, end = 20.dp, top = 16.dp),

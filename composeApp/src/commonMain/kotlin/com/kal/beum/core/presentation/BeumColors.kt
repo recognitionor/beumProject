@@ -7,7 +7,7 @@ object BeumColors {
     val DesertWhite = Color(0xFFF7F7F7)
     val SandYellow = Color(0xFFFFBD64)
     val LightBlue = Color(0xFF9AD9FF)
-    val PrimarySkyBlue = Color(0x0CBAF5)
+    val PrimarySkyBlue = Color(0xFF0CBAF5)
     val White = Color(0xFFFFFFFF)
     val DevilPrimary = Color(0xFFF73914)
 

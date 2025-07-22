@@ -18,6 +18,9 @@ object BeumDimen {
     val TypoLienheigtLineheight200 = 21.sp
     val radius75: Dp = 6.dp
     val lineHeightBody3 = 18.sp
+    val radius150: Dp = 12.dp
+    val TypoLienheigtLineheight500 = 26.sp
+
 
 
 }

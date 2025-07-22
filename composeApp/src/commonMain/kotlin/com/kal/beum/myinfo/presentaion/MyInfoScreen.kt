@@ -52,6 +52,7 @@ import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumDimen
 import com.kal.beum.core.presentation.BeumTypo
 import com.kal.beum.main.presentation.MainAction
+import com.kal.beum.myinfo.domain.MyContent
 import com.kal.beum.utils.formatWithComma
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
@@ -65,8 +66,11 @@ fun MyInfoScreen(devil: Boolean, action: (MainAction) -> Unit) {
     var myInfoSelectedTabIndex by remember { mutableStateOf(0) }
 
     var selectModeBottomSheet by remember { mutableStateOf(false) }
+    var reportContent by remember { mutableStateOf<MyContent?>(null) }
+    var reportPage by remember { mutableStateOf(0) }
+    var reportReasonIndex by remember { mutableStateOf(-1) }
     val sheetState = rememberModalBottomSheetState(
-        skipPartiallyExpanded = false // <- 이게 포인트!
+        skipPartiallyExpanded = false
     )
 
     Box {
@@ -199,11 +203,15 @@ fun MyInfoScreen(devil: Boolean, action: (MainAction) -> Unit) {
 
             MyInfoFeedTab(
                 devil,
-                if (myInfoSelectedTabIndex == 0) state.myContent else state.myReply,
-                myInfoSelectedTabIndex
-            ) {
-                myInfoSelectedTabIndex = it
-            }
+                list = if (myInfoSelectedTabIndex == 0) state.myContent else state.myReply,
+                selectedTabIndex = myInfoSelectedTabIndex,
+                onItemClick = {
+                    reportPage = 1
+                    reportContent = it
+                },
+                onTabSelected = {
+                    myInfoSelectedTabIndex = it
+                })
             if (selectModeBottomSheet) {
                 ModalBottomSheet(
                     onDismissRequest = {
@@ -218,6 +226,58 @@ fun MyInfoScreen(devil: Boolean, action: (MainAction) -> Unit) {
                             action.invoke(MainAction.ToggleDevil(it))
                             selectModeBottomSheet = false
                         })
+                }
+            }
+            if (reportContent != null) {
+                when (reportPage) {
+                    1 -> {
+                        ModalBottomSheet(
+                            onDismissRequest = {
+                                reportPage = 0
+                                reportReasonIndex = -1
+                                reportContent = null
+                            },
+                            sheetState = sheetState,
+                            containerColor = BeumColors.baseGrayLightGray75,
+                            modifier = Modifier.wrapContentHeight().fillMaxWidth()
+                        ) {
+                            ReportBottomSheetPage {
+                                reportPage = 2
+                            }
+                        }
+                    }
+                    2 -> {
+                        ModalBottomSheet(
+                            onDismissRequest = {
+                                reportPage = 0
+                                reportReasonIndex = -1
+                                reportContent = null
+                            }, // 닫힐 때 None으로 초기화
+                            sheetState = sheetState,
+                            containerColor = BeumColors.baseGrayLightGray75,
+                            modifier = Modifier.fillMaxWidth().wrapContentHeight().wrapContentHeight()
+                        ) {
+                            ReportDetailBottomSheet {
+                                reportPage = 3
+                                reportReasonIndex = it
+                            }
+                        }
+                    }
+                    3 -> {
+                        action(MainAction.SetFullScreen {
+                            ReportConfirmDialog(onContinueClick = {
+                                action(MainAction.SetFullScreen(null))
+                                reportContent?.let {
+                                    viewModel.reportUser(it)
+                                }
+                            }, onDismiss = {
+                                action(MainAction.SetFullScreen(null))
+                                reportPage = 0
+                                reportReasonIndex = -1
+                                reportContent = null
+                            })
+                        })
+                    }
                 }
             }
         }

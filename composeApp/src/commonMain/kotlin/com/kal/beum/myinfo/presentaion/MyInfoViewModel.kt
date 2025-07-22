@@ -3,6 +3,7 @@ package com.kal.beum.myinfo.presentaion
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kal.beum.core.domain.onSuccess
+import com.kal.beum.myinfo.domain.MyContent
 import com.kal.beum.myinfo.domain.MyInfoRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -44,5 +45,8 @@ class MyInfoViewModel(private val myInfoRepository: MyInfoRepository) : ViewMode
                 getMyReply(myInfo.id)
             }
         }.start()
+    }
+
+    fun reportUser(reportContent: MyContent) {
     }
 }
