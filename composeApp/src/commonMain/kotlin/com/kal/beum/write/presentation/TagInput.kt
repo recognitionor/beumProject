@@ -45,7 +45,7 @@ fun TagInput(
                     lineHeight = 33.sp,
                     fontFamily = FontFamily(Font(Res.font.sf_pro)),
                     fontWeight = FontWeight(400),
-                    color = BeumColors.primaryPrimarySkyblue,
+                    color = BeumColors.angelSkyblue,
                 )
             )
         }

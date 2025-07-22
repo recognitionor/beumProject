@@ -23,7 +23,7 @@ import org.jetbrains.compose.resources.Font
 fun BeumButton(modifier: Modifier, text: String) {
     Box(
         modifier = modifier.background(
-            color = BeumColors.primaryPrimarySkyblue,
+            color = BeumColors.angelSkyblue,
             shape = RoundedCornerShape(size = BeumDimen.radius100)
         ).clip(shape = RoundedCornerShape(size = BeumDimen.radius100)).clickable {
 

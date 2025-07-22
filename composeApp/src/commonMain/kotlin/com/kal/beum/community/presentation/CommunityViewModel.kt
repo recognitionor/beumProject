@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.kal.beum.community.domain.Category
 import com.kal.beum.community.domain.CommunityItem
 import com.kal.beum.community.domain.CommunityRepository
+import com.kal.beum.core.domain.onError
 import com.kal.beum.core.domain.onSuccess
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted

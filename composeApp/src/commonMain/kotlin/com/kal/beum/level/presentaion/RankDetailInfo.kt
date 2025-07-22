@@ -51,7 +51,7 @@ fun RankDetailInfo(isDevil: Boolean, ranker: RankerUserInfo, onClickItem: () -> 
                 lineHeight = BeumTypo.lineHeightBody3,
                 fontFamily = FontFamily(Font(Res.font.sf_pro)),
                 fontWeight = FontWeight(700),
-                color = if (isDevil) if (ranker.rank > 3) BeumColors.White else BeumColors.DevilPrimary else if (ranker.rank > 3) BeumColors.Black else BeumColors.primaryPrimarySkyblue,
+                color = if (isDevil) if (ranker.rank > 3) BeumColors.White else BeumColors.DevilPrimary else if (ranker.rank > 3) BeumColors.Black else BeumColors.angelSkyblue,
                 textAlign = TextAlign.Center,
             )
         )

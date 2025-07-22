@@ -23,6 +23,7 @@ object BeumTypo {
     val lineHeightBody3 = 18.sp
     val baseTextWeightTextWeight700: Int = 700
 
+    val TypoLienheigtLineheight300 = 22.sp
 
 
 }

@@ -165,7 +165,7 @@ fun CommunityScreen(isDevil: Boolean, onAction: (MainAction) -> Unit) {
                     modifier = Modifier.padding(12.dp).align(Alignment.BottomEnd)
                 ) {
                     Box(modifier = Modifier.width(52.dp).height(52.dp).background(
-                        color = BeumColors.primaryPrimarySkyblue,
+                        color = BeumColors.angelSkyblue,
                         shape = RoundedCornerShape(size = 100.dp)
                     ).clip(shape = RoundedCornerShape(size = 100.dp)).clickable {
                         onAction(MainAction.SetFullScreen {

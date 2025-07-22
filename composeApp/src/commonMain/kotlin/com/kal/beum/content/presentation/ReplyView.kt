@@ -108,7 +108,7 @@ fun ReplyView(replyInfo: ReplyInfo, selectedDetailReview: (ReplyInfo) -> Unit) {
                         lineHeight = 20.sp,
                         fontFamily = FontFamily(Font(Res.font.sf_pro)),
                         fontWeight = FontWeight(700),
-                        color = BeumColors.primaryPrimarySkyblue,
+                        color = BeumColors.angelSkyblue,
                     )
                 )
             }
@@ -163,7 +163,7 @@ fun ReplyView(replyInfo: ReplyInfo, selectedDetailReview: (ReplyInfo) -> Unit) {
                     lineHeight = 20.sp,
                     fontFamily = FontFamily(Font(Res.font.sf_pro)),
                     fontWeight = FontWeight(700),
-                    color = BeumColors.primaryPrimarySkyblue,
+                    color = BeumColors.angelSkyblue,
                 )
             )
 

@@ -222,7 +222,7 @@ fun WritingScreen(onAction: (MainAction) -> Unit) {
                     .padding(start = 20.dp, end = 20.dp),
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = BeumColors.primaryPrimarySkyblue, contentColor = Color.White
+                    containerColor = BeumColors.angelSkyblue, contentColor = Color.White
                 )
             ) {
                 if (state.submitProgress) {

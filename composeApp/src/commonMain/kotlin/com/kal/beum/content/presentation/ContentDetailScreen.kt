@@ -191,7 +191,7 @@ fun ContentDetailScreen(id: Int, backBtnClick: () -> Unit) {
                             lineHeight = 22.sp,
                             fontFamily = FontFamily(Font(Res.font.sf_pro)),
                             fontWeight = FontWeight(400),
-                            color = BeumColors.primaryPrimarySkyblue,
+                            color = BeumColors.angelSkyblue,
                         )
                     )
                     Spacer(modifier = Modifier.height(24.dp))

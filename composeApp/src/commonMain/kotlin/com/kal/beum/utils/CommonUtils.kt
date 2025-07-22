@@ -21,6 +21,20 @@ fun pxToDp(pxValue: Float): Dp {
     }
 }
 
+fun formatWithComma(number: Int): String {
+    val s = number.toString()
+    val sb = StringBuilder()
+    var count = 0
+    for (i in s.length - 1 downTo 0) {
+        sb.append(s[i])
+        count++
+        if (count % 3 == 0 && i != 0) {
+            sb.append(',')
+        }
+    }
+    return sb.reverse().toString()
+}
+
 fun formatTimeAgo(timestampMillis: Long): String {
     val now = Clock.System.now().toEpochMilliseconds()
     val diffMillis = now - timestampMillis

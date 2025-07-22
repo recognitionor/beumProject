@@ -14,7 +14,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kal.beum.core.presentation.BeumColors
-import com.kal.beum.write.presentation.InfoBottomSheetType
 
 @Composable
 fun InfoBottomSheet(type: InfoBottomSheetType, onConfirm: () -> Unit) {
@@ -65,7 +64,7 @@ fun InfoBottomSheet(type: InfoBottomSheetType, onConfirm: () -> Unit) {
             modifier = Modifier.fillMaxWidth().height(52.dp),
             shape = RoundedCornerShape(12.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = BeumColors.primaryPrimarySkyblue, contentColor = Color.White
+                containerColor = BeumColors.angelSkyblue, contentColor = Color.White
             )
         ) {
             Text(
