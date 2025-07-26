@@ -1,6 +1,5 @@
 package com.kal.beum.myinfo.data.network
 
-import com.kal.beum.community.data.dto.CategoryDto
 import com.kal.beum.core.domain.DataError
 import com.kal.beum.core.domain.Result
 import com.kal.beum.myinfo.data.dto.MyContentDto
@@ -58,5 +57,9 @@ class MockMyInfoDataSource : RemoteMyInfoDataSource {
                 MyContentDto(40, "오늘 하루 마무리", "오늘도 수고하셨습니다.", "잡담", "2025-07-20", 10, 2)
             )
         )
+    }
+
+    override suspend fun reportUser(myContentId: Int): Result<Unit, DataError.Remote> {
+        return Result.Success(Unit)
     }
 }

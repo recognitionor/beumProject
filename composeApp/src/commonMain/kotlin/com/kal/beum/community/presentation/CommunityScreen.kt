@@ -107,9 +107,9 @@ fun CommunityScreen(isDevil: Boolean, onAction: (MainAction) -> Unit) {
                                 spotColor = Color(0x0D000000),
                                 ambientColor = Color(0x0D000000)
                             ).clip(RoundedCornerShape(9.dp)).clickable {
-                                onAction(MainAction.SetFullScreen {
+                                onAction(MainAction.PushFullScreen {
                                     ContentDetailScreen(item.id) {
-                                        onAction(MainAction.SetFullScreen(null))
+                                        onAction(MainAction.PopFullScreen)
                                     }
                                 })
                             }.background(
@@ -168,16 +168,16 @@ fun CommunityScreen(isDevil: Boolean, onAction: (MainAction) -> Unit) {
                         color = BeumColors.angelSkyblue,
                         shape = RoundedCornerShape(size = 100.dp)
                     ).clip(shape = RoundedCornerShape(size = 100.dp)).clickable {
-                        onAction(MainAction.SetFullScreen {
+                        onAction(MainAction.PushFullScreen {
                             DraftDialog(onNewClick = {
-                                onAction(MainAction.SetFullScreen {
+                                onAction(MainAction.PushFullScreen {
                                     WritingScreen(onAction)
                                 })
                             }, onContinueClick = {
-                                onAction(MainAction.SetFullScreen(null))
+                                onAction(MainAction.PopFullScreen)
                             }, onDismiss = {
 
-                                onAction(MainAction.SetFullScreen(null))
+                                onAction(MainAction.PopFullScreen)
                             })
                         })
                     }) {

@@ -81,7 +81,7 @@ fun WritingScreen(onAction: (MainAction) -> Unit) {
         if (state.closeMessage?.isNotEmpty() == true) {
             onAction(MainAction.ToastMessage(ToastInfo("게시글이 등록되었습니다.")))
         }
-        onAction(MainAction.SetFullScreen(null))
+        onAction(MainAction.PopFullScreen)
         viewModel.onAction(WritingAction.Reset)
     }
     Box(modifier = Modifier.fillMaxSize()) {

@@ -8,4 +8,6 @@ interface RemoteMyInfoDataSource {
     suspend fun getMyContents(userId: Int): Result<List<MyContentDto>, DataError.Remote>
 
     suspend fun getMyReply(userId: Int): Result<List<MyContentDto>, DataError.Remote>
+
+    suspend fun reportUser(myContentId: Int): Result<Unit, DataError.Remote>
 }

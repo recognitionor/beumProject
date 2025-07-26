@@ -1,5 +1,6 @@
 package com.kal.beum.myinfo.data.database
 
+import com.kal.beum.main.domain.SocialType
 import com.kal.beum.myinfo.domain.MyInfo
 
 class MockMyInfoDao : MyInfoDao {
@@ -13,7 +14,7 @@ class MockMyInfoDao : MyInfoDao {
             refreshToken = "mockRefreshToken",
             profileImage = "",
             email = "jhlee@google.com",
-            socialType = "KAKAO"
+            socialType = SocialType.GOOGLE
         )
     }
 }

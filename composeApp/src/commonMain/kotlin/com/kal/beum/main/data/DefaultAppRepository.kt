@@ -36,6 +36,11 @@ class DefaultAppRepository(
         }
     }
 
+    override fun logout(): Flow<Unit> = flow {
+        println("logout!!!!!!!!")
+        emit(appDao.clearLoginInfo())
+    }
+
     override fun isOnBoardingDone(): Flow<Boolean> = flow {
         emit(appDao.getOnBoardingStatus())
     }

@@ -6,6 +6,8 @@ import kotlinx.coroutines.flow.Flow
 interface AppRepository {
     fun getLoginInfo(): Flow<UserInfo?>
     fun login(socialType: Int): Flow<UserInfo>
+
+    fun logout(): Flow<Unit>
     fun isOnBoardingDone(): Flow<Boolean>
     fun isDevil(): Flow<Boolean>
     fun getAppEntity(): Flow<AppEntity>

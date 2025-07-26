@@ -11,4 +11,11 @@ object BeumConstants {
         "허위 정보",
         "기타"
     )
+
+    val SOCIAL_TYPES_ = listOf(
+        "KAKAO",
+        "NAVER",
+        "APPLE",
+        "GOOGLE"
+    )
 }

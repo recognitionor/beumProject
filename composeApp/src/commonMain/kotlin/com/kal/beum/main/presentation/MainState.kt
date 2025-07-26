@@ -10,6 +10,6 @@ data class MainState(
     val userInfo: UserInfo? = null,
     val isDevil: Boolean = false,
     val showToast: ToastInfo? = null,
-    val fullScreen: (@Composable () -> Unit)? = null,
+    val fullScreen: List<@Composable() (() -> Unit)?> = emptyList(),
     val isFullScreen: Boolean = false
 )

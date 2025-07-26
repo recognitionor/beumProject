@@ -1,10 +1,8 @@
 package com.kal.beum.myinfo.data.repository
 
-import com.kal.beum.community.data.toCommunityItem
 import com.kal.beum.core.domain.DataError
 import com.kal.beum.core.domain.Result
 import com.kal.beum.core.domain.map
-import com.kal.beum.myinfo.data.database.MockMyInfoDao
 import com.kal.beum.myinfo.data.database.MyInfoDao
 import com.kal.beum.myinfo.data.network.RemoteMyInfoDataSource
 import com.kal.beum.myinfo.data.toMyContent
@@ -25,6 +23,10 @@ class DefaultMyInfoRepository(
 
     override suspend fun getMyReply(userId: Int): Result<List<MyContent>, DataError.Remote> {
         return myInfoDataSource.getMyReply(userId).map { it.map { item -> item.toMyContent() } }
+    }
+
+    override suspend fun reportUser(myContent: MyContent): Result<Unit, DataError.Remote> {
+        return myInfoDataSource.reportUser(myContent.id)
     }
 
 }

@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -92,13 +93,24 @@ fun MyInfoScreen(devil: Boolean, action: (MainAction) -> Unit) {
                     )
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                Image(
-                    modifier = Modifier.size(24.dp),
-                    painter = painterResource(Res.drawable.ic_setting),
-                    colorFilter = ColorFilter.tint(Color.Black),
-                    contentDescription = ""
-                )
-
+                Box(
+                    modifier = Modifier.size(48.dp).clickable(
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() }) {
+                    state.myInfo?.let {
+                        action(MainAction.PushFullScreen {
+                            SettingsScreen(it, action)
+                        })
+                    }
+                }, contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        modifier = Modifier.size(24.dp),
+                        painter = painterResource(Res.drawable.ic_setting),
+                        colorFilter = ColorFilter.tint(Color.Black),
+                        contentDescription = ""
+                    )
+                }
             }
             Spacer(modifier = Modifier.fillMaxWidth().height(32.dp))
 
@@ -246,6 +258,7 @@ fun MyInfoScreen(devil: Boolean, action: (MainAction) -> Unit) {
                             }
                         }
                     }
+
                     2 -> {
                         ModalBottomSheet(
                             onDismissRequest = {
@@ -255,7 +268,8 @@ fun MyInfoScreen(devil: Boolean, action: (MainAction) -> Unit) {
                             }, // 닫힐 때 None으로 초기화
                             sheetState = sheetState,
                             containerColor = BeumColors.baseGrayLightGray75,
-                            modifier = Modifier.fillMaxWidth().wrapContentHeight().wrapContentHeight()
+                            modifier = Modifier.fillMaxWidth().wrapContentHeight()
+                                .wrapContentHeight()
                         ) {
                             ReportDetailBottomSheet {
                                 reportPage = 3
@@ -263,15 +277,16 @@ fun MyInfoScreen(devil: Boolean, action: (MainAction) -> Unit) {
                             }
                         }
                     }
+
                     3 -> {
-                        action(MainAction.SetFullScreen {
+                        action(MainAction.PushFullScreen {
                             ReportConfirmDialog(onContinueClick = {
-                                action(MainAction.SetFullScreen(null))
+                                action(MainAction.PopFullScreen)
                                 reportContent?.let {
                                     viewModel.reportUser(it)
                                 }
                             }, onDismiss = {
-                                action(MainAction.SetFullScreen(null))
+                                action(MainAction.PopFullScreen)
                                 reportPage = 0
                                 reportReasonIndex = -1
                                 reportContent = null

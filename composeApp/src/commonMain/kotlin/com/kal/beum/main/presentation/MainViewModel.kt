@@ -3,7 +3,6 @@ package com.kal.beum.main.presentation
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.kal.beum.core.presentation.ToastInfo
 import com.kal.beum.main.domain.AppRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -58,9 +57,19 @@ class MainViewModel(private val appRepository: AppRepository) : ViewModel() {
         }.launchIn(viewModelScope)
     }
 
-    private fun setFullScreen(screen: (@Composable () -> Unit)? = null) {
-        println("setFullScreen")
-        _state.update { it.copy(fullScreen = screen) }
+    private fun pushFullScreen(screen: (@Composable () -> Unit)) {
+        println("pushFullScreen")
+        _state.update { it.copy(fullScreen = _state.value.fullScreen + screen) }
+    }
+
+    private fun popFullScreen() {
+        println("popFullScreen")
+        _state.update { it.copy(fullScreen = state.value.fullScreen.dropLast(1)) }
+    }
+
+    private fun clearFullScreen() {
+        println("clearFullScreen")
+        _state.update { it.copy(fullScreen = emptyList(), isSplashDone = false) }
     }
 
     fun toggleFullScreen() {
@@ -76,13 +85,24 @@ class MainViewModel(private val appRepository: AppRepository) : ViewModel() {
         }.launchIn(viewModelScope)
     }
 
+    fun logout() {
+        appRepository.logout().onEach {
+            println("logout~~~~ : ")
+            _state.update { it.copy(userInfo = null) }
+        }.launchIn(viewModelScope)
+    }
+
     fun onAction(action: MainAction) {
         when (action) {
             is MainAction.ToggleDevil -> devilToggle(action.isDevil)
-            is MainAction.SetFullScreen -> setFullScreen(action.screen)
+            is MainAction.PushFullScreen -> pushFullScreen(action.screen)
+            is MainAction.PopFullScreen -> popFullScreen()
+            is MainAction.ClearFullScreen -> clearFullScreen()
             is MainAction.ToastMessage -> {
                 _state.update { it.copy(showToast = action.toastInfo) }
             }
+
+            is MainAction.LogOut -> logout()
         }
     }
 }

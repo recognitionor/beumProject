@@ -7,4 +7,5 @@ interface MyInfoRepository {
     suspend fun getMyInfo(): Result<MyInfo, DataError.Local>
     suspend fun getMyContents(userId: Int): Result<List<MyContent>, DataError.Remote>
     suspend fun getMyReply(userId: Int): Result<List<MyContent>, DataError.Remote>
+    suspend fun reportUser(myContent: MyContent): Result<Unit, DataError.Remote>
 }

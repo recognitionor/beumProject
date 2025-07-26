@@ -1,5 +1,7 @@
 package com.kal.beum.main.presentation
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -13,6 +15,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -101,10 +104,24 @@ fun MainScreen() {
     println("state.isFullScreen ${state.isFullScreen}")
     // ✅ 여기에 전역 fullScreen 처리!
     println("state.fullScreen ${state.fullScreen}")
-    if (state.fullScreen != null) {
-        println("~~~~~~~~~~~~~~~~~~r")
-        state.fullScreen?.invoke()
+    println("~~~~~~~~~~~~~~~~~~r")
 
+    Box(modifier = Modifier.fillMaxSize()) {
+        // FullScreen Overlay
+        state.fullScreen.forEach { content ->
+            if (content != null) {
+                Box(
+                    Modifier
+                        .fillMaxSize()
+                        .clickable(
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() }
+                        ) { /* 이벤트 소모만! */ }
+                ) {
+                    content()
+                }
+            }
+        }
     }
 
 //    PermissionScreen()

@@ -1,6 +1,7 @@
 package com.kal.beum.main.data.database
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -27,4 +28,7 @@ interface AppDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun setLoginInfo(userInfoEntity: UserInfoEntity)
+
+    @Query("DELETE FROM UserInfoEntity WHERE id = 1")
+    suspend fun clearLoginInfo()
 }
