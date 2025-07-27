@@ -1,6 +1,7 @@
 package com.kal.beum.home.presentation.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,18 +19,20 @@ import com.kal.beum.core.presentation.BeumColors
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun AlarmButton(toggle: Boolean) {
+fun AlarmButton(isDevil: Boolean, onClick: () -> Unit) {
 
     Box(
-        modifier = Modifier.width(48.dp).height(48.dp).background(
-            color = if (toggle) BeumColors.Black else BeumColors.White,
+        modifier = Modifier.clickable {
+            onClick()
+        }.width(48.dp).height(48.dp).background(
+            color = if (isDevil) BeumColors.Black else BeumColors.White,
             shape = RoundedCornerShape(size = 100.dp)
         ).padding(start = 8.dp, top = 8.dp, end = 8.dp, bottom = 8.dp),
         contentAlignment = Alignment.Center // 가운데 정렬 (좌우 + 상하)
     ) {
         Icon(
-            painter = painterResource(if (toggle) Res.drawable.alarm else Res.drawable.alarm),
-            tint = if (toggle) Color.White else BeumColors.Black,
+            painter = painterResource(if (isDevil) Res.drawable.alarm else Res.drawable.alarm),
+            tint = if (isDevil) Color.White else BeumColors.Black,
             contentDescription = null
         )
     }

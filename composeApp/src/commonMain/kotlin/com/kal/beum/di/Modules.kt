@@ -37,6 +37,11 @@ import com.kal.beum.myinfo.data.network.RemoteMyInfoDataSource
 import com.kal.beum.myinfo.data.repository.DefaultMyInfoRepository
 import com.kal.beum.myinfo.domain.MyInfoRepository
 import com.kal.beum.myinfo.presentaion.MyInfoViewModel
+import com.kal.beum.notice.data.DefaultNoticeRepository
+import com.kal.beum.notice.data.network.MockRemoteNoticeDataSource
+import com.kal.beum.notice.data.network.RemoteNoticeDataSource
+import com.kal.beum.notice.domain.NoticeRepository
+import com.kal.beum.notice.presentaion.NoticeViewModel
 import com.kal.beum.write.data.network.MockWriteCategoryDataSource
 import com.kal.beum.write.data.network.MockWriteDataSource
 import com.kal.beum.write.data.network.RemoteWriteCategoryDataSource
@@ -72,6 +77,7 @@ val sharedModules = module {
     singleOf(::MockContentDataSource).bind<RemoteContentDataSource>()
     singleOf(::MockRankerUserInfoDataSource).bind<RemoteRankerUserInfoDataSource>()
     singleOf(::MockMyInfoDataSource).bind<RemoteMyInfoDataSource>()
+    singleOf(::MockRemoteNoticeDataSource).bind<RemoteNoticeDataSource>()
 
     singleOf(::MockMyInfoDao).bind<MyInfoDao>()
 
@@ -83,6 +89,7 @@ val sharedModules = module {
     singleOf(::DefaultContentDetailRepository).bind<ContentsRepository>()
     singleOf(::DefaultRankerUserInfoRepository).bind<RankerUserInfoRepository>()
     singleOf(::DefaultMyInfoRepository).bind<MyInfoRepository>()
+    singleOf(::DefaultNoticeRepository).bind<NoticeRepository>()
 
     viewModelOf(::HomeViewModel)
     viewModelOf(::MainViewModel)
@@ -91,7 +98,7 @@ val sharedModules = module {
     viewModelOf(::WritingViewModel)
     viewModelOf(::RankingViewModel)
     viewModelOf(::MyInfoViewModel)
-
+    viewModelOf(::NoticeViewModel)
 
     single { get<AppDatabase>().appDao }
 

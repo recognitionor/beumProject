@@ -40,6 +40,7 @@ import com.kal.beum.home.presentation.components.AlarmButton
 import com.kal.beum.home.presentation.components.FlowRow
 import com.kal.beum.home.presentation.components.ToggleButton
 import com.kal.beum.main.presentation.MainAction
+import com.kal.beum.notice.presentaion.NoticeScreen
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -66,7 +67,11 @@ fun HomeScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Spacer(modifier = Modifier.weight(1f))
-                AlarmButton(toggle)
+                AlarmButton(toggle) {
+                    onAction(MainAction.PushFullScreen {
+                        NoticeScreen(onAction)
+                    })
+                }
                 Spacer(modifier = Modifier.width(20.dp))
             }
         }
