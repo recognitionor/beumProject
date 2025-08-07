@@ -19,6 +19,8 @@ class DefaultAppRepository(
     }
 
     override fun login(socialType: Int): Flow<UserInfo> = flow {
+
+        val userInfo = remoteLoginDataSource.login(socialType)
         val loginInfo = appDao.getLoginInfo()
         if (loginInfo == null) {
             // 로그인 코드가 들어가야함

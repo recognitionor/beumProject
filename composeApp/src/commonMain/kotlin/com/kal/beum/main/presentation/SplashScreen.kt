@@ -139,7 +139,7 @@ fun SplashScreen() {
                     painterResource(Res.drawable.kakao),
                     BeumColors.Black
                 ) {
-                    viewModel.socialLogin(SocialType.KAKAO_CODE)
+                    viewModel.socialLogin(SocialType.NAVER_CODE)
                 }
                 Spacer(modifier = Modifier.height(10.dp))
                 SocialLoginBtn(

@@ -1,6 +1,7 @@
 package com.kal.beum.di
 
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
+import com.kal.beum.Platform
 import com.kal.beum.community.data.network.MockCommunityDataSource
 import com.kal.beum.community.data.network.RemoteCommunityDataSource
 import com.kal.beum.community.data.repository.DefaultCommunityRepository
@@ -13,6 +14,7 @@ import com.kal.beum.content.data.repository.DefaultContentDetailRepository
 import com.kal.beum.content.domain.ContentsRepository
 import com.kal.beum.core.data.HttpClientFactory
 import com.kal.beum.core.data.database.DatabaseFactory
+import com.kal.beum.getPlatformContext
 import com.kal.beum.home.data.network.MockHomeDataSource
 import com.kal.beum.home.data.network.RemoteHomeDataSource
 import com.kal.beum.home.data.repository.DefaultHomeRepository
@@ -23,12 +25,17 @@ import com.kal.beum.level.data.network.RemoteRankerUserInfoDataSource
 import com.kal.beum.level.data.repository.DefaultRankerUserInfoRepository
 import com.kal.beum.level.domain.RankerUserInfoRepository
 import com.kal.beum.level.presentaion.RankingViewModel
+import com.kal.beum.login.data.client.KaKaoLoginClient
+import com.kal.beum.login.data.client.NaverLoginClient
+import com.kal.beum.login.data.client.TestLoginClient
+import com.kal.beum.login.domain.LoginClient
 import com.kal.beum.main.data.DefaultAppRepository
 import com.kal.beum.main.data.database.AppDatabase
 import com.kal.beum.main.data.database.MIGRATION_1_2
-import com.kal.beum.main.data.network.MockLoginDataSource
 import com.kal.beum.main.data.network.RemoteLoginDataSource
+import com.kal.beum.main.data.network.SdkLoginDataSource
 import com.kal.beum.main.domain.AppRepository
+import com.kal.beum.main.domain.SocialType
 import com.kal.beum.main.presentation.MainViewModel
 import com.kal.beum.myinfo.data.database.MockMyInfoDao
 import com.kal.beum.myinfo.data.database.MyInfoDao
@@ -69,8 +76,17 @@ val sharedModules = module {
             .addMigrations(MIGRATION_1_2).build()
 //            .fallbackToDestructiveMigration(true).build()
     }
+
+    single<Map<Int, LoginClient>> {
+        mapOf(
+            SocialType.KAKAO_CODE to KaKaoLoginClient(getPlatformContext()),
+            SocialType.NAVER_CODE to NaverLoginClient(getPlatformContext())
+        )
+    }
+
+    singleOf(::SdkLoginDataSource).bind<RemoteLoginDataSource>()
+
     singleOf(::MockHomeDataSource).bind<RemoteHomeDataSource>()
-    singleOf(::MockLoginDataSource).bind<RemoteLoginDataSource>()
     singleOf(::MockCommunityDataSource).bind<RemoteCommunityDataSource>()
     singleOf(::MockWriteCategoryDataSource).bind<RemoteWriteCategoryDataSource>()
     singleOf(::MockWriteDataSource).bind<RemoteWriteDataSource>()
