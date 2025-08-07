@@ -1,4 +1,4 @@
-package com.kal.beum.myinfo.presentaion
+package com.kal.beum.myinfo.presentation
 
 import com.kal.beum.myinfo.domain.MyContent
 import com.kal.beum.myinfo.domain.MyInfo

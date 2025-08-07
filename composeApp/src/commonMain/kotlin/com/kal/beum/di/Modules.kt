@@ -36,7 +36,7 @@ import com.kal.beum.myinfo.data.network.MockMyInfoDataSource
 import com.kal.beum.myinfo.data.network.RemoteMyInfoDataSource
 import com.kal.beum.myinfo.data.repository.DefaultMyInfoRepository
 import com.kal.beum.myinfo.domain.MyInfoRepository
-import com.kal.beum.myinfo.presentaion.MyInfoViewModel
+import com.kal.beum.myinfo.presentation.MyInfoViewModel
 import com.kal.beum.notice.data.DefaultNoticeRepository
 import com.kal.beum.notice.data.network.MockRemoteNoticeDataSource
 import com.kal.beum.notice.data.network.RemoteNoticeDataSource

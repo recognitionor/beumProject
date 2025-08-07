@@ -1,4 +1,4 @@
-package com.kal.beum.myinfo.presentaion
+package com.kal.beum.myinfo.presentation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -28,7 +28,6 @@ import beumproject.composeapp.generated.resources.Res
 import beumproject.composeapp.generated.resources.icon_arrow_right_black
 import beumproject.composeapp.generated.resources.sf_pro
 import com.kal.beum.core.presentation.BeumColors
-import com.kal.beum.core.presentation.BeumDimen
 import com.kal.beum.core.presentation.BeumTypo
 import com.kal.beum.main.presentation.MainAction
 import org.jetbrains.compose.resources.Font

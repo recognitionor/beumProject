@@ -1,4 +1,4 @@
-package com.kal.beum.myinfo.presentaion
+package com.kal.beum.myinfo.presentation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

@@ -48,7 +48,7 @@ import com.kal.beum.core.presentation.BeumTypo
 import com.kal.beum.core.presentation.Toast
 import com.kal.beum.home.presentation.HomeScreen
 import com.kal.beum.level.presentaion.RankingScreen
-import com.kal.beum.myinfo.presentaion.MyInfoScreen
+import com.kal.beum.myinfo.presentation.MyInfoScreen
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel

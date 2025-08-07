@@ -1,4 +1,4 @@
-package com.kal.beum.myinfo.presentaion
+package com.kal.beum.myinfo.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

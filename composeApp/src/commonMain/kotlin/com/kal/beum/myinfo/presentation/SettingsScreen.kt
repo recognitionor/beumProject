@@ -1,4 +1,4 @@
-package com.kal.beum.myinfo.presentaion
+package com.kal.beum.myinfo.presentation
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -16,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -29,28 +30,29 @@ import beumproject.composeapp.generated.resources.icon_arrow_right_black
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumTypo
 import com.kal.beum.main.presentation.MainAction
+import com.kal.beum.myinfo.domain.MyInfo
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun ServicePolicyInfoScreen(action: (MainAction) -> Unit) {
 
+fun SettingsScreen(info: MyInfo, action: (MainAction) -> Unit) {
     Column(Modifier.fillMaxSize().background(BeumColors.baseGrayLightGray75)) {
+
         Column(
             modifier = Modifier.background(
                 BeumColors.White
             )
         ) {
             Spacer(modifier = Modifier.height(50.dp))
-
             Row(
                 verticalAlignment = Alignment.CenterVertically, modifier = Modifier.background(
                     BeumColors.White
                 ).fillMaxWidth()
             ) {
-                Box(modifier = Modifier.clickable {
+                Box(modifier = Modifier.size(48.dp).clickable {
                     action(MainAction.PopFullScreen)
-                }.size(48.dp), contentAlignment = Alignment.Center) {
+                }, contentAlignment = Alignment.Center) {
                     Image(
                         painter = painterResource(Res.drawable.icon_arrow_right_black),
                         contentDescription = "",
@@ -61,7 +63,7 @@ fun ServicePolicyInfoScreen(action: (MainAction) -> Unit) {
                 }
 
                 Text(
-                    text = "서비스 정보 및 약관", style = TextStyle(
+                    text = "설정", style = TextStyle(
                         fontSize = 20.sp,
                         lineHeight = BeumTypo.baseLineheightTextLineheight300,
                         fontFamily = FontFamily(Font(Res.font.Pretendard_Medium)),
@@ -76,17 +78,17 @@ fun ServicePolicyInfoScreen(action: (MainAction) -> Unit) {
                     .background(BeumColors.baseGrayLightGray75)
             )
 
-            Row(
-                modifier = Modifier.clickable {
-                    action(MainAction.PushFullScreen {
-                        PrivacyPolicyScreen(action)
-                    })
-                }.fillMaxWidth().height(56.dp).background(color = BeumColors.White)
-                    .padding(start = 20.dp, top = 0.dp, end = 20.dp, bottom = 0.dp),
-                verticalAlignment = Alignment.CenterVertically
+            Box(
+                modifier = Modifier.fillMaxWidth().height(56.dp)
+                    .background(color = BeumColors.White)
+                    .padding(start = 20.dp, top = 0.dp, end = 20.dp, bottom = 0.dp).clickable {
+                        action(MainAction.PushFullScreen {
+                            MyInfoDetailScreen(info, action)
+                        })
+                    }, contentAlignment = Alignment.CenterStart
             ) {
                 Text(
-                    text = "개인 정보 처리 방침", style = TextStyle(
+                    text = "내 정보", style = TextStyle(
                         fontSize = 16.sp,
                         lineHeight = 20.96.sp,
                         fontFamily = FontFamily(Font(Res.font.Pretendard_Medium)),
@@ -95,27 +97,37 @@ fun ServicePolicyInfoScreen(action: (MainAction) -> Unit) {
                         textAlign = TextAlign.Center,
                     )
                 )
-                Spacer(modifier = Modifier.weight(1f))
+            }
 
-                Box(modifier = Modifier.size(48.dp), contentAlignment = Alignment.Center) {
-                    Image(
-                        painter = painterResource(Res.drawable.icon_arrow_right_black),
-                        contentDescription = ""
+            Box(
+                modifier = Modifier.fillMaxWidth().height(56.dp)
+                    .background(color = BeumColors.White)
+                    .padding(start = 20.dp, top = 0.dp, end = 20.dp, bottom = 0.dp).clickable {
+                        action(MainAction.PushFullScreen {
+                            ServicePolicyInfoScreen(action)
+                        })
+                    }, contentAlignment = Alignment.CenterStart
+            ) {
+                Text(
+                    text = "서비스 정보 및 약관", style = TextStyle(
+                        fontSize = 16.sp,
+                        lineHeight = 20.96.sp,
+                        fontFamily = FontFamily(Font(Res.font.Pretendard_Medium)),
+                        fontWeight = FontWeight(700),
+                        color = BeumColors.baseGrayLightGray800,
+                        textAlign = TextAlign.Center,
                     )
-                }
+                )
             }
 
             Row(
-                modifier = Modifier.clickable {
-                    action(MainAction.PushFullScreen {
-                        TermScreen(action)
-                    })
-                }.fillMaxWidth().height(56.dp).background(color = BeumColors.White)
+                modifier = Modifier.fillMaxWidth().height(56.dp)
+                    .background(color = BeumColors.White)
                     .padding(start = 20.dp, top = 0.dp, end = 20.dp, bottom = 0.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "이용 약관", style = TextStyle(
+                    text = "앱 버전", style = TextStyle(
                         fontSize = 16.sp,
                         lineHeight = 20.96.sp,
                         fontFamily = FontFamily(Font(Res.font.Pretendard_Medium)),
@@ -126,13 +138,45 @@ fun ServicePolicyInfoScreen(action: (MainAction) -> Unit) {
                 )
                 Spacer(modifier = Modifier.weight(1f))
 
-                Box(modifier = Modifier.size(48.dp), contentAlignment = Alignment.Center) {
-                    Image(
-                        painter = painterResource(Res.drawable.icon_arrow_right_black),
-                        contentDescription = ""
+                Text(
+                    text = "V.1.0.0", style = TextStyle(
+                        fontSize = 14.sp,
+                        lineHeight = 20.96.sp,
+                        fontFamily = FontFamily(Font(Res.font.Pretendard_Medium)),
+                        fontWeight = FontWeight(700),
+                        color = BeumColors.baseGrayLightGray600,
+                        textAlign = TextAlign.Center,
                     )
-                }
+                )
+            }
+
+            Box(
+                modifier = Modifier.clickable {
+                    action(MainAction.PushFullScreen {
+                        LogOutDialog({
+                            println("~!~!~!~")
+                            action(MainAction.PopFullScreen)
+                        }) {
+                            action(MainAction.ClearFullScreen)
+                            action(MainAction.LogOut)
+                        }
+                    })
+                }.fillMaxWidth().height(56.dp).background(color = BeumColors.White)
+                    .padding(start = 20.dp, top = 0.dp, end = 20.dp, bottom = 0.dp),
+                contentAlignment = Alignment.CenterStart
+            ) {
+                Text(
+                    text = "로그아웃", style = TextStyle(
+                        fontSize = 16.sp,
+                        lineHeight = 20.96.sp,
+                        fontFamily = FontFamily(Font(Res.font.Pretendard_Medium)),
+                        fontWeight = FontWeight(700),
+                        color = Color(0xFFF73914),
+                        textAlign = TextAlign.Center,
+                    )
+                )
             }
         }
     }
 }
+
