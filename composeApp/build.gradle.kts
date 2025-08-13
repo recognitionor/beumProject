@@ -29,6 +29,13 @@ kotlin {
             baseName = "ComposeApp"
             isStatic = true
         }
+
+        iosTarget.compilations.getByName("main") {
+            cinterops.create("SwiftProvider") {
+                definitionFile.set(file(rootDir.absolutePath + "/composeApp/src/iosMain/c_interop/SwiftProvider.def"))
+                includeDirs.allHeaders(rootDir.absolutePath + "/iosApp/iosApp/Bridge/")
+            }
+        }
     }
 
     room {
