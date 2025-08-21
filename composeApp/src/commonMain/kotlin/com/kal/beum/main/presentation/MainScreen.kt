@@ -104,21 +104,25 @@ fun MainScreen() {
     println("state.isFullScreen ${state.isFullScreen}")
     // ✅ 여기에 전역 fullScreen 처리!
     println("state.fullScreen ${state.fullScreen}")
-    println("~~~~~~~~~~~~~~~~~~r")
 
     Box(modifier = Modifier.fillMaxSize()) {
-        // FullScreen Overlay
-        state.fullScreen.forEach { content ->
-            if (content != null) {
-                Box(
-                    Modifier
-                        .fillMaxSize()
-                        .clickable(
-                            indication = null,
-                            interactionSource = remember { MutableInteractionSource() }
-                        ) { /* 이벤트 소모만! */ }
-                ) {
-                    content()
+
+        if (state.isProgress) {
+            ProgressDialog()
+        } else {
+            // FullScreen Overlay
+            state.fullScreen.forEach { content ->
+                if (content != null) {
+                    Box(
+                        Modifier
+                            .fillMaxSize()
+                            .clickable(
+                                indication = null,
+                                interactionSource = remember { MutableInteractionSource() }
+                            ) { /* 이벤트 소모만! */ }
+                    ) {
+                        content()
+                    }
                 }
             }
         }

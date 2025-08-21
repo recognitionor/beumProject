@@ -1,5 +1,9 @@
 package com.kal.beum.main.data
 
+import com.kal.beum.core.domain.DataError
+import com.kal.beum.core.domain.Result
+import com.kal.beum.core.domain.onError
+import com.kal.beum.core.domain.onSuccess
 import com.kal.beum.main.data.database.AppDao
 import com.kal.beum.main.data.database.AppEntity
 import com.kal.beum.main.data.database.UserInfoEntity
@@ -9,6 +13,8 @@ import com.kal.beum.main.domain.AppRepository
 import com.kal.beum.main.domain.UserInfo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlin.onFailure
+import kotlin.onSuccess
 
 class DefaultAppRepository(
     private val appDao: AppDao, private val remoteLoginDataSource: RemoteLoginDataSource
@@ -18,29 +24,29 @@ class DefaultAppRepository(
         emit(result)
     }
 
-    override fun login(socialType: Int): Flow<UserInfo> = flow {
-
-        val userInfo = remoteLoginDataSource.login(socialType)
-        val loginInfo = appDao.getLoginInfo()
-        if (loginInfo == null) {
-            // 로그인 코드가 들어가야함
-            val userInfo = UserInfoEntity(
-                userId = "jhlee",
-                nickName = "곡괭이",
-                socialType = socialType,
-                mail = "jhlee@gamil.com",
-                sessionKey = ""
+    override fun login(socialType: Int): Flow<Result<UserInfo, DataError.Remote>> = flow {
+        emit(Result.Progress())
+        val result = remoteLoginDataSource.login(socialType)
+        result.onSuccess { userInfo ->
+            val userInfoEntity = UserInfoEntity(
+                userId = userInfo.id,
+                nickName = userInfo.nickName,
+                socialType = userInfo.socialType,
+                mail = userInfo.mail,
+                sessionKey = userInfo.sessionKey
             )
-            appDao.setLoginInfo(userInfo)
-            emit(userInfo.toUserInfo())
-        } else {
-            emit(loginInfo.toUserInfo())
+            appDao.setLoginInfo(userInfoEntity)
+            emit(result)
+        }.onError {
+            emit(result)
         }
     }
 
-    override fun logout(): Flow<Unit> = flow {
-        println("logout!!!!!!!!")
-        emit(appDao.clearLoginInfo())
+    override fun logout(userInfo: UserInfo): Flow<Result<Unit, DataError.Remote>> = flow {
+        emit(Result.Progress())
+        remoteLoginDataSource.logout(userInfo)
+        appDao.clearLoginInfo()
+        emit(Result.Success(Unit))
     }
 
     override fun isOnBoardingDone(): Flow<Boolean> = flow {

@@ -18,6 +18,7 @@ class DefaultRankerUserInfoRepository(private val remoteCommunityDataSource: Rem
             return when (result) {
                 is Result.Success -> Result.Success(result.data)
                 is Result.Error -> Result.Error(DataError.Remote.UNKNOWN)
+                else -> Result.Progress()
             }
         }
     }

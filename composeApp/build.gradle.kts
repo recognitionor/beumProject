@@ -52,6 +52,8 @@ kotlin {
             implementation(libs.koin.androidx.compose)
             implementation(libs.ktor.client.okhttp)
             implementation(libs.android.naver)
+            implementation(libs.android.kakao)
+
         }
         commonMain.dependencies {
             implementation(libs.kotlinx.datetime)

@@ -41,6 +41,7 @@ import beumproject.composeapp.generated.resources.apple
 import beumproject.composeapp.generated.resources.google
 import beumproject.composeapp.generated.resources.img_wings_set
 import beumproject.composeapp.generated.resources.kakao
+import beumproject.composeapp.generated.resources.naver
 import beumproject.composeapp.generated.resources.sf_pro
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumColors.White
@@ -72,7 +73,7 @@ fun SplashScreen() {
         LaunchedEffect(Unit) {
             val topSpacerHeightResult = topSpacerHeight.animateTo(
                 targetValue = 140f, // 줄일 최종 높이 (상단 1/3 정도 느낌)
-                animationSpec = tween(durationMillis = 1000)
+                animationSpec = tween(durationMillis = 1)
             )
             if (topSpacerHeightResult.endReason == AnimationEndReason.Finished) {
                 val titleAlphaResult = titleAlpha.animateTo(
@@ -139,17 +140,17 @@ fun SplashScreen() {
                     painterResource(Res.drawable.kakao),
                     BeumColors.Black
                 ) {
-                    viewModel.socialLogin(SocialType.NAVER_CODE)
+                    viewModel.socialLogin(SocialType.KAKAO_CODE)
                 }
                 Spacer(modifier = Modifier.height(10.dp))
                 SocialLoginBtn(
-                    White,
-                    BeumColors.baseAlphaBlackDarkBlack200A,
-                    SocialType.GOOGLE,
-                    painterResource(Res.drawable.google),
-                    BeumColors.Black
+                    BeumColors.NaverColor,
+                    BeumColors.NaverColor,
+                    SocialType.NAVER,
+                    painterResource(Res.drawable.naver),
+                    BeumColors.White
                 ) {
-                    viewModel.socialLogin(SocialType.GOOGLE_CODE)
+                    viewModel.socialLogin(SocialType.NAVER_CODE)
                 }
                 Spacer(modifier = Modifier.height(10.dp))
                 SocialLoginBtn(

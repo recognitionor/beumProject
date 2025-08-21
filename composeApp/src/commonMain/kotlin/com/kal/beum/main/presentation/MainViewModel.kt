@@ -3,6 +3,10 @@ package com.kal.beum.main.presentation
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kal.beum.core.domain.Result
+import com.kal.beum.core.domain.onError
+import com.kal.beum.core.domain.onProgress
+import com.kal.beum.core.domain.onSuccess
 import com.kal.beum.main.domain.AppRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -12,6 +16,7 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.onSuccess
 
 class MainViewModel(private val appRepository: AppRepository) : ViewModel() {
     private val _state = MutableStateFlow(MainState())
@@ -81,15 +86,41 @@ class MainViewModel(private val appRepository: AppRepository) : ViewModel() {
         println("socialLogin : $socialCode")
         appRepository.login(socialCode).onEach { result ->
             println("socialLogin~~~~ : $result")
-            _state.update { it.copy(userInfo = result, isSplashDone = true) }
+            when (result) {
+                is Result.Error -> {
+                    println("Error :")
+                    _state.update { it.copy(isProgress = false) }
+                }
+
+                is Result.Success -> {
+                    println("Success :")
+                    _state.update {
+                        it.copy(
+                            userInfo = result.data, isSplashDone = true, isProgress = false
+                        )
+                    }
+                }
+
+                is Result.Progress -> {
+                    _state.update { it.copy(isProgress = true) }
+                    println("progress :")
+                }
+            }
+
         }.launchIn(viewModelScope)
     }
 
     fun logout() {
-        appRepository.logout().onEach {
-            println("logout~~~~ : ")
-            _state.update { it.copy(userInfo = null) }
-        }.launchIn(viewModelScope)
+        val userInfo = state.value.userInfo
+        if (userInfo != null) {
+            appRepository.logout(userInfo).onEach { result ->
+                result.onSuccess {
+                    _state.update { it.copy(userInfo = null, isProgress = false) }
+                }.onProgress {
+                    _state.update { it.copy(isProgress = true) }
+                }
+            }.launchIn(viewModelScope)
+        }
     }
 
     fun onAction(action: MainAction) {

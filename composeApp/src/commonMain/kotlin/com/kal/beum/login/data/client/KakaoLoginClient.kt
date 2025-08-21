@@ -1,13 +1,15 @@
 package com.kal.beum.login.data.client
 
+import com.kal.beum.core.domain.DataError
 import com.kal.beum.login.domain.LoginClient
+import com.kal.beum.login.domain.SocialToken
 
 expect class KaKaoLoginClient(obj: Any?) : LoginClient {
+
     override fun login(
         type: Int,
-        callback: (Result<String>) -> Unit
-
+        callback: (SocialToken?, DataError.Remote?) -> Unit
     )
 
-    override fun logout(type: Int)
+    override fun logout()
 }

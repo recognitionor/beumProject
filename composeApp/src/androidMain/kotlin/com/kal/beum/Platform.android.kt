@@ -10,7 +10,7 @@ class AndroidPlatform : Platform {
 private lateinit var appContext: Context
 
 fun initPlatformContext(context: Context) {
-    appContext = context.applicationContext
+    appContext = context
 }
 
 actual fun getPlatform(): Platform = AndroidPlatform()

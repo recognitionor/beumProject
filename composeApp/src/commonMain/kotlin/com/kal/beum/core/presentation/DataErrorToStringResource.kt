@@ -2,6 +2,7 @@ package com.kal.beum.core.presentation
 
 import beumproject.composeapp.generated.resources.Res
 import beumproject.composeapp.generated.resources.error_disk_full
+import beumproject.composeapp.generated.resources.error_login_failed
 import beumproject.composeapp.generated.resources.error_no_internet
 import beumproject.composeapp.generated.resources.error_request_timeout
 import beumproject.composeapp.generated.resources.error_serialization
@@ -19,6 +20,7 @@ fun DataError.toUiText(): UiText {
         DataError.Remote.SERVER -> Res.string.error_unknown
         DataError.Remote.SERIALIZATION -> Res.string.error_serialization
         DataError.Remote.UNKNOWN -> Res.string.error_unknown
+        DataError.Remote.LOGIN_FAILED -> Res.string.error_login_failed
     }
 
     return UiText.StringResourceId(stringRes)
