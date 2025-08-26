@@ -12,7 +12,7 @@ public class NaverLoginSDK: NSObject {
 
     @objc public static func initSDK() {
         NidOAuth.shared.initialize()
-        NidOAuth.shared.setLoginBehavior(.appPreferredWithInAppBrowserFallback) // 3번 방식
+        NidOAuth.shared.setLoginBehavior(.appPreferredWithInAppBrowserFallback)
 
     }
 

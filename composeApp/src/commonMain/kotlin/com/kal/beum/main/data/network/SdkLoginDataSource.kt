@@ -35,17 +35,14 @@ class SdkLoginDataSource(
     }
 
     override suspend fun logout(userInfo: UserInfo): Result<Unit, DataError.Remote> {
-        println("logout : ")
         val client =
             loginClients[userInfo.socialType] ?: return Result.Error(DataError.Remote.UNKNOWN)
         client.logout()
         return Result.Success(Unit)
-
     }
 
     private suspend fun getSocialToken(socialType: Int): SocialToken {
         val client = loginClients[socialType] ?: throw Exception("클라이언트 없음")
-        println("getSocialToken :   $socialType")
         return suspendCoroutine { cont ->
             client.login(socialType) { token, error ->
                 if (error == null && token != null) {

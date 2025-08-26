@@ -41,6 +41,7 @@ import beumproject.composeapp.generated.resources.level_selected
 import beumproject.composeapp.generated.resources.sf_pro
 import beumproject.composeapp.generated.resources.wing
 import beumproject.composeapp.generated.resources.wing_selected
+import com.kal.beum.Platform
 import com.kal.beum.Route
 import com.kal.beum.community.presentation.CommunityScreen
 import com.kal.beum.core.presentation.BeumColors

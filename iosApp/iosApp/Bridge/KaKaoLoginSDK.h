@@ -4,6 +4,9 @@
 #import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
+typedef void (^KaKaoLoginCompletion)(NSString * _Nullable accessToken,
+                                     NSString * _Nullable refreshToken,
+                                     NSError  * _Nullable error);
 
 @interface KaKaoLoginSDK : NSObject
 
@@ -12,7 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 // Swift의 `@objc public static func initSDK()` → 클래스 메서드
 + (void)initSDK;
-
++ (void)requestLoginWithCompletion:(KaKaoLoginCompletion)completion;
++ (void)logoutWithCompletion:(void (^ _Nonnull)(NSError * _Nullable error))completion;
 @end
 
 NS_ASSUME_NONNULL_END
