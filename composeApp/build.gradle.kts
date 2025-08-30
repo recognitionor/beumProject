@@ -110,6 +110,9 @@ android {
         getByName("release") {
             isMinifyEnabled = false
         }
+        debug {
+            isDebuggable = true
+        }
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11

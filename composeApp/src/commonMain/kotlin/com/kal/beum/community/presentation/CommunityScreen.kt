@@ -40,6 +40,7 @@ import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumTypo
 import com.kal.beum.home.presentation.components.ToggleButton
 import com.kal.beum.main.presentation.MainAction
+import com.kal.beum.main.presentation.MainScreen
 import com.kal.beum.write.presentation.WritingScreen
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
@@ -170,13 +171,13 @@ fun CommunityScreen(isDevil: Boolean, onAction: (MainAction) -> Unit) {
                     ).clip(shape = RoundedCornerShape(size = 100.dp)).clickable {
                         onAction(MainAction.PushFullScreen {
                             DraftDialog(onNewClick = {
+                                onAction(MainAction.PopFullScreen)
                                 onAction(MainAction.PushFullScreen {
                                     WritingScreen(onAction)
                                 })
                             }, onContinueClick = {
                                 onAction(MainAction.PopFullScreen)
                             }, onDismiss = {
-
                                 onAction(MainAction.PopFullScreen)
                             })
                         })

@@ -14,8 +14,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -33,11 +35,15 @@ import beumproject.composeapp.generated.resources.sf_pro
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumDimen
 import com.kal.beum.core.presentation.BeumTypo
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ReportBottomSheetPage(reportClick: () -> Unit) {
+fun ReportBottomSheetPage(sheetState: () -> Unit, reportClick: () -> Unit) {
+    val scope = rememberCoroutineScope()
+
     Column(
         modifier = Modifier.fillMaxWidth().wrapContentHeight().background(
             color = BeumColors.baseGrayLightGray75, shape = RoundedCornerShape(
@@ -115,7 +121,9 @@ fun ReportBottomSheetPage(reportClick: () -> Unit) {
                 top = BeumDimen.Px075RemSpacing06,
                 end = BeumDimen.Px125RemSpacing08,
                 bottom = BeumDimen.Px075RemSpacing06
-            ), contentAlignment = Alignment.Center
+            ).clickable {
+                sheetState.invoke()
+            }, contentAlignment = Alignment.Center
         ) {
             Text(
                 text = "닫기", style = TextStyle(

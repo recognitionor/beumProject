@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -37,12 +38,12 @@ fun LogOutDialog(onDismiss: () -> Unit, logoutClick: () -> Unit) {
             .clickable { onDismiss.invoke() }, contentAlignment = Alignment.Center
     ) {
         Column(
-            modifier = Modifier.padding(
+            modifier = Modifier.fillMaxWidth().wrapContentHeight().padding(
                 start = 20.dp,
                 top = BeumDimen.Px125RemSpacing08,
-                end = 20.dp,
+                end = 12.dp,
                 bottom = BeumDimen.Px075RemSpacing06
-            ).fillMaxWidth().height(200.dp).background(
+            ).background(
                 color = BeumColors.White, shape = RoundedCornerShape(
                     topStart = 12.dp, topEnd = 12.dp, bottomStart = 12.dp, bottomEnd = 12.dp
                 )
@@ -50,7 +51,7 @@ fun LogOutDialog(onDismiss: () -> Unit, logoutClick: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-
+            Spacer(modifier = Modifier.height(20.dp))
             Text(
                 text = "로그아웃 하시겠습니까?", style = TextStyle(
                     fontSize = BeumTypo.TypoScaleText400,
@@ -63,14 +64,14 @@ fun LogOutDialog(onDismiss: () -> Unit, logoutClick: () -> Unit) {
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            Row(modifier = Modifier.padding(20.dp)) {
+            Row(modifier = Modifier.padding(12.dp)) {
                 Box(
                     modifier = Modifier.clickable {
                         onDismiss.invoke()
                     }.weight(1f).background(
                         color = BeumColors.baseGrayLightGray100,
                         shape = RoundedCornerShape(size = 12.dp)
-                    ).padding(20.dp), contentAlignment = Alignment.Center
+                    ).padding(12.dp), contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = "취소", style = TextStyle(
@@ -89,7 +90,7 @@ fun LogOutDialog(onDismiss: () -> Unit, logoutClick: () -> Unit) {
                         logoutClick()
                     }.weight(1f).background(
                         color = BeumColors.PrimarySkyBlue, shape = RoundedCornerShape(size = 12.dp)
-                    ).padding(20.dp), contentAlignment = Alignment.Center
+                    ).padding(12.dp), contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = "로그아웃", style = TextStyle(
@@ -102,6 +103,8 @@ fun LogOutDialog(onDismiss: () -> Unit, logoutClick: () -> Unit) {
                     )
                 }
             }
+
+            Spacer(modifier = Modifier.height(12.dp))
         }
     }
 }

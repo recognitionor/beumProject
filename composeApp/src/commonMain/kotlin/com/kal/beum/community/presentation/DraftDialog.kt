@@ -27,9 +27,7 @@ import com.kal.beum.write.domain.WritingCategory
 
 @Composable
 fun DraftDialog(
-    onNewClick: () -> Unit,
-    onContinueClick: () -> Unit,
-    onDismiss: (selectItem: WritingCategory?) -> Unit
+    onNewClick: () -> Unit, onContinueClick: () -> Unit, onDismiss: (selectItem: WritingCategory?) -> Unit
 ) {
     // 다이얼로그 바깥쪽을 누르면 닫히도록 Box로 감싸기
     Box(
@@ -38,8 +36,7 @@ fun DraftDialog(
     ) {
         // 실제 다이얼로그 박스
         Column(
-            modifier = Modifier.width(300.dp).clip(RoundedCornerShape(12.dp))
-                .background(Color.White)
+            modifier = Modifier.width(300.dp).clip(RoundedCornerShape(12.dp)).background(Color.White)
                 .padding(start = 16.dp, end = 16.dp, bottom = 20.dp, top = 20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -59,8 +56,9 @@ fun DraftDialog(
                 // 새로쓰기 버튼
                 Box(
                     modifier = Modifier.weight(1f).height(48.dp).clip(RoundedCornerShape(6.dp))
-                        .background(Color(0xFFF2F2F2)).clickable { onNewClick() },
-                    contentAlignment = Alignment.Center
+                        .background(Color(0xFFF2F2F2)).clickable {
+                            onNewClick()
+                        }, contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = "새로 쓰기", style = TextStyle(

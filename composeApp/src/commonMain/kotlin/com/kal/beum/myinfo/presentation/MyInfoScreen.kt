@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -55,6 +56,7 @@ import com.kal.beum.core.presentation.BeumTypo
 import com.kal.beum.main.presentation.MainAction
 import com.kal.beum.myinfo.domain.MyContent
 import com.kal.beum.utils.formatWithComma
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -73,11 +75,12 @@ fun MyInfoScreen(devil: Boolean, action: (MainAction) -> Unit) {
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = false
     )
+    val scope = rememberCoroutineScope()
 
     Box {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.background(BeumColors.White),
+            modifier = Modifier.background(BeumColors.baseCoolGrayLightGray100),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth().height(64.dp).padding(horizontal = 20.dp),
@@ -253,7 +256,14 @@ fun MyInfoScreen(devil: Boolean, action: (MainAction) -> Unit) {
                             containerColor = BeumColors.baseGrayLightGray75,
                             modifier = Modifier.wrapContentHeight().fillMaxWidth()
                         ) {
-                            ReportBottomSheetPage {
+                            ReportBottomSheetPage({
+                                scope.launch {
+                                    reportPage = 0
+                                    reportReasonIndex = -1
+                                    reportContent = null
+                                    sheetState.hide()
+                                }
+                            }) {
                                 reportPage = 2
                             }
                         }
