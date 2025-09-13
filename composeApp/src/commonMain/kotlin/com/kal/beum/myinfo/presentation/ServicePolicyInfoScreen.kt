@@ -28,6 +28,7 @@ import beumproject.composeapp.generated.resources.Res
 import beumproject.composeapp.generated.resources.icon_arrow_right_black
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumTypo
+import com.kal.beum.main.presentation.FullScreenType
 import com.kal.beum.main.presentation.MainAction
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
@@ -78,9 +79,7 @@ fun ServicePolicyInfoScreen(action: (MainAction) -> Unit) {
 
             Row(
                 modifier = Modifier.clickable {
-                    action(MainAction.PushFullScreen {
-                        PrivacyPolicyScreen(action)
-                    })
+                    action(MainAction.PushFullScreen(FullScreenType.PrivacyPolicyScreen))
                 }.fillMaxWidth().height(56.dp).background(color = BeumColors.White)
                     .padding(start = 20.dp, top = 0.dp, end = 20.dp, bottom = 0.dp),
                 verticalAlignment = Alignment.CenterVertically
@@ -107,9 +106,7 @@ fun ServicePolicyInfoScreen(action: (MainAction) -> Unit) {
 
             Row(
                 modifier = Modifier.clickable {
-                    action(MainAction.PushFullScreen {
-                        TermScreen(action)
-                    })
+                    action(MainAction.PushFullScreen(FullScreenType.TermScreen));
                 }.fillMaxWidth().height(56.dp).background(color = BeumColors.White)
                     .padding(start = 20.dp, top = 0.dp, end = 20.dp, bottom = 0.dp),
                 verticalAlignment = Alignment.CenterVertically

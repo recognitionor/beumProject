@@ -2,16 +2,18 @@ package com.kal.beum.main.data.network
 
 import com.kal.beum.core.domain.DataError
 import com.kal.beum.core.domain.Result
+import com.kal.beum.login.data.dto.LoginResponseDto
 import com.kal.beum.login.domain.LoginClient
 import com.kal.beum.login.domain.SocialToken
-import com.kal.beum.main.data.database.UserInfoEntity
-import com.kal.beum.main.data.mappers.toUserInfo
-import com.kal.beum.main.data.mappers.toUserInfoEntity
+import com.kal.beum.main.domain.SocialType
 import com.kal.beum.main.domain.UserInfo
 import io.ktor.client.HttpClient
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import io.ktor.client.call.body
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
+import io.ktor.client.statement.bodyAsText
+import io.ktor.http.ContentType
+import io.ktor.http.contentType
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -20,6 +22,20 @@ import kotlin.coroutines.suspendCoroutine
 class SdkLoginDataSource(
     private val loginClients: Map<Int, LoginClient>, private val httpClient: HttpClient
 ) : RemoteLoginDataSource {
+    override suspend fun signup(socialType: Int): Result<UserInfo, DataError.Remote> {
+        println("signup : $socialType")
+        return try {
+            val socialToken = getSocialToken(socialType)
+            val userInfo = fetchUserInfoFromServer(socialToken, socialType)
+            Result.Success(userInfo)
+        } catch (e: CancellationException) {
+            println(e.message)
+            throw e
+        } catch (e: Exception) {
+            println(e.message)
+            Result.Error(DataError.Remote.UNKNOWN)
+        }
+    }
 
     override suspend fun login(socialType: Int): Result<UserInfo, DataError.Remote> {
         println("login : $socialType")
@@ -28,8 +44,10 @@ class SdkLoginDataSource(
             val userInfo = fetchUserInfoFromServer(socialToken, socialType)
             Result.Success(userInfo)
         } catch (e: CancellationException) {
+            println(e.message)
             throw e
         } catch (e: Exception) {
+            println(e.message)
             Result.Error(DataError.Remote.UNKNOWN)
         }
     }
@@ -57,16 +75,56 @@ class SdkLoginDataSource(
     private suspend fun fetchUserInfoFromServer(
         socialToken: SocialToken, socialType: Int
     ): UserInfo {
-//        val response = httpClient.post("your-api-endpoint") {
-//            setBody(mapOf(
-//                "socialToken" to socialToken,
-//                "socialType" to socialType
-//            ))
-//        }
+        println("fetchUserInfoFromServer : $socialType-$socialToken")
 
+        val response = httpClient.post("https://dev.winning-lotto.com/signin") {
+            contentType(ContentType.Application.Json)
+            setBody(mapOf(
+                "accessToken" to socialToken.accessToken,
+                "socialType" to SocialType.toName(socialType)
+            ))
+        }
+        when (response.status.value) {
+            200 -> {
+                val responseBody = response.body<LoginResponseDto>()
+                println("성공 응답: $responseBody")
+                return UserInfo(
+                    userId = "",
+                    nickName = "Mock User",
+                    socialType = 1,
+                    email = "",
+                    sessionKey = "",
+                    accessToken = "",
+                    refreshToken = "",
+                    profileImageId = "",
+                    needSignUp = true
+                )
+            }
 
-        println("fetchUserInfoFromServer : $socialToken")
-        return UserInfo("1", "고라니", socialType, "jhlee@gmail.com", "1111")
+            400 -> {
+                val errorBody = response.bodyAsText()
+                println("잘못된 요청: $errorBody")
+                throw Exception("잘못된 요청 데이터")
+            }
+
+            401 -> {
+                val errorBody = response.bodyAsText()
+                println("인증 실패: $errorBody")
+                throw Exception("소셜 토큰이 유효하지 않음")
+            }
+
+            500 -> {
+                val errorBody = response.bodyAsText()
+                println("서버 오류: $errorBody")
+                throw Exception("서버 내부 오류")
+            }
+
+            else -> {
+                val errorBody = response.bodyAsText()
+                println("알 수 없는 오류 (${response.status}): $errorBody")
+                throw Exception("서버 오류: ${response.status}")
+            }
+        }
     }
 }
 

@@ -10,7 +10,7 @@ import androidx.sqlite.execSQL
 import com.kal.beum.core.data.database.StringListTypeConverter
 
 @Database(
-    entities = [AppEntity::class, UserInfoEntity::class], version = 2
+    entities = [AppEntity::class, UserInfoEntity::class], version = 1
 )
 @TypeConverters(
     StringListTypeConverter::class

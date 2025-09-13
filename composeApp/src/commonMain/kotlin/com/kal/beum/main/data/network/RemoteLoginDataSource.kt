@@ -6,6 +6,7 @@ import com.kal.beum.main.domain.UserInfo
 import kotlinx.coroutines.flow.Flow
 
 interface RemoteLoginDataSource {
+    suspend fun signup(socialType: Int): Result<UserInfo, DataError.Remote>
     suspend fun login(socialType: Int): Result<UserInfo, DataError.Remote>
     suspend fun logout(userInfo: UserInfo): Result<Unit, DataError.Remote>
 }

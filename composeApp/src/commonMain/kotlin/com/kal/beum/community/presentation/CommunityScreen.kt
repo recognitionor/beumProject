@@ -39,6 +39,7 @@ import com.kal.beum.content.presentation.ContentDetailScreen
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumTypo
 import com.kal.beum.home.presentation.components.ToggleButton
+import com.kal.beum.main.presentation.FullScreenType
 import com.kal.beum.main.presentation.MainAction
 import com.kal.beum.main.presentation.MainScreen
 import com.kal.beum.write.presentation.WritingScreen
@@ -108,11 +109,8 @@ fun CommunityScreen(isDevil: Boolean, onAction: (MainAction) -> Unit) {
                                 spotColor = Color(0x0D000000),
                                 ambientColor = Color(0x0D000000)
                             ).clip(RoundedCornerShape(9.dp)).clickable {
-                                onAction(MainAction.PushFullScreen {
-                                    ContentDetailScreen(item.id) {
-                                        onAction(MainAction.PopFullScreen)
-                                    }
-                                })
+                                onAction(MainAction.PushFullScreen(FullScreenType.ContentDetailScreen(item.id)))
+
                             }.background(
                                 color = BeumColors.baseGrayLightGray50,
                                 shape = RoundedCornerShape(9.dp)
@@ -169,18 +167,14 @@ fun CommunityScreen(isDevil: Boolean, onAction: (MainAction) -> Unit) {
                         color = BeumColors.angelSkyblue,
                         shape = RoundedCornerShape(size = 100.dp)
                     ).clip(shape = RoundedCornerShape(size = 100.dp)).clickable {
-                        onAction(MainAction.PushFullScreen {
-                            DraftDialog(onNewClick = {
-                                onAction(MainAction.PopFullScreen)
-                                onAction(MainAction.PushFullScreen {
-                                    WritingScreen(onAction)
-                                })
-                            }, onContinueClick = {
-                                onAction(MainAction.PopFullScreen)
-                            }, onDismiss = {
-                                onAction(MainAction.PopFullScreen)
-                            })
-                        })
+                        onAction(MainAction.PushFullScreen(FullScreenType.DraftDialog(onNewClick = {
+                            onAction(MainAction.PopFullScreen)
+                            onAction(MainAction.PushFullScreen(FullScreenType.WritingScreen))
+                        }, onContinueClick = {
+                            onAction(MainAction.PopFullScreen)
+                        }, onDismiss = {
+                            onAction(MainAction.PopFullScreen)
+                        })))
                     }) {
                         Image(
                             painter = painterResource(Res.drawable.ic_add_medium),

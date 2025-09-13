@@ -73,8 +73,8 @@ val sharedModules = module {
 
     single {
         get<DatabaseFactory>().create().setDriver(BundledSQLiteDriver())
-            .addMigrations(MIGRATION_1_2).build()
-//            .fallbackToDestructiveMigration(true).build()
+//            .addMigrations(MIGRATION_1_2).build()
+            .fallbackToDestructiveMigration(true).build()
     }
 
     single<Map<Int, LoginClient>> {

@@ -19,6 +19,9 @@ object HttpClientFactory {
             install(ContentNegotiation) {
                 json(json = Json {
                     ignoreUnknownKeys = true
+                    prettyPrint = true
+                    isLenient = true
+                    coerceInputValues = true  // 이 옵션이 핵심!
                 })
             }
             install(HttpTimeout) {

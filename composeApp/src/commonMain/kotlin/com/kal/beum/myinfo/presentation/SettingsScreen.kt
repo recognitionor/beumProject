@@ -32,6 +32,7 @@ import beumproject.composeapp.generated.resources.Res
 import beumproject.composeapp.generated.resources.icon_arrow_right_black
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumTypo
+import com.kal.beum.main.presentation.FullScreenType
 import com.kal.beum.main.presentation.MainAction
 import com.kal.beum.myinfo.domain.MyInfo
 import org.jetbrains.compose.resources.Font
@@ -40,20 +41,12 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 
 fun SettingsScreen(info: MyInfo, action: (MainAction) -> Unit) {
-    val topSpace = WindowInsets.safeDrawing
-        .asPaddingValues()
-        .calculateTopPadding()
+    val topSpace = WindowInsets.safeDrawing.asPaddingValues().calculateTopPadding()
     Column(Modifier.fillMaxSize().background(BeumColors.baseGrayLightGray75)) {
         Spacer(modifier = Modifier.height(topSpace))
-        Column(
-            modifier = Modifier.background(
-                BeumColors.White
-            )
-        ) {
+        Column {
             Row(
-                verticalAlignment = Alignment.CenterVertically, modifier = Modifier.background(
-                    BeumColors.White
-                ).fillMaxWidth()
+                verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()
             ) {
                 Box(modifier = Modifier.size(48.dp).clickable {
                     action(MainAction.PopFullScreen)
@@ -79,17 +72,16 @@ fun SettingsScreen(info: MyInfo, action: (MainAction) -> Unit) {
                 )
             }
             Box(
-                modifier = Modifier.fillMaxWidth().height(1.dp)
-                    .background(BeumColors.baseGrayLightGray75)
+                modifier = Modifier.fillMaxWidth().height(1.dp).background(BeumColors.baseGrayLightGray75)
             )
 
             Box(
                 modifier = Modifier.fillMaxWidth().height(56.dp)
-                    .background(color = BeumColors.White)
                     .padding(start = 20.dp, top = 0.dp, end = 20.dp, bottom = 0.dp).clickable {
-                        action(MainAction.PushFullScreen {
-                            MyInfoDetailScreen(info, action)
-                        })
+                        action(MainAction.PushFullScreen(FullScreenType.MyInfoDetailScreen(info)))
+//                        action(MainAction.PushFullScreen {
+//                            MyInfoDetailScreen(info, action)
+//                        })
                     }, contentAlignment = Alignment.CenterStart
             ) {
                 Text(
@@ -106,11 +98,8 @@ fun SettingsScreen(info: MyInfo, action: (MainAction) -> Unit) {
 
             Box(
                 modifier = Modifier.fillMaxWidth().height(56.dp)
-                    .background(color = BeumColors.White)
                     .padding(start = 20.dp, top = 0.dp, end = 20.dp, bottom = 0.dp).clickable {
-                        action(MainAction.PushFullScreen {
-                            ServicePolicyInfoScreen(action)
-                        })
+                        action(MainAction.PushFullScreen(FullScreenType.ServicePolicyInfoScreen))
                     }, contentAlignment = Alignment.CenterStart
             ) {
                 Text(
@@ -127,7 +116,6 @@ fun SettingsScreen(info: MyInfo, action: (MainAction) -> Unit) {
 
             Row(
                 modifier = Modifier.fillMaxWidth().height(56.dp)
-                    .background(color = BeumColors.White)
                     .padding(start = 20.dp, top = 0.dp, end = 20.dp, bottom = 0.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -157,17 +145,13 @@ fun SettingsScreen(info: MyInfo, action: (MainAction) -> Unit) {
 
             Box(
                 modifier = Modifier.clickable {
-                    action(MainAction.PushFullScreen {
-                        LogOutDialog({
-                            println("~!~!~!~")
-                            action(MainAction.PopFullScreen)
-                        }) {
-                            action(MainAction.ClearFullScreen)
-                            action(MainAction.LogOut)
-                        }
-                    })
-                }.fillMaxWidth().height(56.dp).background(color = BeumColors.White)
-                    .padding(start = 20.dp, top = 0.dp, end = 20.dp, bottom = 0.dp),
+                    action(MainAction.PushFullScreen(FullScreenType.LogOutDialog({
+                        action(MainAction.PopFullScreen)
+                    }) {
+                        action(MainAction.ClearFullScreen)
+                        action(MainAction.LogOut)
+                    }))
+                }.fillMaxWidth().height(56.dp).padding(start = 20.dp, top = 0.dp, end = 20.dp, bottom = 0.dp),
                 contentAlignment = Alignment.CenterStart
             ) {
                 Text(

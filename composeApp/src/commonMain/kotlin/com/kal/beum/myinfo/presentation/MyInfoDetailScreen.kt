@@ -36,6 +36,7 @@ import beumproject.composeapp.generated.resources.sf_pro
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumTypo
 import com.kal.beum.main.domain.SocialType
+import com.kal.beum.main.presentation.FullScreenType
 import com.kal.beum.main.presentation.MainAction
 import com.kal.beum.myinfo.domain.MyInfo
 import org.jetbrains.compose.resources.Font
@@ -44,9 +45,11 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun MyInfoDetailScreen(info: MyInfo, action: (MainAction) -> Unit) {
     Column(modifier = Modifier.background(BeumColors.baseGrayLightGray75).fillMaxSize()) {
-        Column (modifier = Modifier.background(
-            BeumColors.White
-        )){
+        Column(
+            modifier = Modifier.background(
+                BeumColors.White
+            )
+        ) {
             Spacer(modifier = Modifier.height(50.dp))
             Row(
                 verticalAlignment = Alignment.CenterVertically, modifier = Modifier.background(
@@ -84,9 +87,10 @@ fun MyInfoDetailScreen(info: MyInfo, action: (MainAction) -> Unit) {
             Row(
                 modifier = Modifier.fillMaxWidth().height(56.dp).background(color = BeumColors.White)
                     .padding(start = 20.dp, top = 0.dp, end = 20.dp, bottom = 0.dp).clickable {
-                        action(MainAction.PushFullScreen {
-                            MyInfoDetailScreen(info, action)
-                        })
+                        action(MainAction.PushFullScreen(FullScreenType.MyInfoDetailScreen(info)))
+//                        action(MainAction.PushFullScreen {
+//                            MyInfoDetailScreen(info, action)
+//                        })
                     }, verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
@@ -116,9 +120,7 @@ fun MyInfoDetailScreen(info: MyInfo, action: (MainAction) -> Unit) {
             Row(
                 modifier = Modifier.fillMaxWidth().height(56.dp).background(color = BeumColors.White)
                     .padding(start = 20.dp, top = 0.dp, end = 20.dp, bottom = 0.dp).clickable {
-                        action(MainAction.PushFullScreen {
-                            MyInfoDetailScreen(info, action)
-                        })
+                        action(MainAction.PushFullScreen(FullScreenType.MyInfoDetailScreen(info)))
                     }, verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(

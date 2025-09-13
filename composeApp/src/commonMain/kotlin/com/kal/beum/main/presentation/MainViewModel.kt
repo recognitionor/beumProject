@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kal.beum.core.domain.Result
-import com.kal.beum.core.domain.onError
 import com.kal.beum.core.domain.onProgress
 import com.kal.beum.core.domain.onSuccess
 import com.kal.beum.main.domain.AppRepository
@@ -16,7 +15,6 @@ import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlin.onSuccess
 
 class MainViewModel(private val appRepository: AppRepository) : ViewModel() {
     private val _state = MutableStateFlow(MainState())
@@ -53,7 +51,7 @@ class MainViewModel(private val appRepository: AppRepository) : ViewModel() {
     private fun getUserInfo() {
         println("getUserInfo")
         appRepository.getLoginInfo().onEach { result ->
-
+            println("getLoginInfo : $result")
             if (result != null) {
                 _state.update { it.copy(userInfo = result) }
 //                delay(3000)
@@ -62,19 +60,22 @@ class MainViewModel(private val appRepository: AppRepository) : ViewModel() {
         }.launchIn(viewModelScope)
     }
 
-    private fun pushFullScreen(screen: (@Composable () -> Unit)) {
-        println("pushFullScreen")
-        _state.update { it.copy(fullScreen = _state.value.fullScreen + screen) }
+    private fun pushFullScreen(screen: FullScreenType) {
+        println("pushFullScreen2")
+        _state.update { it.copy(fullScreenStack = _state.value.fullScreenStack + screen) }
     }
+
 
     private fun popFullScreen() {
         println("popFullScreen")
         _state.update { it.copy(fullScreen = state.value.fullScreen.dropLast(1)) }
+        _state.update { it.copy(fullScreenStack = state.value.fullScreenStack.dropLast(1)) }
     }
 
     private fun clearFullScreen() {
         println("clearFullScreen")
         _state.update { it.copy(fullScreen = emptyList(), isSplashDone = false) }
+        _state.update { it.copy(fullScreenStack = emptyList(), isSplashDone = false) }
     }
 
     fun toggleFullScreen() {
@@ -94,11 +95,17 @@ class MainViewModel(private val appRepository: AppRepository) : ViewModel() {
 
                 is Result.Success -> {
                     println("Success :")
-                    _state.update {
-                        it.copy(
-                            userInfo = result.data, isSplashDone = true, isProgress = false
-                        )
+                    if (result.data.needSignUp) {
+
+                    } else {
+                        _state.update {
+                            it.copy(
+                                userInfo = result.data, isSplashDone = true, isProgress = false
+                            )
+                        }
                     }
+
+
                 }
 
                 is Result.Progress -> {
@@ -126,7 +133,7 @@ class MainViewModel(private val appRepository: AppRepository) : ViewModel() {
     fun onAction(action: MainAction) {
         when (action) {
             is MainAction.ToggleDevil -> devilToggle(action.isDevil)
-            is MainAction.PushFullScreen -> pushFullScreen(action.screen)
+            is MainAction.PushFullScreen -> pushFullScreen(action.fullScreen)
             is MainAction.PopFullScreen -> popFullScreen()
             is MainAction.ClearFullScreen -> clearFullScreen()
             is MainAction.ToastMessage -> {
@@ -134,6 +141,7 @@ class MainViewModel(private val appRepository: AppRepository) : ViewModel() {
             }
 
             is MainAction.LogOut -> logout()
+            is MainAction.PushFullScreen -> pushFullScreen(action.fullScreen)
         }
     }
 }

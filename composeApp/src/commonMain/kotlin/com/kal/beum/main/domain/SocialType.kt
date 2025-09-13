@@ -10,7 +10,27 @@ object SocialType {
     const val APPLE_CODE = 3
     const val NAVER_CODE = 4
 
-    fun toType(socialName: String): Int {
+    fun toName(socialCode: Int): String {
+        when (socialCode) {
+            KAKAO_CODE -> {
+                return "kakao"
+            }
+
+            NAVER_CODE -> {
+                return "naver"
+            }
+
+            APPLE_CODE -> {
+                return "apple"
+            }
+
+            else -> {
+                return "apple"
+            }
+        }
+    }
+
+    fun toTypeCode(socialName: String): Int {
         when (socialName.lowercase()) {
             "카카오", "kakao" -> {
                 return KAKAO_CODE

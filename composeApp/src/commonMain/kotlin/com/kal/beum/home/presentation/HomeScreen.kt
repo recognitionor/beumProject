@@ -39,6 +39,7 @@ import com.kal.beum.core.presentation.ToastInfo
 import com.kal.beum.home.presentation.components.AlarmButton
 import com.kal.beum.home.presentation.components.FlowRow
 import com.kal.beum.home.presentation.components.ToggleButton
+import com.kal.beum.main.presentation.FullScreenType
 import com.kal.beum.main.presentation.MainAction
 import com.kal.beum.notice.presentaion.NoticeScreen
 import org.jetbrains.compose.resources.Font
@@ -68,9 +69,7 @@ fun HomeScreen(
             ) {
                 Spacer(modifier = Modifier.weight(1f))
                 AlarmButton(toggle) {
-                    onAction(MainAction.PushFullScreen {
-                        NoticeScreen(onAction)
-                    })
+                    onAction(MainAction.PushFullScreen(FullScreenType.NoticeScreen))
                 }
                 Spacer(modifier = Modifier.width(20.dp))
             }

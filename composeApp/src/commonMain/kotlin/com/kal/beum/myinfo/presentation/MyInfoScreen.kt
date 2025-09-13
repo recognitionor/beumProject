@@ -53,7 +53,9 @@ import coil3.compose.AsyncImage
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumDimen
 import com.kal.beum.core.presentation.BeumTypo
+import com.kal.beum.main.presentation.FullScreenType
 import com.kal.beum.main.presentation.MainAction
+import com.kal.beum.main.presentation.MainScreen
 import com.kal.beum.myinfo.domain.MyContent
 import com.kal.beum.utils.formatWithComma
 import kotlinx.coroutines.launch
@@ -101,9 +103,7 @@ fun MyInfoScreen(devil: Boolean, action: (MainAction) -> Unit) {
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() }) {
                     state.myInfo?.let {
-                        action(MainAction.PushFullScreen {
-                            SettingsScreen(it, action)
-                        })
+                        action(MainAction.PushFullScreen(FullScreenType.SettingsScreen(it)))
                     }
                 }, contentAlignment = Alignment.Center
                 ) {
@@ -289,19 +289,17 @@ fun MyInfoScreen(devil: Boolean, action: (MainAction) -> Unit) {
                     }
 
                     3 -> {
-                        action(MainAction.PushFullScreen {
-                            ReportConfirmDialog(onContinueClick = {
-                                action(MainAction.PopFullScreen)
-                                reportContent?.let {
-                                    viewModel.reportUser(it)
-                                }
-                            }, onDismiss = {
-                                action(MainAction.PopFullScreen)
-                                reportPage = 0
-                                reportReasonIndex = -1
-                                reportContent = null
-                            })
-                        })
+                        action(MainAction.PushFullScreen(FullScreenType.ReportConfirmDialog(onContinueClick = {
+                            action(MainAction.PopFullScreen)
+                            reportContent?.let {
+                                viewModel.reportUser(it)
+                            }
+                        }, onDismiss = {
+                            action(MainAction.PopFullScreen)
+                            reportPage = 0
+                            reportReasonIndex = -1
+                            reportContent = null
+                        })))
                     }
                 }
             }

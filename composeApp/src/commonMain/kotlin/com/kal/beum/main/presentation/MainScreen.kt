@@ -44,12 +44,23 @@ import beumproject.composeapp.generated.resources.wing_selected
 import com.kal.beum.Platform
 import com.kal.beum.Route
 import com.kal.beum.community.presentation.CommunityScreen
+import com.kal.beum.community.presentation.DraftDialog
+import com.kal.beum.content.presentation.ContentDetailScreen
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumTypo
 import com.kal.beum.core.presentation.Toast
 import com.kal.beum.home.presentation.HomeScreen
 import com.kal.beum.level.presentaion.RankingScreen
+import com.kal.beum.myinfo.presentation.LogOutDialog
+import com.kal.beum.myinfo.presentation.MyInfoDetailScreen
 import com.kal.beum.myinfo.presentation.MyInfoScreen
+import com.kal.beum.myinfo.presentation.PrivacyPolicyScreen
+import com.kal.beum.myinfo.presentation.ReportConfirmDialog
+import com.kal.beum.myinfo.presentation.ServicePolicyInfoScreen
+import com.kal.beum.myinfo.presentation.SettingsScreen
+import com.kal.beum.myinfo.presentation.TermScreen
+import com.kal.beum.notice.presentaion.NoticeScreen
+import com.kal.beum.write.presentation.WritingScreen
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -111,21 +122,83 @@ fun MainScreen() {
         if (state.isProgress) {
             ProgressDialog()
         } else {
-            // FullScreen Overlay
-            state.fullScreen.forEach { content ->
-                if (content != null) {
-                    Box(
-                        Modifier
-                            .fillMaxSize()
-                            .clickable(
-                                indication = null,
-                                interactionSource = remember { MutableInteractionSource() }
-                            ) { /* 이벤트 소모만! */ }
-                    ) {
-                        content()
+            state.fullScreenStack.forEach { content ->
+                Box(
+                    Modifier.fillMaxSize().clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }) { /* 이벤트 소모만! */ }) {
+                    when (content) {
+                        is FullScreenType.MyInfoDetailScreen -> {
+                            println("FullScreenType.MyInfoDetailScreen")
+                            MyInfoDetailScreen(content.info, viewModel::onAction)
+                        }
+
+                        is FullScreenType.SettingsScreen -> {
+                            println("FullScreenType.SettingsScreen")
+                            SettingsScreen(content.info, viewModel::onAction)
+                        }
+
+                        is FullScreenType.ContentDetailScreen -> {
+                            println("FullScreenType.ContentDetailScreen")
+                            ContentDetailScreen(content.id) {
+                                viewModel.onAction(MainAction.PopFullScreen)
+                            }
+                            content.id
+
+
+                            ContentDetailScreen(content.id, {
+                                viewModel.onAction(MainAction.PopFullScreen)
+                            })
+                        }
+
+                        is FullScreenType.DraftDialog -> {
+                            DraftDialog(content.onNewClick, content.onContinueClick, content.onDismiss)
+                        }
+
+                        is FullScreenType.WritingScreen -> {
+                            println("WritingScreen")
+                            WritingScreen(viewModel::onAction)
+                        }
+
+                        is FullScreenType.NoticeScreen -> {
+                            println("NoticeScreen")
+                            NoticeScreen(viewModel::onAction)
+                        }
+
+                        is FullScreenType.LogOutDialog -> {
+                            LogOutDialog(content.onDismiss, content.logoutClick)
+                        }
+
+                        is FullScreenType.PrivacyPolicyScreen -> {
+                            PrivacyPolicyScreen(viewModel::onAction)
+                        }
+
+                        is FullScreenType.ReportConfirmDialog -> {
+                            ReportConfirmDialog(content.onDismiss, content.onContinueClick)
+                        }
+
+                        is FullScreenType.ServicePolicyInfoScreen -> {
+                            ServicePolicyInfoScreen(viewModel::onAction)
+                        }
+
+                        is FullScreenType.TermScreen -> {
+                            TermScreen(viewModel::onAction)
+                        }
                     }
                 }
             }
+
+            // FullScreen Overlay
+//            state.fullScreen.forEach { content ->
+//                if (content != null) {
+//                    Box(
+//                        Modifier.fillMaxSize().clickable(
+//                        indication = null,
+//                        interactionSource = remember { MutableInteractionSource() }) { /* 이벤트 소모만! */ }) {
+//                        content()
+//                    }
+//                }
+//            }
         }
     }
 
@@ -146,12 +219,11 @@ fun BottomNavigationBar(navController: NavController, currentRoute: String?, dev
     ) {
         val selectedTintColor = if (devil) Color.White else BeumColors.baseGrayLightGray800
         val unSelectedTintColor = if (devil) BeumColors.transparentWhite else Color.Unspecified
-        NavigationBarItem(selected = currentRoute == Route.Home.toRoute(), // 상태 업데이트 필요
-            onClick = { navController.navigate(Route.Home.toRoute()) },
-            colors = NavigationBarItemDefaults.colors(
+        NavigationBarItem(
+            selected = currentRoute == Route.Home.toRoute(), // 상태 업데이트 필요
+            onClick = { navController.navigate(Route.Home.toRoute()) }, colors = NavigationBarItemDefaults.colors(
                 indicatorColor = Color.Transparent
-            ),
-            label = {
+            ), label = {
                 Text(
                     "홈", style = TextStyle(
                         fontSize = BeumTypo.TypoScaleText25,
@@ -162,18 +234,16 @@ fun BottomNavigationBar(navController: NavController, currentRoute: String?, dev
                         textAlign = TextAlign.Center,
                     )
                 )
-            },
-            icon = {
+            }, icon = {
                 val isSelected = currentRoute == Route.Home.toRoute()
                 Icon(
                     painter = if (isSelected) painterResource(Res.drawable.home_selected) else painterResource(
                         Res.drawable.home
-                    ),
-                    tint = if (isSelected) selectedTintColor else unSelectedTintColor,
-                    contentDescription = "Home"
+                    ), tint = if (isSelected) selectedTintColor else unSelectedTintColor, contentDescription = "Home"
                 )
             })
-        NavigationBarItem(selected = currentRoute == Route.Community.toRoute(), // 상태 업데이트 필요
+        NavigationBarItem(
+            selected = currentRoute == Route.Community.toRoute(), // 상태 업데이트 필요
             onClick = { navController.navigate(Route.Community.toRoute()) }, label = {
                 Text(
                     "커뮤니티", style = TextStyle(
@@ -197,7 +267,8 @@ fun BottomNavigationBar(navController: NavController, currentRoute: String?, dev
                     contentDescription = "Community"
                 )
             })
-        NavigationBarItem(selected = currentRoute == Route.Level("1").toRoute(), // 상태 업데이트 필요
+        NavigationBarItem(
+            selected = currentRoute == Route.Level("1").toRoute(), // 상태 업데이트 필요
             onClick = { navController.navigate(Route.Level("1").toRoute()) }, label = {
                 Text(
                     "레벨", style = TextStyle(
@@ -216,12 +287,11 @@ fun BottomNavigationBar(navController: NavController, currentRoute: String?, dev
                 Icon(
                     painter = if (isSelected) painterResource(Res.drawable.level_selected) else painterResource(
                         Res.drawable.level
-                    ),
-                    tint = if (isSelected) selectedTintColor else unSelectedTintColor,
-                    contentDescription = "Level"
+                    ), tint = if (isSelected) selectedTintColor else unSelectedTintColor, contentDescription = "Level"
                 )
             })
-        NavigationBarItem(selected = currentRoute == Route.MyInfo("userId").toRoute(), // 상태 업데이트 필요
+        NavigationBarItem(
+            selected = currentRoute == Route.MyInfo("userId").toRoute(), // 상태 업데이트 필요
             onClick = { navController.navigate(Route.MyInfo("userId").toRoute()) }, label = {
                 Text(
                     "마이", style = TextStyle(
