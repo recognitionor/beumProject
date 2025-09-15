@@ -236,7 +236,6 @@ fun WritingScreen(onAction: (MainAction) -> Unit) {
                         text = "등록", fontSize = 18.sp, fontWeight = FontWeight.Bold
                     )
                 }
-
             }
 
             Spacer(modifier = Modifier.height(30.dp))

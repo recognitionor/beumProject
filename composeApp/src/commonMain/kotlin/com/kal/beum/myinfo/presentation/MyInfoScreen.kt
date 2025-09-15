@@ -5,28 +5,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,25 +24,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import beumproject.composeapp.generated.resources.Res
-import beumproject.composeapp.generated.resources.angel_abled
-import beumproject.composeapp.generated.resources.devil_abled
-import beumproject.composeapp.generated.resources.heart
-import beumproject.composeapp.generated.resources.ic_angel_emoji
-import beumproject.composeapp.generated.resources.ic_devil_emoji
-import beumproject.composeapp.generated.resources.ic_down_arrow
-import beumproject.composeapp.generated.resources.ic_info
-import beumproject.composeapp.generated.resources.ic_setting
-import beumproject.composeapp.generated.resources.sf_pro
+import beumproject.composeapp.generated.resources.*
 import coil3.compose.AsyncImage
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumDimen
 import com.kal.beum.core.presentation.BeumTypo
 import com.kal.beum.main.presentation.FullScreenType
 import com.kal.beum.main.presentation.MainAction
-import com.kal.beum.main.presentation.MainScreen
 import com.kal.beum.myinfo.domain.MyContent
-import com.kal.beum.utils.formatWithComma
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
@@ -117,8 +91,8 @@ fun MyInfoScreen(devil: Boolean, action: (MainAction) -> Unit) {
             }
             Spacer(modifier = Modifier.fillMaxWidth().height(32.dp))
 
-            if (state.myInfo?.profileImage?.isNotEmpty() == true) {
-                AsyncImage(model = state.myInfo?.profileImage!!, contentDescription = "")
+            if (state.myInfo?.profileImageId?.isNotEmpty() == true) {
+                AsyncImage(model = state.myInfo?.profileImageId!!, contentDescription = "")
             } else {
                 Image(
                     modifier = Modifier.size(64.dp).border(
@@ -183,18 +157,30 @@ fun MyInfoScreen(devil: Boolean, action: (MainAction) -> Unit) {
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
-
-                        Text(
-                            text = formatWithComma(
-                                state.myInfo?.angelPoint ?: 0
-                            ), // Use formatWithComma function to format the number with commas , style = TextStyle(
-                            fontSize = BeumTypo.TypoScaleText600,
-                            lineHeight = BeumTypo.lineHeightCaption1,
-                            fontFamily = FontFamily(Font(Res.font.sf_pro)),
-                            fontWeight = FontWeight(700),
-                            color = BeumColors.baseGrayLightGray800,
-                            textAlign = TextAlign.Right,
-                        )
+// @TODO 천사 악마 포인트 다시 넣기
+//                        Text(
+//                            text = formatWithComma(
+//                                if (devil) state.myInfo?.devilPoint ?: 0 else state.myInfo?.angelPoint
+//                                    ?: 0
+//                            ), // Use formatWithComma function to format the number with commas , style = TextStyle(
+//                            fontSize = BeumTypo.TypoScaleText600,
+//                            lineHeight = BeumTypo.lineHeightCaption1,
+//                            fontFamily = FontFamily(Font(Res.font.sf_pro)),
+//                            fontWeight = FontWeight(700),
+//                            color = BeumColors.baseGrayLightGray800,
+//                            textAlign = TextAlign.Right,
+//                        )
+//                        Text(
+//                            text = formatWithComma(
+//                                state.myInfo?.angelPoint ?: 0
+//                            ), // Use formatWithComma function to format the number with commas , style = TextStyle(
+//                            fontSize = BeumTypo.TypoScaleText600,
+//                            lineHeight = BeumTypo.lineHeightCaption1,
+//                            fontFamily = FontFamily(Font(Res.font.sf_pro)),
+//                            fontWeight = FontWeight(700),
+//                            color = BeumColors.baseGrayLightGray800,
+//                            textAlign = TextAlign.Right,
+//                        )
                         Spacer(modifier = Modifier.weight(1f))
                         Box(
                             modifier = Modifier.width(18.dp).height(18.dp).background(

@@ -1,12 +1,12 @@
 package com.kal.beum.write.presentation
 
-import androidx.lifecycle.VIEW_MODEL_STORE_OWNER_KEY
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kal.beum.core.domain.onError
 import com.kal.beum.core.domain.onSuccess
 import com.kal.beum.write.domain.WritingCategoryRepository
 import com.kal.beum.write.domain.WritingRepository
+import com.kal.beum.write.domain.WritingInfoRequest
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart
@@ -15,8 +15,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class WritingViewModel(
-    private val writingRepository: WritingRepository,
-    private val writeCategoryRepository: WritingCategoryRepository
+    private val writingRepository: WritingRepository, private val writeCategoryRepository: WritingCategoryRepository
 ) : ViewModel() {
     private val _state = MutableStateFlow(WritingState())
     val state = _state.onStart {
@@ -35,14 +34,31 @@ class WritingViewModel(
         }.start()
     }
 
+    private fun parseTagsFromString(tagString: String): List<String> {
+        return tagString.split("#")
+            .map { it.trim() }
+            .filter { it.isNotEmpty() }
+    }
+
     private fun submit() {
         viewModelScope.launch {
             _state.update { it.copy(submitProgress = true) }
-            writingRepository.submitWriting().onSuccess { result ->
+
+            println("tags : ${state.value.tags}")
+
+            val writingSubmitRequest = WritingInfoRequest(
+                title = state.value.title,
+                content = state.value.content,
+                tags = parseTagsFromString(state.value.tags),
+                devil = state.value.isDevil,
+                categoryId = state.value.selectedCategory?.categoryId ?: -1,
+                rewardPoint = state.value.rewardPoint
+            )
+            writingRepository.submitWriting(writingSubmitRequest).onSuccess { result ->
                 if (result) {
                     _state.update { it.copy(submitProgress = false, isClose = true, closeMessage = "게시글이 등록되었습니다.") }
                 }
-            }.onError { error->
+            }.onError { error ->
                 _state.update { it.copy(submitProgress = false, isClose = true, closeMessage = error.name) }
             }
         }.start()

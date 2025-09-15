@@ -40,9 +40,10 @@ class MyInfoViewModel(private val myInfoRepository: MyInfoRepository) : ViewMode
         println("getMyInfo")
         viewModelScope.launch {
             myInfoRepository.getMyInfo().onSuccess { myInfo ->
+                println(myInfo)
                 _state.update { it.copy(myInfo = myInfo) }
-                getMyContent(myInfo.id)
-                getMyReply(myInfo.id)
+                getMyContent(myInfo.userId.toInt())
+                getMyReply(myInfo.userId.toInt())
             }
         }.start()
     }

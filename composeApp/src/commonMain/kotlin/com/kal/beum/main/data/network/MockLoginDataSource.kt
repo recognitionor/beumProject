@@ -7,7 +7,13 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class MockLoginDataSource : RemoteLoginDataSource {
-    override suspend fun signup(socialType: Int): Result<UserInfo, DataError.Remote> {
+
+
+    override suspend fun signup(
+        socialType: Int,
+        accessToken: String,
+        refreshToken: String
+    ): Result<UserInfo, DataError.Remote> {
         return Result.Success(
             UserInfo(
                 userId = "",

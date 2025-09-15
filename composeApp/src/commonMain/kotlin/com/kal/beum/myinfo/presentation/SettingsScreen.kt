@@ -3,18 +3,7 @@ package com.kal.beum.myinfo.presentation
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.asPaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -32,15 +21,15 @@ import beumproject.composeapp.generated.resources.Res
 import beumproject.composeapp.generated.resources.icon_arrow_right_black
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumTypo
+import com.kal.beum.main.domain.UserInfo
 import com.kal.beum.main.presentation.FullScreenType
 import com.kal.beum.main.presentation.MainAction
-import com.kal.beum.myinfo.domain.MyInfo
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
 
-fun SettingsScreen(info: MyInfo, action: (MainAction) -> Unit) {
+fun SettingsScreen(info: UserInfo, action: (MainAction) -> Unit) {
     val topSpace = WindowInsets.safeDrawing.asPaddingValues().calculateTopPadding()
     Column(Modifier.fillMaxSize().background(BeumColors.baseGrayLightGray75)) {
         Spacer(modifier = Modifier.height(topSpace))

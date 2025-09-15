@@ -7,8 +7,8 @@ import com.kal.beum.myinfo.domain.MyInfo
 import com.kal.beum.write.domain.WritingCategory
 
 sealed class FullScreenType {
-    data class MyInfoDetailScreen(val info: MyInfo) : FullScreenType()
-    data class SettingsScreen(val info: MyInfo) : FullScreenType()
+    data class MyInfoDetailScreen(val info: UserInfo) : FullScreenType()
+    data class SettingsScreen(val info: UserInfo) : FullScreenType()
     data class ContentDetailScreen(val id: Int) : FullScreenType()
     data class DraftDialog(
         val onNewClick: () -> Unit,
@@ -24,6 +24,7 @@ sealed class FullScreenType {
 
     object TermScreen : FullScreenType()
 
+    data class SignUpDialog(val onDismiss: () -> Unit, val signUpClick: () -> Unit) : FullScreenType()
     object ServicePolicyInfoScreen : FullScreenType()
 
     data class ReportConfirmDialog(val onDismiss: () -> Unit, val onContinueClick: () -> Unit) : FullScreenType()

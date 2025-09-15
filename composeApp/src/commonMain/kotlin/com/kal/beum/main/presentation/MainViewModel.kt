@@ -61,7 +61,6 @@ class MainViewModel(private val appRepository: AppRepository) : ViewModel() {
     }
 
     private fun pushFullScreen(screen: FullScreenType) {
-        println("pushFullScreen2")
         _state.update { it.copy(fullScreenStack = _state.value.fullScreenStack + screen) }
     }
 
@@ -83,6 +82,33 @@ class MainViewModel(private val appRepository: AppRepository) : ViewModel() {
         _state.update { it.copy(isFullScreen = !it.isFullScreen) }
     }
 
+    fun socialSignUp(socialCode: Int, accessToke: String, refreshToken: String) {
+        println("socialSignUp : $socialCode")
+        appRepository.signup(socialCode, accessToke, refreshToken).onEach { result ->
+            println("socialSignUp~~~~ : $result")
+            when (result) {
+                is Result.Error -> {
+                    println("Error :")
+                    _state.update { it.copy(isProgress = false) }
+                }
+
+                is Result.Success -> {
+                    println("Success :")
+                    _state.update {
+                        it.copy(
+                            userInfo = result.data, isSplashDone = true, isProgress = false
+                        )
+                    }
+                }
+
+                is Result.Progress -> {
+                    _state.update { it.copy(isProgress = true) }
+                    println("progress :")
+                }
+            }
+        }.launchIn(viewModelScope)
+    }
+
     fun socialLogin(socialCode: Int) {
         println("socialLogin : $socialCode")
         appRepository.login(socialCode).onEach { result ->
@@ -96,7 +122,15 @@ class MainViewModel(private val appRepository: AppRepository) : ViewModel() {
                 is Result.Success -> {
                     println("Success :")
                     if (result.data.needSignUp) {
+                        _state.update {
+                            it.copy(isProgress = false)
+                        }
+                        pushFullScreen(FullScreenType.SignUpDialog(onDismiss = {
+                            popFullScreen()
+                        }, signUpClick = {
 
+                            socialSignUp(socialCode, result.data.accessToken, result.data.refreshToken)
+                        }))
                     } else {
                         _state.update {
                             it.copy(
@@ -141,7 +175,6 @@ class MainViewModel(private val appRepository: AppRepository) : ViewModel() {
             }
 
             is MainAction.LogOut -> logout()
-            is MainAction.PushFullScreen -> pushFullScreen(action.fullScreen)
         }
     }
 }

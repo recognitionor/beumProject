@@ -3,16 +3,7 @@ package com.kal.beum.myinfo.presentation
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,24 +17,18 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import beumproject.composeapp.generated.resources.Pretendard_Medium
-import beumproject.composeapp.generated.resources.Res
-import beumproject.composeapp.generated.resources.apple
-import beumproject.composeapp.generated.resources.google
-import beumproject.composeapp.generated.resources.icon_arrow_right_black
-import beumproject.composeapp.generated.resources.kakao
-import beumproject.composeapp.generated.resources.sf_pro
+import beumproject.composeapp.generated.resources.*
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumTypo
 import com.kal.beum.main.domain.SocialType
+import com.kal.beum.main.domain.UserInfo
 import com.kal.beum.main.presentation.FullScreenType
 import com.kal.beum.main.presentation.MainAction
-import com.kal.beum.myinfo.domain.MyInfo
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun MyInfoDetailScreen(info: MyInfo, action: (MainAction) -> Unit) {
+fun MyInfoDetailScreen(info: UserInfo, action: (MainAction) -> Unit) {
     Column(modifier = Modifier.background(BeumColors.baseGrayLightGray75).fillMaxSize()) {
         Column(
             modifier = Modifier.background(
@@ -88,9 +73,6 @@ fun MyInfoDetailScreen(info: MyInfo, action: (MainAction) -> Unit) {
                 modifier = Modifier.fillMaxWidth().height(56.dp).background(color = BeumColors.White)
                     .padding(start = 20.dp, top = 0.dp, end = 20.dp, bottom = 0.dp).clickable {
                         action(MainAction.PushFullScreen(FullScreenType.MyInfoDetailScreen(info)))
-//                        action(MainAction.PushFullScreen {
-//                            MyInfoDetailScreen(info, action)
-//                        })
                     }, verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
@@ -137,12 +119,12 @@ fun MyInfoDetailScreen(info: MyInfo, action: (MainAction) -> Unit) {
                 var resource = Res.drawable.kakao
                 var color: Color
                 when (info.socialType) {
-                    SocialType.GOOGLE -> {
+                    SocialType.GOOGLE_CODE -> {
                         color = BeumColors.White
                         resource = Res.drawable.google
                     }
 
-                    SocialType.APPLE -> {
+                    SocialType.APPLE_CODE -> {
                         color = BeumColors.Black
                         resource = Res.drawable.apple
                     }

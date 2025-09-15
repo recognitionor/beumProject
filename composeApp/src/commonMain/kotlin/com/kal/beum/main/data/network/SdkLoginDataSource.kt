@@ -1,5 +1,7 @@
 package com.kal.beum.main.data.network
 
+import com.kal.beum.core.data.ApiConstants
+import com.kal.beum.core.data.safeCall
 import com.kal.beum.core.domain.DataError
 import com.kal.beum.core.domain.Result
 import com.kal.beum.login.data.dto.LoginResponseDto
@@ -22,11 +24,16 @@ import kotlin.coroutines.suspendCoroutine
 class SdkLoginDataSource(
     private val loginClients: Map<Int, LoginClient>, private val httpClient: HttpClient
 ) : RemoteLoginDataSource {
-    override suspend fun signup(socialType: Int): Result<UserInfo, DataError.Remote> {
+
+    override suspend fun signup(
+        socialType: Int,
+        accessToken: String,
+        refreshToken: String
+    ): Result<UserInfo, DataError.Remote> {
         println("signup : $socialType")
         return try {
-            val socialToken = getSocialToken(socialType)
-            val userInfo = fetchUserInfoFromServer(socialToken, socialType)
+            val userInfo = fetchUserInfoFromServer(SocialToken(accessToken, refreshToken), socialType, true)
+            println("signup userInfo : $userInfo")
             Result.Success(userInfo)
         } catch (e: CancellationException) {
             println(e.message)
@@ -73,31 +80,38 @@ class SdkLoginDataSource(
     }
 
     private suspend fun fetchUserInfoFromServer(
-        socialToken: SocialToken, socialType: Int
+        socialToken: SocialToken, socialType: Int, needSignup: Boolean = false
     ): UserInfo {
         println("fetchUserInfoFromServer : $socialType-$socialToken")
 
-        val response = httpClient.post("https://dev.winning-lotto.com/signin") {
-            contentType(ContentType.Application.Json)
-            setBody(mapOf(
-                "accessToken" to socialToken.accessToken,
-                "socialType" to SocialType.toName(socialType)
-            ))
+        val path = if (needSignup) {
+            ApiConstants.Endpoints.SIGNUP
+        } else {
+            ApiConstants.Endpoints.SIGNIN
+        }
+
+        val response = httpClient.post(path) {
+            setBody(
+                mapOf(
+                    "accessToken" to socialToken.accessToken,
+                    "socialType" to SocialType.toName(socialType)
+                )
+            )
         }
         when (response.status.value) {
             200 -> {
                 val responseBody = response.body<LoginResponseDto>()
                 println("성공 응답: $responseBody")
                 return UserInfo(
-                    userId = "",
-                    nickName = "Mock User",
-                    socialType = 1,
-                    email = "",
+                    userId = responseBody.userId,
+                    nickName = responseBody.nickName,
+                    socialType = socialType,
+                    email = responseBody.email,
                     sessionKey = "",
-                    accessToken = "",
-                    refreshToken = "",
-                    profileImageId = "",
-                    needSignUp = true
+                    accessToken = responseBody.tokenSet?.accessToken ?: socialToken.accessToken,
+                    refreshToken = responseBody.tokenSet?.refreshToken ?: socialToken.refreshToken,
+                    profileImageId = responseBody.profileImageId,
+                    needSignUp = responseBody.needSignUp
                 )
             }
 

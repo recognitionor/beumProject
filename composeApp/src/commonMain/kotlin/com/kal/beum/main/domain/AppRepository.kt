@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 interface AppRepository {
     fun getLoginInfo(): Flow<UserInfo?>
 
-    fun signup(socialType: Int): Flow<Result<UserInfo, DataError.Remote>>
+    fun signup(socialType: Int, accessToken: String, refreshToken: String): Flow<Result<UserInfo, DataError.Remote>>
     fun login(socialType: Int): Flow<Result<UserInfo, DataError.Remote>>
     fun logout(userInfo: UserInfo): Flow<Result<Unit, DataError.Remote>>
     fun isOnBoardingDone(): Flow<Boolean>

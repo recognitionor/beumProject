@@ -6,13 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.NavigationBarItemDefaults
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -31,17 +25,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import beumproject.composeapp.generated.resources.Res
-import beumproject.composeapp.generated.resources.home
-import beumproject.composeapp.generated.resources.home_selected
-import beumproject.composeapp.generated.resources.info
-import beumproject.composeapp.generated.resources.info_selected
-import beumproject.composeapp.generated.resources.level
-import beumproject.composeapp.generated.resources.level_selected
-import beumproject.composeapp.generated.resources.sf_pro
-import beumproject.composeapp.generated.resources.wing
-import beumproject.composeapp.generated.resources.wing_selected
-import com.kal.beum.Platform
+import beumproject.composeapp.generated.resources.*
 import com.kal.beum.Route
 import com.kal.beum.community.presentation.CommunityScreen
 import com.kal.beum.community.presentation.DraftDialog
@@ -51,16 +35,10 @@ import com.kal.beum.core.presentation.BeumTypo
 import com.kal.beum.core.presentation.Toast
 import com.kal.beum.home.presentation.HomeScreen
 import com.kal.beum.level.presentaion.RankingScreen
-import com.kal.beum.myinfo.presentation.LogOutDialog
-import com.kal.beum.myinfo.presentation.MyInfoDetailScreen
-import com.kal.beum.myinfo.presentation.MyInfoScreen
-import com.kal.beum.myinfo.presentation.PrivacyPolicyScreen
-import com.kal.beum.myinfo.presentation.ReportConfirmDialog
-import com.kal.beum.myinfo.presentation.ServicePolicyInfoScreen
-import com.kal.beum.myinfo.presentation.SettingsScreen
-import com.kal.beum.myinfo.presentation.TermScreen
+import com.kal.beum.myinfo.presentation.*
 import com.kal.beum.notice.presentaion.NoticeScreen
 import com.kal.beum.write.presentation.WritingScreen
+import com.kal.beum.login.presentation.SignupDialog
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -181,8 +159,13 @@ fun MainScreen() {
                             ServicePolicyInfoScreen(viewModel::onAction)
                         }
 
+
                         is FullScreenType.TermScreen -> {
                             TermScreen(viewModel::onAction)
+                        }
+
+                        is FullScreenType.SignUpDialog -> {
+                            SignupDialog(content.onDismiss, content.signUpClick)
                         }
                     }
                 }

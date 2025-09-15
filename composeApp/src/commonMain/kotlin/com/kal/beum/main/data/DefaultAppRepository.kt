@@ -24,9 +24,14 @@ class DefaultAppRepository(
         emit(result)
     }
 
-    override fun signup(socialType: Int): Flow<Result<UserInfo, DataError.Remote>> = flow {
+    override fun signup(
+        socialType: Int,
+        accessToken: String,
+        refreshToken: String
+    ): Flow<Result<UserInfo, DataError.Remote>> = flow {
+        println("DefaultAppRepository signup")
         emit(Result.Progress())
-        val result = remoteLoginDataSource.login(socialType)
+        val result = remoteLoginDataSource.signup(socialType, accessToken, refreshToken)
         result.onSuccess { userInfo ->
             val userInfoEntity = UserInfoEntity(
                 userId = userInfo.userId,
@@ -46,6 +51,7 @@ class DefaultAppRepository(
             emit(result)
         }
     }
+
 
     override fun login(socialType: Int): Flow<Result<UserInfo, DataError.Remote>> = flow {
         emit(Result.Progress())

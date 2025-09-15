@@ -1,7 +1,6 @@
 package com.kal.beum.di
 
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
-import com.kal.beum.Platform
 import com.kal.beum.community.data.network.MockCommunityDataSource
 import com.kal.beum.community.data.network.RemoteCommunityDataSource
 import com.kal.beum.community.data.repository.DefaultCommunityRepository
@@ -27,11 +26,9 @@ import com.kal.beum.level.domain.RankerUserInfoRepository
 import com.kal.beum.level.presentaion.RankingViewModel
 import com.kal.beum.login.data.client.KaKaoLoginClient
 import com.kal.beum.login.data.client.NaverLoginClient
-import com.kal.beum.login.data.client.TestLoginClient
 import com.kal.beum.login.domain.LoginClient
 import com.kal.beum.main.data.DefaultAppRepository
 import com.kal.beum.main.data.database.AppDatabase
-import com.kal.beum.main.data.database.MIGRATION_1_2
 import com.kal.beum.main.data.network.RemoteLoginDataSource
 import com.kal.beum.main.data.network.SdkLoginDataSource
 import com.kal.beum.main.domain.AppRepository
@@ -49,6 +46,7 @@ import com.kal.beum.notice.data.network.MockRemoteNoticeDataSource
 import com.kal.beum.notice.data.network.RemoteNoticeDataSource
 import com.kal.beum.notice.domain.NoticeRepository
 import com.kal.beum.notice.presentaion.NoticeViewModel
+import com.kal.beum.write.data.network.KtorWriteDataSource
 import com.kal.beum.write.data.network.MockWriteCategoryDataSource
 import com.kal.beum.write.data.network.MockWriteDataSource
 import com.kal.beum.write.data.network.RemoteWriteCategoryDataSource
@@ -85,11 +83,13 @@ val sharedModules = module {
     }
 
     singleOf(::SdkLoginDataSource).bind<RemoteLoginDataSource>()
+    singleOf(::KtorWriteDataSource).bind<RemoteWriteDataSource>()
+
 
     singleOf(::MockHomeDataSource).bind<RemoteHomeDataSource>()
     singleOf(::MockCommunityDataSource).bind<RemoteCommunityDataSource>()
     singleOf(::MockWriteCategoryDataSource).bind<RemoteWriteCategoryDataSource>()
-    singleOf(::MockWriteDataSource).bind<RemoteWriteDataSource>()
+//    singleOf(::MockWriteDataSource).bind<RemoteWriteDataSource>()
     singleOf(::MockContentDataSource).bind<RemoteContentDataSource>()
     singleOf(::MockRankerUserInfoDataSource).bind<RemoteRankerUserInfoDataSource>()
     singleOf(::MockMyInfoDataSource).bind<RemoteMyInfoDataSource>()
