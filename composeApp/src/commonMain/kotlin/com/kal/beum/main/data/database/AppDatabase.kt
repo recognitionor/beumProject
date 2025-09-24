@@ -8,9 +8,11 @@ import androidx.room.migration.Migration
 import androidx.sqlite.SQLiteConnection
 import androidx.sqlite.execSQL
 import com.kal.beum.core.data.database.StringListTypeConverter
+import com.kal.beum.write.data.database.WritingDao
+import com.kal.beum.write.data.database.WritingEntity
 
 @Database(
-    entities = [AppEntity::class, UserInfoEntity::class], version = 1
+    entities = [AppEntity::class, UserInfoEntity::class, WritingEntity::class], version = 2
 )
 @TypeConverters(
     StringListTypeConverter::class
@@ -18,6 +20,8 @@ import com.kal.beum.core.data.database.StringListTypeConverter
 @ConstructedBy(AppDatabaseConstructor::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract val appDao: AppDao
+
+    abstract val writingDao: WritingDao
 
     companion object {
         const val DB_NAME = "beum_app.db"

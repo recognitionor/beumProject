@@ -5,6 +5,7 @@ import com.kal.beum.core.presentation.ToastInfo
 import com.kal.beum.main.domain.UserInfo
 import com.kal.beum.myinfo.domain.MyInfo
 import com.kal.beum.write.domain.WritingCategory
+import com.kal.beum.write.domain.WritingData
 
 sealed class FullScreenType {
     data class MyInfoDetailScreen(val info: UserInfo) : FullScreenType()
@@ -16,7 +17,7 @@ sealed class FullScreenType {
         val onDismiss: (selectItem: WritingCategory?) -> Unit
     ) : FullScreenType()
 
-    object WritingScreen : FullScreenType()
+    data class WritingScreen(val tempWriting: WritingData? = null) : FullScreenType()
 
     object NoticeScreen : FullScreenType()
 
@@ -24,12 +25,16 @@ sealed class FullScreenType {
 
     object TermScreen : FullScreenType()
 
-    data class SignUpDialog(val onDismiss: () -> Unit, val signUpClick: () -> Unit) : FullScreenType()
+    data class SignUpDialog(val onDismiss: () -> Unit, val signUpClick: () -> Unit) :
+        FullScreenType()
+
     object ServicePolicyInfoScreen : FullScreenType()
 
-    data class ReportConfirmDialog(val onDismiss: () -> Unit, val onContinueClick: () -> Unit) : FullScreenType()
+    data class ReportConfirmDialog(val onDismiss: () -> Unit, val onContinueClick: () -> Unit) :
+        FullScreenType()
 
-    data class LogOutDialog(val onDismiss: () -> Unit, val logoutClick: () -> Unit) : FullScreenType()
+    data class LogOutDialog(val onDismiss: () -> Unit, val logoutClick: () -> Unit) :
+        FullScreenType()
 }
 
 data class MainState(

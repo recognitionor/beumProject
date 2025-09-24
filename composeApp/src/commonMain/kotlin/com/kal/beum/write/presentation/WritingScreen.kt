@@ -50,6 +50,7 @@ import beumproject.composeapp.generated.resources.sf_pro
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.ToastInfo
 import com.kal.beum.main.presentation.MainAction
+import com.kal.beum.write.domain.WritingData
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -57,11 +58,15 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WritingScreen(onAction: (MainAction) -> Unit) {
+fun WritingScreen(writingData: WritingData? = null, onAction: (MainAction) -> Unit) {
     val viewModel = koinViewModel<WritingViewModel>()
     // 진입할 때 상태 초기화
     LaunchedEffect(Unit) {
-        viewModel.onAction(WritingAction.Reset)
+        if (writingData == null) {
+            viewModel.onAction(WritingAction.Reset)
+        } else {
+            viewModel.onAction(WritingAction.InitTempWriting(writingData))
+        }
     }
 
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -185,11 +190,8 @@ fun WritingScreen(onAction: (MainAction) -> Unit) {
                 viewModel.onAction(WritingAction.OnCommunityChanged(it.toBoolean()))
             }
             Spacer(modifier = Modifier.height(12.dp))
-            WriteEditText(115.dp,
-                state.selectedCategory?.category ?: "",
-                "카테고리",
-                "카테고리를 선택해주세요",
-                click = {
+            WriteEditText(
+                115.dp, state.selectedCategory?.category ?: "", "카테고리", "카테고리를 선택해주세요", click = {
                     showCategorySheet = true
                 }) {
                 viewModel.onAction(WritingAction.OnTitleChanged(it))
@@ -227,9 +229,7 @@ fun WritingScreen(onAction: (MainAction) -> Unit) {
             ) {
                 if (state.submitProgress) {
                     CircularProgressIndicator(
-                        modifier = Modifier.size(24.dp),
-                        color = Color.White,
-                        strokeWidth = 2.dp
+                        modifier = Modifier.size(24.dp), color = Color.White, strokeWidth = 2.dp
                     )
                 } else {
                     Text(

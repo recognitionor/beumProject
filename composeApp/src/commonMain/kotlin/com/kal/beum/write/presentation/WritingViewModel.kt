@@ -15,7 +15,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class WritingViewModel(
-    private val writingRepository: WritingRepository, private val writeCategoryRepository: WritingCategoryRepository
+    private val writingRepository: WritingRepository,
+    private val writeCategoryRepository: WritingCategoryRepository
 ) : ViewModel() {
     private val _state = MutableStateFlow(WritingState())
     val state = _state.onStart {
@@ -35,9 +36,7 @@ class WritingViewModel(
     }
 
     private fun parseTagsFromString(tagString: String): List<String> {
-        return tagString.split("#")
-            .map { it.trim() }
-            .filter { it.isNotEmpty() }
+        return tagString.split("#").map { it.trim() }.filter { it.isNotEmpty() }
     }
 
     private fun submit() {
@@ -56,10 +55,18 @@ class WritingViewModel(
             )
             writingRepository.submitWriting(writingSubmitRequest).onSuccess { result ->
                 if (result) {
-                    _state.update { it.copy(submitProgress = false, isClose = true, closeMessage = "게시글이 등록되었습니다.") }
+                    _state.update {
+                        it.copy(
+                            submitProgress = false, isClose = true, closeMessage = "게시글이 등록되었습니다."
+                        )
+                    }
                 }
             }.onError { error ->
-                _state.update { it.copy(submitProgress = false, isClose = true, closeMessage = error.name) }
+                _state.update {
+                    it.copy(
+                        submitProgress = false, isClose = true, closeMessage = error.name
+                    )
+                }
             }
         }.start()
     }
@@ -68,26 +75,44 @@ class WritingViewModel(
         when (action) {
             is WritingAction.OnTitleChanged -> {
                 _state.update { it.copy(title = action.newTitle) }
+                viewModelScope.launch {
+                    writingRepository.saveTempWritingTitle(action.newTitle)
+                }
             }
 
             is WritingAction.OnContentChanged -> {
                 _state.update { it.copy(content = action.newContent) }
+                viewModelScope.launch {
+                    writingRepository.saveTempWritingContent(action.newContent)
+                }
             }
 
             is WritingAction.OnTagChanged -> {
                 _state.update { it.copy(tags = action.newTag) }
+                viewModelScope.launch {
+                    writingRepository.saveTempWritingTags(action.newTag)
+                }
             }
             // 다른 WriteAction 처리 로직 추가
             is WritingAction.OnCategoryChanged -> {
                 _state.update { it.copy(selectedCategory = action.writingCategory) }
+                viewModelScope.launch {
+                    writingRepository.saveTempWritingCategory(action.writingCategory)
+                }
             }
 
             is WritingAction.OnCommunityChanged -> {
                 _state.update { it.copy(isDevil = action.isDevil) }
+                viewModelScope.launch {
+                    writingRepository.saveTempWritingIsDevil(action.isDevil)
+                }
             }
 
             is WritingAction.OnPointChanged -> {
                 _state.update { it.copy(rewardPoint = action.point) }
+                viewModelScope.launch {
+                    writingRepository.saveTempWritingRewardPoint(action.point)
+                }
             }
 
             is WritingAction.Reset -> {
@@ -100,6 +125,20 @@ class WritingViewModel(
 
             is WritingAction.Close -> {
                 _state.update { it.copy(isClose = true, closeMessage = null) }
+            }
+
+            is WritingAction.InitTempWriting -> {
+                println("WritingAction.InitTempWriting")
+                _state.update {
+                    it.copy(
+                        title = action.writingData.title,
+                        content = action.writingData.content,
+                        tags = action.writingData.tags.toString(),
+                        isDevil = action.writingData.devil,
+                        selectedCategory = action.writingData.category,
+                        rewardPoint = action.writingData.rewardPoint
+                    )
+                }
             }
         }
     }

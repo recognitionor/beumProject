@@ -135,7 +135,7 @@ fun MainScreen() {
 
                         is FullScreenType.WritingScreen -> {
                             println("WritingScreen")
-                            WritingScreen(viewModel::onAction)
+                            WritingScreen(content.tempWriting, viewModel::onAction)
                         }
 
                         is FullScreenType.NoticeScreen -> {

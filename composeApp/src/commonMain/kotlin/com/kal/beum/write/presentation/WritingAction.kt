@@ -1,11 +1,14 @@
 package com.kal.beum.write.presentation
 
 import com.kal.beum.write.domain.WritingCategory
+import com.kal.beum.write.domain.WritingData
 
 sealed interface WritingAction {
     data object Reset : WritingAction
     data object Submit : WritingAction
     data object Close : WritingAction
+
+    data class InitTempWriting(val writingData: WritingData) : WritingAction
     data class OnTitleChanged(val newTitle: String) : WritingAction
     data class OnContentChanged(val newContent: String) : WritingAction
     data class OnTagChanged(val newTag: String) : WritingAction

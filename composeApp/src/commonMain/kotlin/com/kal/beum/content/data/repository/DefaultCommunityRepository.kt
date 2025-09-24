@@ -9,9 +9,23 @@ import com.kal.beum.community.domain.CommunityRepository
 import com.kal.beum.core.domain.DataError
 import com.kal.beum.core.domain.Result
 import com.kal.beum.core.domain.map
+import com.kal.beum.write.data.database.WritingDao
+import com.kal.beum.write.data.toWritingData
+import com.kal.beum.write.domain.WritingData
 
-class DefaultCommunityRepository(private val remoteCommunityDataSource: RemoteCommunityDataSource) :
-    CommunityRepository {
+class DefaultCommunityRepository(
+    private val writingDao: WritingDao,
+    private val remoteCommunityDataSource: RemoteCommunityDataSource
+) : CommunityRepository {
+    override suspend fun getTempWriting(): Result<WritingData, DataError.Local> {
+        val entity = writingDao.getWritingById(1)
+        return if (entity == null) {
+            Result.Error(DataError.Local.EMPTY_TEMP_WRITING)
+        } else {
+            Result.Success(entity.toWritingData())
+        }
+    }
+
     override suspend fun getCategoryList(): Result<List<Category>, DataError.Remote> {
         return remoteCommunityDataSource.getCategoryList()
             .map { it.map { item -> item.toCategoryData() } }

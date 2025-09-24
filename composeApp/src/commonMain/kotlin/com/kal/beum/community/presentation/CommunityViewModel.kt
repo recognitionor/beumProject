@@ -16,9 +16,21 @@ import kotlinx.coroutines.launch
 
 class CommunityViewModel(private val communityRepository: CommunityRepository) : ViewModel() {
     private val _state = MutableStateFlow(CommunityState())
-    val state = _state.onStart {}.stateIn(
+    val state = _state.onStart {
+        getTempWriting()
+    }.stateIn(
         viewModelScope, SharingStarted.WhileSubscribed(5000L), _state.value
     )
+
+    fun getTempWriting() {
+        println("getTempWriting~~~~~~~~")
+        viewModelScope.launch {
+            communityRepository.getTempWriting().onSuccess { result ->
+                println("result temp  : $result")
+                _state.update { it.copy(writingTemp = result) }
+            }
+        }.start()
+    }
 
     fun getCategory(isDevil: Boolean) {
         viewModelScope.launch {

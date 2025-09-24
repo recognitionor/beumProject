@@ -13,8 +13,6 @@ import com.kal.beum.main.domain.AppRepository
 import com.kal.beum.main.domain.UserInfo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlin.onFailure
-import kotlin.onSuccess
 
 class DefaultAppRepository(
     private val appDao: AppDao, private val remoteLoginDataSource: RemoteLoginDataSource

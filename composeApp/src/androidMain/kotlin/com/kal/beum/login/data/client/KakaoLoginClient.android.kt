@@ -5,6 +5,7 @@ import android.util.Log
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.model.ClientError
 import com.kakao.sdk.common.model.ClientErrorCause
+import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.user.UserApiClient
 import com.kal.beum.core.domain.DataError
 import com.kal.beum.login.domain.LoginClient
@@ -15,15 +16,18 @@ actual class KaKaoLoginClient actual constructor(private val obj: Any?) : LoginC
     actual override fun login(
         type: Int, callback: (SocialToken?, DataError.Remote?) -> Unit
     ) {
+
+
         println("KaKaoLoginClient-login")
         val ctx = obj as Context
+        Log.d("jhlee", "keyHash = " + Utility.getKeyHash(ctx))
         val callback: (OAuthToken?, Throwable?) -> Unit = { token, error ->
             if (error != null) {
                 println("KaKaoLoginClient-login-failed : ${error.message}")
                 callback.invoke(null, DataError.Remote.LOGIN_FAILED)
             } else if (token != null) {
                 println("KaKaoLoginClient-login-success")
-                callback.invoke(SocialToken(token!!.accessToken, token!!.refreshToken), null)
+                callback.invoke(SocialToken(token.accessToken, token.refreshToken), null)
             }
         }
 

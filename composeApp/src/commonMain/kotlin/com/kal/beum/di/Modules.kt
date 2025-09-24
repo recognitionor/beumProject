@@ -117,6 +117,8 @@ val sharedModules = module {
     viewModelOf(::NoticeViewModel)
 
     single { get<AppDatabase>().appDao }
+    single { get<AppDatabase>().writingDao }
+
 
 
 //    viewModelOf(::Select)

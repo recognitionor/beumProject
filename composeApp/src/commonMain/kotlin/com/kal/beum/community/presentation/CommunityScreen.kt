@@ -109,7 +109,13 @@ fun CommunityScreen(isDevil: Boolean, onAction: (MainAction) -> Unit) {
                                 spotColor = Color(0x0D000000),
                                 ambientColor = Color(0x0D000000)
                             ).clip(RoundedCornerShape(9.dp)).clickable {
-                                onAction(MainAction.PushFullScreen(FullScreenType.ContentDetailScreen(item.id)))
+                                onAction(
+                                    MainAction.PushFullScreen(
+                                        FullScreenType.ContentDetailScreen(
+                                            item.id
+                                        )
+                                    )
+                                )
 
                             }.background(
                                 color = BeumColors.baseGrayLightGray50,
@@ -163,19 +169,32 @@ fun CommunityScreen(isDevil: Boolean, onAction: (MainAction) -> Unit) {
                 Box(
                     modifier = Modifier.padding(12.dp).align(Alignment.BottomEnd)
                 ) {
-                    Box(modifier = Modifier.width(52.dp).height(52.dp).background(
-                        color = BeumColors.angelSkyblue,
-                        shape = RoundedCornerShape(size = 100.dp)
-                    ).clip(shape = RoundedCornerShape(size = 100.dp)).clickable {
-                        onAction(MainAction.PushFullScreen(FullScreenType.DraftDialog(onNewClick = {
-                            onAction(MainAction.PopFullScreen)
-                            onAction(MainAction.PushFullScreen(FullScreenType.WritingScreen))
-                        }, onContinueClick = {
-                            onAction(MainAction.PopFullScreen)
-                        }, onDismiss = {
-                            onAction(MainAction.PopFullScreen)
-                        })))
-                    }) {
+                    Box(
+                        modifier = Modifier.width(52.dp).height(52.dp).background(
+                            color = BeumColors.angelSkyblue,
+                            shape = RoundedCornerShape(size = 100.dp)
+                        ).clip(shape = RoundedCornerShape(size = 100.dp)).clickable {
+                            if (state.writingTemp != null) {
+                                onAction(
+                                    MainAction.PushFullScreen(
+                                        FullScreenType.DraftDialog(
+                                            onNewClick = {
+                                                onAction(MainAction.PopFullScreen)
+                                                onAction(MainAction.PushFullScreen(FullScreenType.WritingScreen()))
+                                            },
+                                            onContinueClick = {
+                                                onAction(MainAction.PopFullScreen)
+                                                onAction(MainAction.PushFullScreen(FullScreenType.WritingScreen(state.writingTemp)))
+                                            },
+                                            onDismiss = {
+                                                onAction(MainAction.PopFullScreen)
+                                            })
+                                    )
+                                )
+                            } else {
+                                onAction(MainAction.PushFullScreen(FullScreenType.WritingScreen()))
+                            }
+                        }) {
                         Image(
                             painter = painterResource(Res.drawable.ic_add_medium),
                             modifier = Modifier.align(Alignment.Center),
