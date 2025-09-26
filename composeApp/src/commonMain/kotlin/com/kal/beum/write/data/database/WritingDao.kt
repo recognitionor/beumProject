@@ -13,6 +13,9 @@ interface WritingDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertOrReplaceWriting(writing: WritingEntity)
 
+    @Query("DELETE FROM WritingEntity WHERE id = :id")
+    suspend fun deleteWritingById(id: Int): Int
+
     // 전체 엔티티를 업데이트 (기본 키를 기준으로)
     // 이 메서드를 사용하려면 먼저 엔티티를 조회하고 수정한 후 전달해야 합니다.
     @Update

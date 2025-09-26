@@ -13,12 +13,13 @@ fun CategoryGroupDto.toWriteCategory(): WritingCategory {
 
 
 fun WritingEntity.toWritingData(): WritingData {
+
     return WritingData(
         title = this.title,
         content = this.content,
         category = WritingCategory(this.categoryId, this.category),
         rewardPoint = this.rewardPoint,
-        tags = this.tags.split(","),
+        tags = this.tags,
         devil = this.isDevil
     )
 }

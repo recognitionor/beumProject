@@ -17,9 +17,15 @@ class DefaultWritingRepository(
         return remoteWriteDataSource.submitWriting(writingSubmitRequest)
     }
 
+    override suspend fun clearTempWritingTitle(): Result<Boolean, DataError.Local> {
+        writingDao.deleteWritingById(1)
+        return Result.Success(true)
+    }
+
     override suspend fun saveTempWritingTitle(title: String): Result<Boolean, DataError.Local> {
         val writingEntity = writingDao.getWritingById(1)
         if (writingEntity == null) {
+            println("writingEntity.toString() 1")
             writingDao.insertOrReplaceWriting(
                 WritingEntity(
                     id = 1,
@@ -33,6 +39,7 @@ class DefaultWritingRepository(
                 )
             )
         } else {
+            println("writingEntity.toString() 2 : $writingEntity - $title")
             writingDao.updateTitle(writingEntity.id, title)
         }
         return Result.Success(true)

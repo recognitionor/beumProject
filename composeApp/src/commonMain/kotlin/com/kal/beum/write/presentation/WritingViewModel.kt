@@ -2,6 +2,7 @@ package com.kal.beum.write.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kal.beum.core.domain.onError
 import com.kal.beum.core.domain.onSuccess
 import com.kal.beum.write.domain.WritingCategoryRepository
@@ -133,11 +134,24 @@ class WritingViewModel(
                     it.copy(
                         title = action.writingData.title,
                         content = action.writingData.content,
-                        tags = action.writingData.tags.toString(),
+                        tags = action.writingData.tags,
                         isDevil = action.writingData.devil,
                         selectedCategory = action.writingData.category,
                         rewardPoint = action.writingData.rewardPoint
                     )
+                }
+            }
+
+            WritingAction.SaveTempWriting -> {
+                val isEmpty = state.value.tags.isEmpty() &&
+                        state.value.title.isEmpty() &&
+                        state.value.content.isEmpty() &&
+                        state.value.selectedCategory == null
+                if (isEmpty) {
+                    viewModelScope.launch {
+                        println("clearTempWritingTitle")
+                        writingRepository.clearTempWritingTitle()
+                    }
                 }
             }
         }

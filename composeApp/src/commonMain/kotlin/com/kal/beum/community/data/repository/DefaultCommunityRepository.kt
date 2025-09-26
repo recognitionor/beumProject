@@ -23,6 +23,7 @@ class DefaultCommunityRepository(
         return if (entity == null) {
             Result.Error(DataError.Local.EMPTY_TEMP_WRITING)
         } else {
+            println("getTempWriting : $entity")
             Result.Success(entity.toWritingData())
         }
     }

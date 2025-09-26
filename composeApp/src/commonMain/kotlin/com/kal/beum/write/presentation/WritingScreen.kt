@@ -79,7 +79,7 @@ fun WritingScreen(writingData: WritingData? = null, onAction: (MainAction) -> Un
         )
     }
 
-    var showCategorySheet by remember { mutableStateOf(true) }
+    var showCategorySheet by remember { mutableStateOf(writingData?.category == null) }
     var showPointSettingSheet by remember { mutableStateOf(false) }
 
     if (state.isClose) {
@@ -105,6 +105,7 @@ fun WritingScreen(writingData: WritingData? = null, onAction: (MainAction) -> Un
                     painter = painterResource(Res.drawable.ic_close),
                     contentDescription = "",
                     Modifier.clickable {
+                        viewModel.onAction(WritingAction.SaveTempWriting)
                         viewModel.onAction(WritingAction.Close)
                     }.width(24.dp).height(24.dp).padding(1.dp)
                 )
@@ -278,6 +279,7 @@ fun WritingScreen(writingData: WritingData? = null, onAction: (MainAction) -> Un
                     modifier = Modifier.wrapContentHeight().fillMaxWidth()
                 ) {
                     // 아래에 들어가는 UI가 이미지랑 비슷하게 작성
+
                     CategorySelectBottomSheet(state.writeCategoryMap) {
                         viewModel.onAction(WritingAction.OnCategoryChanged(it))
                         showCategorySheet = false

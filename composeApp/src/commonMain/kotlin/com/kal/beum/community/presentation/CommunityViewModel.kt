@@ -27,7 +27,9 @@ class CommunityViewModel(private val communityRepository: CommunityRepository) :
         viewModelScope.launch {
             communityRepository.getTempWriting().onSuccess { result ->
                 println("result temp  : $result")
-                _state.update { it.copy(writingTemp = result) }
+                _state.update { it.copy(writingTemp = result, isDraftDialog = true) }
+            }.onError {
+                _state.update { it -> it.copy(writingTemp = null, isDraftDialog = true) }
             }
         }.start()
     }
@@ -77,6 +79,14 @@ class CommunityViewModel(private val communityRepository: CommunityRepository) :
                     it.copy(selectedCategoryId = action.index)
                 }
                 getItemsByCategory(state.value.categoryList[action.index], action.isDevil)
+            }
+
+            CommunityAction.GetTempWriting -> {
+                getTempWriting()
+            }
+
+            CommunityAction.OnDraftDialog -> {
+                _state.update { it.copy(isDraftDialog = !it.isDraftDialog) }
             }
         }
     }

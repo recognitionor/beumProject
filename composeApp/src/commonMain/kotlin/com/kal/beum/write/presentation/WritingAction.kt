@@ -8,6 +8,8 @@ sealed interface WritingAction {
     data object Submit : WritingAction
     data object Close : WritingAction
 
+    data object SaveTempWriting : WritingAction
+
     data class InitTempWriting(val writingData: WritingData) : WritingAction
     data class OnTitleChanged(val newTitle: String) : WritingAction
     data class OnContentChanged(val newContent: String) : WritingAction

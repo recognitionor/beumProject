@@ -6,6 +6,7 @@ import com.kal.beum.core.domain.Result
 interface WritingRepository {
     suspend fun submitWriting(writingSubmitRequest: WritingInfoRequest): Result<Boolean, DataError.Remote>
 
+    suspend fun clearTempWritingTitle(): Result<Boolean, DataError.Local>
     suspend fun saveTempWritingTitle(title: String): Result<Boolean, DataError.Local>
     suspend fun saveTempWritingContent(content: String): Result<Boolean, DataError.Local>
     suspend fun saveTempWritingTags(tags: String): Result<Boolean, DataError.Local>

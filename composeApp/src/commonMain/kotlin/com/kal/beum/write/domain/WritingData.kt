@@ -5,6 +5,6 @@ data class WritingData(
     val content: String,
     val category: WritingCategory,
     val rewardPoint: Int,
-    val tags: List<String>,
+    val tags: String,
     val devil: Boolean
 )

@@ -103,7 +103,7 @@ fun WriteEditText(
                     }
 
                     "태그" -> {
-                        TagInput {
+                        TagInput(tags = content) {
                             var tags = ""
                             it.forEach { str ->
                                 tags += str
