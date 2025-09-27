@@ -27,6 +27,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import beumproject.composeapp.generated.resources.*
 import com.kal.beum.Route
+import com.kal.beum.community.presentation.CommunityAction
 import com.kal.beum.community.presentation.CommunityScreen
 import com.kal.beum.community.presentation.DraftDialog
 import com.kal.beum.content.presentation.ContentDetailScreen
@@ -84,6 +85,30 @@ fun MainScreen() {
                 }
             }
         }
+        if (state.isDraftDialog) {
+            if (state.writingTemp != null) {
+                viewModel.onAction(
+                    MainAction.PushFullScreen(
+                        FullScreenType.DraftDialog(
+                            onNewClick = {
+                                viewModel.onAction(MainAction.PopFullScreen)
+                                viewModel.onAction(MainAction.PushFullScreen(FullScreenType.WritingScreen()))
+                            },
+                            onContinueClick = {
+                                viewModel.onAction(MainAction.PopFullScreen)
+                                viewModel.onAction(MainAction.PushFullScreen(FullScreenType.WritingScreen(state.writingTemp)))
+                            },
+                            onDismiss = {
+                                viewModel.onAction(MainAction.PopFullScreen)
+                            })
+                    )
+                )
+            } else {
+                viewModel.onAction(MainAction.PushFullScreen(FullScreenType.WritingScreen()))
+            }
+            viewModel.onAction(MainAction.OnDraftDialog)
+        }
+
         state.showToast?.let {
             Toast(it) {
                 viewModel.onAction(MainAction.ToastMessage())

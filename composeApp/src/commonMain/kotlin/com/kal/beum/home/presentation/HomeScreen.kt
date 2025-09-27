@@ -35,13 +35,11 @@ import beumproject.composeapp.generated.resources.icon_arrow_right
 import beumproject.composeapp.generated.resources.sf_pro
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumDimen
-import com.kal.beum.core.presentation.ToastInfo
 import com.kal.beum.home.presentation.components.AlarmButton
 import com.kal.beum.home.presentation.components.FlowRow
 import com.kal.beum.home.presentation.components.ToggleButton
 import com.kal.beum.main.presentation.FullScreenType
 import com.kal.beum.main.presentation.MainAction
-import com.kal.beum.notice.presentaion.NoticeScreen
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -118,6 +116,9 @@ fun HomeScreen(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
+                modifier = Modifier.clickable {
+                    onAction(MainAction.GetTempWriting)
+                },
                 text = "고민을 남겨보세요", style = TextStyle(
                     fontSize = BeumDimen.TypoScaleText300,
                     lineHeight = BeumDimen.baseLineheightTextLineheight300,

@@ -1,5 +1,6 @@
 package com.kal.beum.main.data
 
+import com.kal.beum.core.data.AuthTokenCache
 import com.kal.beum.core.domain.DataError
 import com.kal.beum.core.domain.Result
 import com.kal.beum.core.domain.onError
@@ -11,14 +12,20 @@ import com.kal.beum.main.data.mappers.toUserInfo
 import com.kal.beum.main.data.network.RemoteLoginDataSource
 import com.kal.beum.main.domain.AppRepository
 import com.kal.beum.main.domain.UserInfo
+import com.kal.beum.write.data.database.WritingDao
+import com.kal.beum.write.data.toWritingData
+import com.kal.beum.write.domain.WritingData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class DefaultAppRepository(
-    private val appDao: AppDao, private val remoteLoginDataSource: RemoteLoginDataSource
+    private val appDao: AppDao,
+    private val writingDao: WritingDao,
+    private val remoteLoginDataSource: RemoteLoginDataSource
 ) : AppRepository {
     override fun getLoginInfo(): Flow<UserInfo?> = flow {
         val result = appDao.getLoginInfo()?.toUserInfo()
+        AuthTokenCache.accessToken = result?.accessToken
         emit(result)
     }
 
@@ -44,6 +51,7 @@ class DefaultAppRepository(
 
             )
             appDao.setLoginInfo(userInfoEntity)
+            AuthTokenCache.accessToken = userInfo.accessToken
             emit(result)
         }.onError {
             emit(result)
@@ -68,6 +76,7 @@ class DefaultAppRepository(
 
             )
             appDao.setLoginInfo(userInfoEntity)
+            AuthTokenCache.accessToken = userInfo.accessToken
             emit(result)
         }.onError {
             emit(result)
@@ -78,6 +87,7 @@ class DefaultAppRepository(
         emit(Result.Progress())
         remoteLoginDataSource.logout(userInfo)
         appDao.clearLoginInfo()
+        AuthTokenCache.accessToken = null
         emit(Result.Success(Unit))
     }
 
@@ -112,6 +122,16 @@ class DefaultAppRepository(
             appDao.insertAppEntity(AppEntity(isOnBoardingDone = isOnBoardingDone, isDevil = false))
         } else {
             appDao.insertAppEntity(appEntity.copy(isOnBoardingDone = isOnBoardingDone))
+        }
+    }
+
+    override suspend fun getTempWriting(): Result<WritingData, DataError.Local> {
+        val entity = writingDao.getWritingById(1)
+        return if (entity == null) {
+            Result.Error(DataError.Local.EMPTY_TEMP_WRITING)
+        } else {
+            println("getTempWriting : $entity")
+            Result.Success(entity.toWritingData())
         }
     }
 }

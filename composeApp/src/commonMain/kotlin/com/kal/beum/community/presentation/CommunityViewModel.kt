@@ -16,23 +16,9 @@ import kotlinx.coroutines.launch
 
 class CommunityViewModel(private val communityRepository: CommunityRepository) : ViewModel() {
     private val _state = MutableStateFlow(CommunityState())
-    val state = _state.onStart {
-        getTempWriting()
-    }.stateIn(
+    val state = _state.stateIn(
         viewModelScope, SharingStarted.WhileSubscribed(5000L), _state.value
     )
-
-    fun getTempWriting() {
-        println("getTempWriting~~~~~~~~")
-        viewModelScope.launch {
-            communityRepository.getTempWriting().onSuccess { result ->
-                println("result temp  : $result")
-                _state.update { it.copy(writingTemp = result, isDraftDialog = true) }
-            }.onError {
-                _state.update { it -> it.copy(writingTemp = null, isDraftDialog = true) }
-            }
-        }.start()
-    }
 
     fun getCategory(isDevil: Boolean) {
         viewModelScope.launch {
@@ -79,14 +65,6 @@ class CommunityViewModel(private val communityRepository: CommunityRepository) :
                     it.copy(selectedCategoryId = action.index)
                 }
                 getItemsByCategory(state.value.categoryList[action.index], action.isDevil)
-            }
-
-            CommunityAction.GetTempWriting -> {
-                getTempWriting()
-            }
-
-            CommunityAction.OnDraftDialog -> {
-                _state.update { it.copy(isDraftDialog = !it.isDraftDialog) }
             }
         }
     }

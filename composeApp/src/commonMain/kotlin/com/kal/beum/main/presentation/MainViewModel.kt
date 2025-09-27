@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kal.beum.core.domain.Result
+import com.kal.beum.core.domain.onError
 import com.kal.beum.core.domain.onProgress
 import com.kal.beum.core.domain.onSuccess
 import com.kal.beum.main.domain.AppRepository
@@ -129,7 +130,9 @@ class MainViewModel(private val appRepository: AppRepository) : ViewModel() {
                             popFullScreen()
                         }, signUpClick = {
 
-                            socialSignUp(socialCode, result.data.accessToken, result.data.refreshToken)
+                            socialSignUp(
+                                socialCode, result.data.accessToken, result.data.refreshToken
+                            )
                         }))
                     } else {
                         _state.update {
@@ -164,6 +167,18 @@ class MainViewModel(private val appRepository: AppRepository) : ViewModel() {
         }
     }
 
+    fun getTempWriting() {
+        println("getTempWriting~~~~~~~~")
+        viewModelScope.launch {
+            appRepository.getTempWriting().onSuccess { result ->
+                println("result temp  : $result")
+                _state.update { it.copy(writingTemp = result, isDraftDialog = true) }
+            }.onError {
+                _state.update { it -> it.copy(writingTemp = null, isDraftDialog = true) }
+            }
+        }.start()
+    }
+
     fun onAction(action: MainAction) {
         when (action) {
             is MainAction.ToggleDevil -> devilToggle(action.isDevil)
@@ -175,6 +190,10 @@ class MainViewModel(private val appRepository: AppRepository) : ViewModel() {
             }
 
             is MainAction.LogOut -> logout()
+            is MainAction.GetTempWriting -> getTempWriting()
+            is MainAction.OnDraftDialog -> {
+                _state.update { it.copy(isDraftDialog = !it.isDraftDialog) }
+            }
         }
     }
 }

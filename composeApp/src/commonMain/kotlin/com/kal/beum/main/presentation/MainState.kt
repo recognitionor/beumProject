@@ -46,5 +46,7 @@ data class MainState(
     val isProgress: Boolean = false,
     val fullScreenStack: List<FullScreenType> = emptyList(),
     val fullScreen: List<@Composable() (() -> Unit)?> = emptyList(),
-    val isFullScreen: Boolean = false
+    val isFullScreen: Boolean = false,
+    val writingTemp: WritingData? = null,
+    val isDraftDialog: Boolean = false
 )

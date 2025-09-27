@@ -1,5 +1,6 @@
 package com.kal.beum.main.presentation
 
+import com.kal.beum.community.presentation.CommunityAction
 import com.kal.beum.core.presentation.ToastInfo
 
 sealed interface MainAction {
@@ -10,4 +11,8 @@ sealed interface MainAction {
     data object ClearFullScreen : MainAction
     data class ToastMessage(val toastInfo: ToastInfo? = null) : MainAction
     data object LogOut : MainAction
+
+    object GetTempWriting : MainAction
+
+    object OnDraftDialog : MainAction
 }

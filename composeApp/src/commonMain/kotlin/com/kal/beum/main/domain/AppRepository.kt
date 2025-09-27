@@ -2,6 +2,7 @@ package com.kal.beum.main.domain
 
 import com.kal.beum.core.domain.*
 import com.kal.beum.main.data.database.AppEntity
+import com.kal.beum.write.domain.WritingData
 import kotlinx.coroutines.flow.Flow
 
 interface AppRepository {
@@ -15,4 +16,5 @@ interface AppRepository {
     fun getAppEntity(): Flow<AppEntity>
     suspend fun setIsDevil(isDevil: Boolean)
     suspend fun setOnBoardingDone(isOnBoardingDone: Boolean)
+    suspend fun getTempWriting(): Result<WritingData, DataError.Local>
 }

@@ -77,16 +77,20 @@ fun CommunityScreen(isDevil: Boolean, onAction: (MainAction) -> Unit) {
 
         LazyRow(modifier = Modifier.height(52.dp), verticalAlignment = Alignment.CenterVertically) {
             items(state.categoryList.size) {
-
+                val textColor = if (isDevil) {
+                    if (state.selectedCategoryId == it) BeumColors.White else BeumColors.baseGrayLightGray600
+                } else {
+                    if (state.selectedCategoryId == it) BeumColors.Black else BeumColors.baseGrayLightGray300
+                }
                 Text(
-                    modifier = Modifier.padding(start = 22.dp, end = 22.dp).clickable {
+                    modifier = Modifier.clip(RoundedCornerShape(12.dp)).clickable {
                         viewModel.onAction(CommunityAction.OnTabSelected(it, isDevil))
-                    }, text = state.categoryList[it].category, style = TextStyle(
+                    }.padding(start = 22.dp, end = 22.dp), text = state.categoryList[it].category, style = TextStyle(
                         fontSize = BeumTypo.TypoScaleText150,
                         lineHeight = 20.96.sp,
                         fontFamily = FontFamily(Font(Res.font.sf_pro)),
                         fontWeight = FontWeight(700),
-                        color = if (state.selectedCategoryId == it) BeumColors.Black else BeumColors.baseGrayLightGray300,
+                        color = textColor,
                         textAlign = TextAlign.Center,
                     )
                 )
@@ -95,7 +99,7 @@ fun CommunityScreen(isDevil: Boolean, onAction: (MainAction) -> Unit) {
         }
         if (state.communityList.isNotEmpty()) {
             val communityList = state.communityList[state.selectedCategoryId]
-            Box {
+            Box (modifier = Modifier.background(if (isDevil)BeumColors.DarkGray50 else BeumColors.baseGrayLightGray75)) {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize()
                         .padding(start = 20.dp, end = 20.dp, top = 16.dp, bottom = 24.dp),
@@ -118,7 +122,7 @@ fun CommunityScreen(isDevil: Boolean, onAction: (MainAction) -> Unit) {
                                 )
 
                             }.background(
-                                color = BeumColors.baseGrayLightGray50,
+                                color = if (isDevil) BeumColors.baseGrayLightGray800 else BeumColors.baseGrayLightGray50,
                                 shape = RoundedCornerShape(9.dp)
                             ).padding(start = 20.dp, top = 16.dp, end = 20.dp, bottom = 24.dp)
                                 .fillMaxWidth()
@@ -146,7 +150,7 @@ fun CommunityScreen(isDevil: Boolean, onAction: (MainAction) -> Unit) {
                                     lineHeight = 18.sp,
                                     fontFamily = FontFamily(Font(Res.font.sf_pro)),
                                     fontWeight = FontWeight(500),
-                                    color = BeumColors.Black,
+                                    color = if (isDevil) BeumColors.White else BeumColors.Black,
                                 )
                             )
 
@@ -174,7 +178,8 @@ fun CommunityScreen(isDevil: Boolean, onAction: (MainAction) -> Unit) {
                             color = BeumColors.angelSkyblue,
                             shape = RoundedCornerShape(size = 100.dp)
                         ).clip(shape = RoundedCornerShape(size = 100.dp)).clickable {
-                            viewModel.onAction(CommunityAction.GetTempWriting)
+                            onAction(MainAction.GetTempWriting)
+//                            viewModel.onAction(CommunityAction.GetTempWriting)
                         }) {
                         Image(
                             painter = painterResource(Res.drawable.ic_add_medium),
@@ -183,30 +188,30 @@ fun CommunityScreen(isDevil: Boolean, onAction: (MainAction) -> Unit) {
                         )
                     }
                 }
-                println("state.isDraftDialog : ${state.isDraftDialog}")
-                if (state.isDraftDialog) {
-                    if (state.writingTemp != null) {
-                        onAction(
-                            MainAction.PushFullScreen(
-                                FullScreenType.DraftDialog(
-                                    onNewClick = {
-                                        onAction(MainAction.PopFullScreen)
-                                        onAction(MainAction.PushFullScreen(FullScreenType.WritingScreen()))
-                                    },
-                                    onContinueClick = {
-                                        onAction(MainAction.PopFullScreen)
-                                        onAction(MainAction.PushFullScreen(FullScreenType.WritingScreen(state.writingTemp)))
-                                    },
-                                    onDismiss = {
-                                        onAction(MainAction.PopFullScreen)
-                                    })
-                            )
-                        )
-                    } else {
-                        onAction(MainAction.PushFullScreen(FullScreenType.WritingScreen()))
-                    }
-                    viewModel.onAction(CommunityAction.OnDraftDialog)
-                }
+//                println("state.isDraftDialog : ${state.isDraftDialog}")
+//                if (state.isDraftDialog) {
+//                    if (state.writingTemp != null) {
+//                        onAction(
+//                            MainAction.PushFullScreen(
+//                                FullScreenType.DraftDialog(
+//                                    onNewClick = {
+//                                        onAction(MainAction.PopFullScreen)
+//                                        onAction(MainAction.PushFullScreen(FullScreenType.WritingScreen()))
+//                                    },
+//                                    onContinueClick = {
+//                                        onAction(MainAction.PopFullScreen)
+//                                        onAction(MainAction.PushFullScreen(FullScreenType.WritingScreen(state.writingTemp)))
+//                                    },
+//                                    onDismiss = {
+//                                        onAction(MainAction.PopFullScreen)
+//                                    })
+//                            )
+//                        )
+//                    } else {
+//                        onAction(MainAction.PushFullScreen(FullScreenType.WritingScreen()))
+//                    }
+//                    viewModel.onAction(CommunityAction.OnDraftDialog)
+//                }
             }
         }
     }

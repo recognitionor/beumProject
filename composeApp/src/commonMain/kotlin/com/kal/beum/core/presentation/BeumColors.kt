@@ -44,6 +44,7 @@ object BeumColors {
     val baseGrayDarkGray700: Color = Color(0xFFBBBBBB)
     val baseGrayLightGray700: Color = Color(0xFF484848)
     val GrayGray500: Color = Color(0xFF757575)
+    val DarkGray50: Color = Color(0xFF161616)
 
     val baseAlphaWhiteLightWhite: Color = Color(0xFFFFFFFF)
     val baseAlphaWhiteLightWhite700A: Color = Color(0xE5FFFFFF)
