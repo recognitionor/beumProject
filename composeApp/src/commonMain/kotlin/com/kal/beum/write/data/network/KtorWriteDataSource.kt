@@ -16,6 +16,7 @@ class KtorWriteDataSource(private val httpClient: HttpClient) : RemoteWriteDataS
 
     override suspend fun submitWriting(writingSubmitRequest: WritingInfoRequest): Result<Boolean, DataError.Remote> {
         println("AuthTokenCache.accessToken : ${AuthTokenCache.accessToken}")
+        println("AuthTokenCache.writingSubmitRequest : $writingSubmitRequest")
         val response = httpClient.post(ApiConstants.Endpoints.BOARD) {
 
             headers {
@@ -24,13 +25,13 @@ class KtorWriteDataSource(private val httpClient: HttpClient) : RemoteWriteDataS
                 }
             }
             setBody(
-                BoardSubmitRequest(
-                    boardReq = writingSubmitRequest,
-                    userDto = WritingUserDto(userId = 6, nickname = "KAL")
-                )
+                writingSubmitRequest
             )
         }
-        println(response)
-        return Result.Success(true)
+        if (response.status.value == 200) {
+            return Result.Success(true)
+        } else {
+            return Result.Error(DataError.Remote.FAILED_BOARD)
+        }
     }
 }

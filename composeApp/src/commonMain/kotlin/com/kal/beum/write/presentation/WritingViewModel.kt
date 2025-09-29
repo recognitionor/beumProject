@@ -30,8 +30,9 @@ class WritingViewModel(
         println("getWriteCategoryList()")
         viewModelScope.launch {
             writeCategoryRepository.getWriteCategory().onSuccess { result ->
-                println("getWriteCategoryList(): $result")
                 _state.update { it.copy(writeCategoryMap = result) }
+            }.onError {
+
             }
         }.start()
     }
@@ -129,7 +130,6 @@ class WritingViewModel(
             }
 
             is WritingAction.InitTempWriting -> {
-                println("WritingAction.InitTempWriting")
                 _state.update {
                     it.copy(
                         title = action.writingData.title,

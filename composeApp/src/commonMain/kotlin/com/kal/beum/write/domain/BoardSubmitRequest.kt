@@ -4,8 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class BoardSubmitRequest(
-    val boardReq: WritingInfoRequest,
-    val userDto: WritingUserDto
+    val boardReq: WritingInfoRequest
 )
 
 @Serializable

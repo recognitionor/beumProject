@@ -3,7 +3,6 @@ package com.kal.beum.main.data.network
 import com.kal.beum.core.domain.DataError
 import com.kal.beum.core.domain.Result
 import com.kal.beum.main.domain.UserInfo
-import kotlinx.coroutines.flow.Flow
 
 interface RemoteLoginDataSource {
     suspend fun signup(socialType: Int, accessToken: String, refreshToken: String): Result<UserInfo, DataError.Remote>

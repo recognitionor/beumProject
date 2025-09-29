@@ -9,4 +9,5 @@
     <string name="error_too_many_requests">Your quota seems to be exceeded.</string>
     <string name="error_serialization">Couldn't parse data.</string>
     <string name="error_login_failed">Login failed. Please try again.</string>
+    <string name="error_board_failed">글쓰기 실패.</string>
 </resources>

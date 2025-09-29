@@ -22,6 +22,7 @@ fun DataError.toUiText(): UiText {
         DataError.Remote.SERIALIZATION -> Res.string.error_serialization
         DataError.Remote.UNKNOWN -> Res.string.error_unknown
         DataError.Remote.LOGIN_FAILED -> Res.string.error_login_failed
+        DataError.Remote.FAILED_BOARD -> Res.string.error_login_failed
     }
 
     return UiText.StringResourceId(stringRes)

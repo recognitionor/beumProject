@@ -1,10 +1,19 @@
 package com.kal.beum.myinfo.data.network
 
+import com.kal.beum.core.data.ApiConstants
 import com.kal.beum.core.domain.DataError
 import com.kal.beum.core.domain.Result
+import com.kal.beum.login.data.dto.LoginResponseDto
+import com.kal.beum.login.domain.SocialToken
+import com.kal.beum.main.domain.SocialType
+import com.kal.beum.main.domain.UserInfo
 import com.kal.beum.myinfo.data.dto.MyContentDto
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
 
-class MockMyInfoDataSource : RemoteMyInfoDataSource {
+class MockMyInfoDataSource(private val httpClient: HttpClient) : RemoteMyInfoDataSource {
     override suspend fun getMyContents(userId: Int): Result<List<MyContentDto>, DataError.Remote> {
         return Result.Success(
             listOf(
@@ -35,7 +44,9 @@ class MockMyInfoDataSource : RemoteMyInfoDataSource {
     override suspend fun getMyReply(userId: Int): Result<List<MyContentDto>, DataError.Remote> {
         return Result.Success(
             listOf(
-                MyContentDto(21, "첫 월급 썼어요!", "기분 너무 좋아요. 여러분은 어디에 쓰셨나요?", "잡담", "2025-07-01", 15, 6),
+                MyContentDto(
+                    21, "첫 월급 썼어요!", "기분 너무 좋아요. 여러분은 어디에 쓰셨나요?", "잡담", "2025-07-01", 15, 6
+                ),
                 MyContentDto(22, "퇴사 고민", "계속 다닐지 고민입니다.", "이직/퇴사", "2025-07-02", 9, 1),
                 MyContentDto(23, "프로젝트 폭탄", "갑자기 업무가 몰려서 당황했어요.", "고민상담", "2025-07-03", 6, 3),
                 MyContentDto(24, "업무 스킬업", "새로운 기술 배워보고 싶어요.", "커리어", "2025-07-04", 8, 2),
@@ -61,5 +72,36 @@ class MockMyInfoDataSource : RemoteMyInfoDataSource {
 
     override suspend fun reportUser(myContentId: Int): Result<Unit, DataError.Remote> {
         return Result.Success(Unit)
+    }
+
+    override suspend fun refreshLoginInfo(
+        socialType: Int, socialToken: SocialToken
+    ): Result<UserInfo, DataError.Remote> {
+
+        val response = httpClient.post(ApiConstants.Endpoints.SIGNIN) {
+            setBody(
+                mapOf(
+                    "accessToken" to socialToken.accessToken,
+                    "socialType" to SocialType.toName(socialType)
+                )
+            )
+        }
+        if (response.status.value == 200) {
+            val responseBody = response.body<LoginResponseDto>()
+            val userInfo = UserInfo(
+                userId = responseBody.userId,
+                nickName = responseBody.nickName,
+                socialType = socialType,
+                email = responseBody.email,
+                sessionKey = "",
+                accessToken = responseBody.tokenSet?.accessToken ?: socialToken.accessToken,
+                refreshToken = responseBody.tokenSet?.refreshToken ?: socialToken.refreshToken,
+                profileImageId = responseBody.profileImageId,
+                needSignUp = responseBody.needSignUp
+            )
+            return Result.Success(userInfo)
+        } else {
+            return Result.Error(DataError.Remote.LOGIN_FAILED)
+        }
     }
 }
