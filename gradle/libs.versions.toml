@@ -12,6 +12,7 @@ androidx-lifecycle = "2.8.3"
 androidx-material = "1.12.0"
 androidx-test-junit = "1.2.1"
 compose-plugin = "1.7.0"
+firebaseMessaging = "25.0.1"
 junit = "4.13.2"
 kotlin = "2.0.21"
 kotlinx-coroutines = "1.9.0"
@@ -27,7 +28,12 @@ napier = "2.6.1"
 kotlinx-datetime = "0.5.0"
 android-naver-login = "5.10.0"
 android-kakao-login = "2.21.6"
+firebase = "2.3.0"
+google-services = "4.4.3"
+workRuntimeKtx = "2.10.5"
+
 [libraries]
+google-firebase-messaging = { module = "com.google.firebase:firebase-messaging", version.ref = "firebaseMessaging" }
 kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinx-datetime" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
@@ -73,6 +79,8 @@ napier = { group = "io.github.aakira", name = "napier", version.ref = "napier" }
 
 android-naver = { group = "com.navercorp.nid", name = "oauth", version.ref = "android-naver-login" }
 android-kakao = { group = "com.kakao.sdk", name = "v2-user", version.ref = "android-kakao-login" }
+firebase-messaging = { group = "dev.gitlive", name = "firebase-messaging", version.ref = "firebase" }
+androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "workRuntimeKtx" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
@@ -83,6 +91,7 @@ kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref =
 jetbrains-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 room = { id = "androidx.room", version.ref = "room" }
+google-services = { id = "com.google.gms.google-services", version.ref = "google-services" }
 
 [bundles]
 ktor = [

@@ -3,10 +3,17 @@ package com.kal.beum.content.data.network
 import com.kal.beum.content.data.dto.CommentDto
 import com.kal.beum.content.data.dto.ContentDetailDto
 import com.kal.beum.content.data.dto.ReplyInfoDto
+import com.kal.beum.core.data.ApiConstants
+import com.kal.beum.core.data.AuthTokenCache
 import com.kal.beum.core.domain.DataError
 import com.kal.beum.core.domain.Result
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.headers
+import io.ktor.client.request.post
+import io.ktor.client.request.setBody
 
-class MockContentDataSource : RemoteContentDataSource {
+class KtorContentDataSource(private val httpClient: HttpClient) : RemoteContentDataSource {
     val reReplyList = listOf(
         ReplyInfoDto(
             writer = "유저1",
@@ -118,6 +125,21 @@ class MockContentDataSource : RemoteContentDataSource {
     }
 
     override suspend fun sendReply(commentDto: CommentDto): Result<Boolean, DataError.Remote> {
-        return Result.Success(true)
+        println("sendReply")
+        val response = httpClient.post(ApiConstants.Endpoints.COMMENT) {
+            headers {
+                AuthTokenCache.accessToken?.let {
+                    append(ApiConstants.KEY.KEY_AUTH_TOKEN, it)
+                }
+            }
+            setBody(
+                commentDto
+            )
+        }
+        return if (response.status.value == 200) {
+            Result.Success(true)
+        } else {
+            Result.Error(DataError.Remote.FAILED_BOARD)
+        }
     }
 }

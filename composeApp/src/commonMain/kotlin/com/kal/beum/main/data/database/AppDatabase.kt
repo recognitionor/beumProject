@@ -12,7 +12,7 @@ import com.kal.beum.write.data.database.WritingDao
 import com.kal.beum.write.data.database.WritingEntity
 
 @Database(
-    entities = [AppEntity::class, UserInfoEntity::class, WritingEntity::class], version = 2
+    entities = [AppEntity::class, UserInfoEntity::class, WritingEntity::class], version = 3
 )
 @TypeConverters(
     StringListTypeConverter::class

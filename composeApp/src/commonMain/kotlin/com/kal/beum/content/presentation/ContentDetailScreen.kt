@@ -259,16 +259,54 @@ fun ContentDetailScreen(id: Int, backBtnClick: () -> Unit) {
                         )
                     )
 
-                    LazyColumn {
-                        items(state.contentDetail?.replyList?.size ?: 0) { index ->
-                            val reply = state.contentDetail?.replyList?.get(index)
-                            reply?.let {
-                                Spacer(modifier = Modifier.height(16.dp))
-                                ReplyView(it) { replyList ->
-                                    detailReplyInfo = replyList
+                    Column {
+                        LazyColumn(modifier = Modifier.weight(1f)) {
+                            items(state.contentDetail?.replyList?.size ?: 0) { index ->
+                                val reply = state.contentDetail?.replyList?.get(index)
+                                reply?.let {
+                                    Spacer(modifier = Modifier.height(16.dp))
+                                    ReplyView(it) { replyList ->
+                                        detailReplyInfo = replyList
+                                    }
                                 }
                             }
                         }
+
+                        Box(
+                            modifier = Modifier.fillMaxWidth().height(2.dp)
+                                .background(BeumColors.baseGrayLightGray100)
+                        )
+                        Row(
+                            modifier = Modifier.height(72.dp).padding(top = 12.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Box(
+                                modifier = Modifier.border(
+                                    width = 0.625.dp,
+                                    color = BeumColors.baseAlphaWhiteLightWhite500A,
+                                    shape = RoundedCornerShape(size = 20.dp)
+                                ).width(30.dp).height(30.dp).background(
+                                    color = Color(0xFF45CAF7),
+                                    shape = RoundedCornerShape(size = 20.dp)
+                                ).padding(
+                                    start = 8.125.dp,
+                                    top = 6.875.dp,
+                                    end = 8.125.dp,
+                                    bottom = 6.875.dp
+                                )
+                            ) {
+                                Image(
+                                    painter = painterResource(Res.drawable.ic_angel_emoji),
+                                    contentDescription = "",
+                                    modifier = Modifier.size(30.dp)
+                                )
+                            }
+                            Spacer(modifier = Modifier.width(8.dp))
+                            ReplyField {
+                                viewModel.sendReply(it)
+                            }
+                        }
+                        Spacer(modifier = Modifier.height(16.dp))
                     }
                 }
             }

@@ -28,10 +28,10 @@ class KtorWriteDataSource(private val httpClient: HttpClient) : RemoteWriteDataS
                 writingSubmitRequest
             )
         }
-        if (response.status.value == 200) {
-            return Result.Success(true)
+        return if (response.status.value == 200) {
+            Result.Success(true)
         } else {
-            return Result.Error(DataError.Remote.FAILED_BOARD)
+            Result.Error(DataError.Remote.FAILED_BOARD)
         }
     }
 }

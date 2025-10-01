@@ -49,12 +49,16 @@
 	<key>NidClientSecret</key>
 	<string>oD1SqxgLnE</string>
 	<key>NidUrlScheme</key>
-	<string>com.kal.beum.beumProject</string>
+	<string>com.kal.beum.ios</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
 		<false/>
 	</dict>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+	</array>
 	<key>UILaunchScreen</key>
 	<dict/>
 	<key>UIRequiredDeviceCapabilities</key>

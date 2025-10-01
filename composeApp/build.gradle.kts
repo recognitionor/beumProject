@@ -10,6 +10,9 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.serialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.room)
+    alias (libs.plugins.google.services)
+//    id("com.google.gms.google-services") version "4.4.3" apply false
+
 }
 
 kotlin {
@@ -53,8 +56,12 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
             implementation(libs.android.naver)
             implementation(libs.android.kakao)
+            implementation(project.dependencies.platform("com.google.firebase:firebase-bom:34.3.0"))
+            implementation(libs.google.firebase.messaging)
+            implementation(libs.androidx.work.runtime.ktx)
 
         }
+
         commonMain.dependencies {
             implementation(libs.kotlinx.datetime)
             implementation(compose.runtime)
@@ -78,7 +85,9 @@ kotlin {
 
             implementation(libs.bundles.ktor)
             implementation(libs.bundles.coil)
-            implementation(libs.napier)
+
+
+
         }
         nativeMain.dependencies {
             implementation(libs.ktor.client.darwin)
@@ -95,7 +104,7 @@ android {
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.kal.beum"
+        applicationId = "com.kal.beum.android"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1

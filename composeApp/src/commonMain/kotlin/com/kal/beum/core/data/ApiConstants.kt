@@ -8,6 +8,7 @@ object ApiConstants {
         const val KEY_AUTH_TOKEN = "X-AUTH-TOKEN"
     }
     object Endpoints {
+        const val COMMENT = "/comment"
         const val BOARD = "/board"
         const val SIGNUP = "/signup"
         const val SIGNIN = "/signin"
