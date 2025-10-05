@@ -19,6 +19,8 @@ sealed class FullScreenType {
 
     data class WritingScreen(val tempWriting: WritingData? = null) : FullScreenType()
 
+    object ProgressDialog : FullScreenType()
+
     object NoticeScreen : FullScreenType()
 
     object PrivacyPolicyScreen : FullScreenType()

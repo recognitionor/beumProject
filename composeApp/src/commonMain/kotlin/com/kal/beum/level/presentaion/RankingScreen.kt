@@ -1,22 +1,12 @@
 package com.kal.beum.level.presentaion
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
@@ -32,30 +22,24 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import beumproject.composeapp.generated.resources.Res
-import beumproject.composeapp.generated.resources.angel
-import beumproject.composeapp.generated.resources.devil
-import beumproject.composeapp.generated.resources.heart
-import beumproject.composeapp.generated.resources.ic_devil_fire
 import beumproject.composeapp.generated.resources.sf_pro
-import coil3.compose.AsyncImage
 import com.kal.beum.core.presentation.BeumColors
-import com.kal.beum.core.presentation.BeumDimen
-import com.kal.beum.core.presentation.BeumTypo
 import com.kal.beum.home.presentation.components.ToggleButton
 import com.kal.beum.main.presentation.MainAction
 import org.jetbrains.compose.resources.Font
-import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RankingScreen(isDevil: Boolean, onAction: (MainAction) -> Unit) {
-    val viewModel = koinViewModel<RankingViewModel>()
+fun RankingScreen(
+    isDevil: Boolean,
+    viewModel: RankingViewModel,
+    onAction: (MainAction) -> Unit
+) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     var showDetailInfoIndex by remember { mutableStateOf(-1) }
     LaunchedEffect(Unit) {

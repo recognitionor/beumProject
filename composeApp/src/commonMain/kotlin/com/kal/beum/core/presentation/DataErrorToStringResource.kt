@@ -6,6 +6,7 @@ import beumproject.composeapp.generated.resources.error_comment_failed
 import beumproject.composeapp.generated.resources.error_disk_full
 import beumproject.composeapp.generated.resources.error_login_failed
 import beumproject.composeapp.generated.resources.error_no_internet
+import beumproject.composeapp.generated.resources.error_request_fail
 import beumproject.composeapp.generated.resources.error_request_timeout
 import beumproject.composeapp.generated.resources.error_serialization
 import beumproject.composeapp.generated.resources.error_too_many_requests
@@ -26,6 +27,7 @@ fun DataError.toUiText(): UiText {
         DataError.Remote.LOGIN_FAILED -> Res.string.error_login_failed
         DataError.Remote.FAILED_BOARD -> Res.string.error_board_failed
         DataError.Remote.FAILED_COMMENT -> Res.string.error_comment_failed
+        DataError.Remote.REQUEST_ERROR -> Res.string.error_request_fail
     }
 
     return UiText.StringResourceId(stringRes)

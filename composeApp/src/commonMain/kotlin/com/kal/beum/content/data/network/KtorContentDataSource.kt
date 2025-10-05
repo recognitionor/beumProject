@@ -9,6 +9,7 @@ import com.kal.beum.core.domain.DataError
 import com.kal.beum.core.domain.Result
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
@@ -106,6 +107,15 @@ class KtorContentDataSource(private val httpClient: HttpClient) : RemoteContentD
     )
 
     override suspend fun getContentDetail(contentId: Int): Result<ContentDetailDto, DataError.Remote> {
+        val response = httpClient.get(ApiConstants.Endpoints.BOARD) {
+            headers {
+                AuthTokenCache.accessToken?.let {
+                    append(ApiConstants.KEY.KEY_AUTH_TOKEN, it)
+                }
+            }
+        }
+        println("getContentDetail response: ${response.body<String>()}")
+
         return Result.Success(
             ContentDetailDto(
                 id = 1,

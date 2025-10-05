@@ -6,7 +6,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -21,34 +27,54 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import beumproject.composeapp.generated.resources.*
+import beumproject.composeapp.generated.resources.Res
+import beumproject.composeapp.generated.resources.home
+import beumproject.composeapp.generated.resources.home_selected
+import beumproject.composeapp.generated.resources.info
+import beumproject.composeapp.generated.resources.info_selected
+import beumproject.composeapp.generated.resources.level
+import beumproject.composeapp.generated.resources.level_selected
+import beumproject.composeapp.generated.resources.sf_pro
+import beumproject.composeapp.generated.resources.wing
+import beumproject.composeapp.generated.resources.wing_selected
 import com.kal.beum.Route
-import com.kal.beum.community.presentation.CommunityAction
 import com.kal.beum.community.presentation.CommunityScreen
+import com.kal.beum.community.presentation.CommunityViewModel
 import com.kal.beum.community.presentation.DraftDialog
 import com.kal.beum.content.presentation.ContentDetailScreen
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumTypo
 import com.kal.beum.core.presentation.Toast
 import com.kal.beum.home.presentation.HomeScreen
+import com.kal.beum.home.presentation.HomeViewModel
 import com.kal.beum.level.presentaion.RankingScreen
-import com.kal.beum.myinfo.presentation.*
+import com.kal.beum.level.presentaion.RankingViewModel
+import com.kal.beum.login.presentation.SignupDialog
+import com.kal.beum.myinfo.presentation.LogOutDialog
+import com.kal.beum.myinfo.presentation.MyInfoDetailScreen
+import com.kal.beum.myinfo.presentation.MyInfoScreen
+import com.kal.beum.myinfo.presentation.MyInfoViewModel
+import com.kal.beum.myinfo.presentation.PrivacyPolicyScreen
+import com.kal.beum.myinfo.presentation.ReportConfirmDialog
+import com.kal.beum.myinfo.presentation.ServicePolicyInfoScreen
+import com.kal.beum.myinfo.presentation.SettingsScreen
+import com.kal.beum.myinfo.presentation.TermScreen
 import com.kal.beum.notice.presentaion.NoticeScreen
 import com.kal.beum.write.presentation.WritingScreen
-import com.kal.beum.login.presentation.SignupDialog
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun MainScreen() {
-    val viewModel = koinViewModel<MainViewModel>()
+fun MainScreen(navController: NavHostController = rememberNavController()) {
+    val viewModel = koinViewModel<MainViewModel>(key = "main")
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val navController = rememberNavController()
+
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
     if (!state.isSplashDone) {
         SplashScreen()
@@ -70,16 +96,21 @@ fun MainScreen() {
                     ) {
 
                         composable(Route.Home.toRoute()) {
-                            HomeScreen(state.isDevil, viewModel::onAction)
+                            val homeViewModel = koinViewModel<HomeViewModel>()
+                            HomeScreen(state.isDevil, homeViewModel, viewModel::onAction)
                         }
                         composable(Route.Community.toRoute()) {
-                            CommunityScreen(state.isDevil, viewModel::onAction)
+                            val communityViewModel =
+                                koinViewModel<CommunityViewModel>(key = "Community")
+                            CommunityScreen(state.isDevil, communityViewModel, viewModel::onAction)
                         }
                         composable(Route.Level("1").toRoute()) { backStackEntry ->
-                            RankingScreen(state.isDevil, viewModel::onAction)
+                            val rankingViewModel = koinViewModel<RankingViewModel>()
+                            RankingScreen(state.isDevil, rankingViewModel, viewModel::onAction)
                         }
                         composable(Route.MyInfo("userId").toRoute()) { backStackEntry ->
-                            MyInfoScreen(state.isDevil, viewModel::onAction)
+                            val myInfoViewModel = koinViewModel<MyInfoViewModel>()
+                            MyInfoScreen(state.isDevil, myInfoViewModel, viewModel::onAction)
                         }
                     }
                 }
@@ -89,18 +120,21 @@ fun MainScreen() {
             if (state.writingTemp != null) {
                 viewModel.onAction(
                     MainAction.PushFullScreen(
-                        FullScreenType.DraftDialog(
-                            onNewClick = {
-                                viewModel.onAction(MainAction.PopFullScreen)
-                                viewModel.onAction(MainAction.PushFullScreen(FullScreenType.WritingScreen()))
-                            },
-                            onContinueClick = {
-                                viewModel.onAction(MainAction.PopFullScreen)
-                                viewModel.onAction(MainAction.PushFullScreen(FullScreenType.WritingScreen(state.writingTemp)))
-                            },
-                            onDismiss = {
-                                viewModel.onAction(MainAction.PopFullScreen)
-                            })
+                        FullScreenType.DraftDialog(onNewClick = {
+                            viewModel.onAction(MainAction.PopFullScreen)
+                            viewModel.onAction(MainAction.PushFullScreen(FullScreenType.WritingScreen()))
+                        }, onContinueClick = {
+                            viewModel.onAction(MainAction.PopFullScreen)
+                            viewModel.onAction(
+                                MainAction.PushFullScreen(
+                                    FullScreenType.WritingScreen(
+                                        state.writingTemp
+                                    )
+                                )
+                            )
+                        }, onDismiss = {
+                            viewModel.onAction(MainAction.PopFullScreen)
+                        })
                     )
                 )
             } else {
@@ -155,7 +189,9 @@ fun MainScreen() {
                         }
 
                         is FullScreenType.DraftDialog -> {
-                            DraftDialog(content.onNewClick, content.onContinueClick, content.onDismiss)
+                            DraftDialog(
+                                content.onNewClick, content.onContinueClick, content.onDismiss
+                            )
                         }
 
                         is FullScreenType.WritingScreen -> {
@@ -191,6 +227,10 @@ fun MainScreen() {
 
                         is FullScreenType.SignUpDialog -> {
                             SignupDialog(content.onDismiss, content.signUpClick)
+                        }
+
+                        is FullScreenType.ProgressDialog -> {
+                            ProgressDialog()
                         }
                     }
                 }
@@ -229,7 +269,12 @@ fun BottomNavigationBar(navController: NavController, currentRoute: String?, dev
         val unSelectedTintColor = if (devil) BeumColors.transparentWhite else Color.Unspecified
         NavigationBarItem(
             selected = currentRoute == Route.Home.toRoute(), // 상태 업데이트 필요
-            onClick = { navController.navigate(Route.Home.toRoute()) }, colors = NavigationBarItemDefaults.colors(
+            onClick = {
+                navController.navigate(Route.Home.toRoute()) {
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            }, colors = NavigationBarItemDefaults.colors(
                 indicatorColor = Color.Transparent
             ), label = {
                 Text(
@@ -247,12 +292,19 @@ fun BottomNavigationBar(navController: NavController, currentRoute: String?, dev
                 Icon(
                     painter = if (isSelected) painterResource(Res.drawable.home_selected) else painterResource(
                         Res.drawable.home
-                    ), tint = if (isSelected) selectedTintColor else unSelectedTintColor, contentDescription = "Home"
+                    ),
+                    tint = if (isSelected) selectedTintColor else unSelectedTintColor,
+                    contentDescription = "Home"
                 )
             })
         NavigationBarItem(
             selected = currentRoute == Route.Community.toRoute(), // 상태 업데이트 필요
-            onClick = { navController.navigate(Route.Community.toRoute()) }, label = {
+            onClick = {
+                navController.navigate(Route.Community.toRoute()) {
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            }, label = {
                 Text(
                     "커뮤니티", style = TextStyle(
                         fontSize = BeumTypo.TypoScaleText25,
@@ -277,7 +329,12 @@ fun BottomNavigationBar(navController: NavController, currentRoute: String?, dev
             })
         NavigationBarItem(
             selected = currentRoute == Route.Level("1").toRoute(), // 상태 업데이트 필요
-            onClick = { navController.navigate(Route.Level("1").toRoute()) }, label = {
+            onClick = {
+                navController.navigate(Route.Level("1").toRoute()) {
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            }, label = {
                 Text(
                     "레벨", style = TextStyle(
                         fontSize = BeumTypo.TypoScaleText25,
@@ -295,12 +352,19 @@ fun BottomNavigationBar(navController: NavController, currentRoute: String?, dev
                 Icon(
                     painter = if (isSelected) painterResource(Res.drawable.level_selected) else painterResource(
                         Res.drawable.level
-                    ), tint = if (isSelected) selectedTintColor else unSelectedTintColor, contentDescription = "Level"
+                    ),
+                    tint = if (isSelected) selectedTintColor else unSelectedTintColor,
+                    contentDescription = "Level"
                 )
             })
         NavigationBarItem(
             selected = currentRoute == Route.MyInfo("userId").toRoute(), // 상태 업데이트 필요
-            onClick = { navController.navigate(Route.MyInfo("userId").toRoute()) }, label = {
+            onClick = {
+                navController.navigate(Route.MyInfo("userId").toRoute()) {
+                    launchSingleTop = true
+                    restoreState = true
+                }
+            }, label = {
                 Text(
                     "마이", style = TextStyle(
                         fontSize = BeumTypo.TypoScaleText25,

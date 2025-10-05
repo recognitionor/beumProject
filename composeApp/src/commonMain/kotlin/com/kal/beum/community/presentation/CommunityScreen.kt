@@ -35,32 +35,38 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import beumproject.composeapp.generated.resources.Res
 import beumproject.composeapp.generated.resources.ic_add_medium
 import beumproject.composeapp.generated.resources.sf_pro
-import com.kal.beum.content.presentation.ContentDetailScreen
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumTypo
 import com.kal.beum.home.presentation.components.ToggleButton
 import com.kal.beum.main.presentation.FullScreenType
 import com.kal.beum.main.presentation.MainAction
-import com.kal.beum.main.presentation.MainScreen
-import com.kal.beum.write.presentation.WritingScreen
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
-fun CommunityScreen(isDevil: Boolean, onAction: (MainAction) -> Unit) {
-    val viewModel = koinViewModel<CommunityViewModel>()
+fun CommunityScreen(
+    isDevil: Boolean,
+    viewModel: CommunityViewModel,
+    onAction: (MainAction) -> Unit
+) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val listState = rememberLazyListState()
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(isDevil) {
         viewModel.getCategory(isDevil)
     }
 
     // 👇 선택된 카테고리가 바뀔 때마다 맨 위로 스크롤
     LaunchedEffect(state.selectedCategoryId) {
         listState.scrollToItem(0)
+    }
+
+    if (state.onProgress) {
+        onAction(MainAction.PushFullScreen(FullScreenType.ProgressDialog))
+    } else {
+        onAction(MainAction.PopFullScreen)
     }
 
     Column {

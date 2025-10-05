@@ -23,6 +23,7 @@ class DefaultContentDetailRepository(private val remoteContentDataSource: Remote
     override suspend fun getContentInfo(
         id: Int
     ): Result<ContentDetail, DataError.Remote> {
+        println("DefaultContentDetailRepository getContentInfo id: $id")
         return remoteContentDataSource.getContentDetail(id).map { it.toContentDetail() }
     }
 }

@@ -11,7 +11,7 @@ import com.kal.beum.content.domain.ReplyInfo
 
 fun CategoryDto.toCategoryData(): Category {
     return Category(
-        id = this.id, category = this.category
+        id = this.id, category = this.name
     )
 }
 
@@ -24,7 +24,7 @@ fun CommunityItemDto.toCommunityItem(): CommunityItem {
         writer = this.writer,
         categoryName = this.categoryName,
         isPopular = this.isPopular,
-        lastModifiedTime = this.lastModifiedTime
+        lastModifiedTime = this.lastModifiedTime.toString()
     )
 }
 

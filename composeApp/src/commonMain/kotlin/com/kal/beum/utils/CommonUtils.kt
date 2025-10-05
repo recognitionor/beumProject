@@ -4,6 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.DurationUnit
 
@@ -19,6 +23,21 @@ fun pxToDp(pxValue: Float): Dp {
     return with(LocalDensity.current) {
         pxValue.toDp()
     }
+}
+
+fun stringTimeToLong(time: String): Long {
+
+    val instant = Instant.parse(time + "Z") // 'Z' 붙여서 UTC로 인식시킴
+    val epochMillis = instant.toEpochMilliseconds()
+
+    // 만약 LocalDateTime으로 쓰고 싶으면:
+    val localDateTime = LocalDateTime.parse(time)
+    val epochMillisFromLocal = localDateTime.toInstant(TimeZone.UTC).toEpochMilliseconds()
+    println(epochMillisFromLocal) // 1758986208000
+
+    // UTC 기준 epoch milli로 변환
+    val epochMilli = localDateTime.toInstant(TimeZone.UTC).toEpochMilliseconds()
+    return epochMilli
 }
 
 fun formatWithComma(number: Int): String {

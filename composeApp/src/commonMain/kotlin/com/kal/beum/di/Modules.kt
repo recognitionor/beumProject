@@ -1,14 +1,13 @@
 package com.kal.beum.di
 
 import androidx.sqlite.driver.bundled.BundledSQLiteDriver
-import com.kal.beum.community.data.network.MockCommunityDataSource
+import com.kal.beum.community.data.network.KtorCommunityDataSource
 import com.kal.beum.community.data.network.RemoteCommunityDataSource
 import com.kal.beum.community.data.repository.DefaultCommunityRepository
 import com.kal.beum.community.domain.CommunityRepository
 import com.kal.beum.community.presentation.CommunityViewModel
 import com.kal.beum.community.presentation.ContentDetailViewModel
 import com.kal.beum.content.data.network.KtorContentDataSource
-import com.kal.beum.content.data.network.MockContentDataSource
 import com.kal.beum.content.data.network.RemoteContentDataSource
 import com.kal.beum.content.data.repository.DefaultContentDetailRepository
 import com.kal.beum.content.domain.ContentsRepository
@@ -85,7 +84,7 @@ val sharedModules = module {
     singleOf(::KtorContentDataSource).bind<RemoteContentDataSource>()
 
     singleOf(::MockHomeDataSource).bind<RemoteHomeDataSource>()
-    singleOf(::MockCommunityDataSource).bind<RemoteCommunityDataSource>()
+    singleOf(::KtorCommunityDataSource).bind<RemoteCommunityDataSource>()
     singleOf(::MockWriteCategoryDataSource).bind<RemoteWriteCategoryDataSource>()
 //    singleOf(::MockWriteDataSource).bind<RemoteWriteDataSource>()
 

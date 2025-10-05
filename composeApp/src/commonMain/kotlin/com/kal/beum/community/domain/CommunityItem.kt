@@ -7,5 +7,5 @@ data class CommunityItem(
     val writer: String,
     val categoryName: String,
     val isPopular: Boolean,
-    val lastModifiedTime: Long
+    val lastModifiedTime: String
 )

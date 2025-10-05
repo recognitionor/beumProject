@@ -11,5 +11,6 @@
     <string name="error_login_failed">Login failed. Please try again.</string>
     <string name="error_board_failed">글쓰기 실패.</string>
     <string name="error_comment_failed">댓글 쓰기 실패.</string>
+    <string name="error_request_fail">Request failed</string>
 
 </resources>

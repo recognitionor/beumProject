@@ -46,9 +46,8 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun HomeScreen(
-    toggle: Boolean, onAction: (MainAction) -> Unit
+    toggle: Boolean, viewModel: HomeViewModel, onAction: (MainAction) -> Unit
 ) {
-    val viewModel = koinViewModel<HomeViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
     Column(
         horizontalAlignment = Alignment.CenterHorizontally

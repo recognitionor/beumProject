@@ -39,8 +39,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyInfoScreen(devil: Boolean, action: (MainAction) -> Unit) {
-    val viewModel = koinViewModel<MyInfoViewModel>()
+fun MyInfoScreen(devil: Boolean, viewModel: MyInfoViewModel, action: (MainAction) -> Unit) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     var myInfoSelectedTabIndex by remember { mutableStateOf(0) }
 
