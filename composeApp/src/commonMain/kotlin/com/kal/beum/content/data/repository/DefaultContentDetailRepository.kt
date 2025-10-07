@@ -1,6 +1,6 @@
 package com.kal.beum.content.data.repository
 
-import com.kal.beum.content.data.dto.CommentDto
+import com.kal.beum.content.data.dto.CommentRequestDto
 import com.kal.beum.content.data.network.RemoteContentDataSource
 import com.kal.beum.content.data.toCommentInfo
 import com.kal.beum.content.domain.ContentDetail
@@ -12,10 +12,15 @@ import com.kal.beum.utils.stringTimeToLong
 class DefaultContentDetailRepository(private val remoteContentDataSource: RemoteContentDataSource) :
     ContentsRepository {
 
+
     override suspend fun sendReply(
-        id: Int, reply: String
+        boardId: Int,
+        content: String,
+        depth: Int,
+        parentId: Int,
+        devil: Boolean
     ): Result<Boolean, DataError.Remote> {
-        val commentDto = CommentDto(boardId = id, content = reply, depth = 0, ord = 0)
+        val commentDto = CommentRequestDto(boardId = boardId, content = content, depth = depth, parentId = parentId, devil = devil)
         return remoteContentDataSource.sendReply(commentDto)
     }
 

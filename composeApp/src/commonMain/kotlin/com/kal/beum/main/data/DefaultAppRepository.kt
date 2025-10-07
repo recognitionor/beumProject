@@ -1,6 +1,6 @@
 package com.kal.beum.main.data
 
-import com.kal.beum.core.data.AuthTokenCache
+import com.kal.beum.core.data.AppUserCache
 import com.kal.beum.core.domain.DataError
 import com.kal.beum.core.domain.Result
 import com.kal.beum.core.domain.onError
@@ -25,7 +25,7 @@ class DefaultAppRepository(
 ) : AppRepository {
     override fun getLoginInfo(): Flow<UserInfo?> = flow {
         val result = appDao.getLoginInfo()?.toUserInfo()
-        AuthTokenCache.accessToken = result?.accessToken
+        AppUserCache.accessToken = result?.accessToken
         emit(result)
     }
 
@@ -51,7 +51,7 @@ class DefaultAppRepository(
 
             )
             appDao.setLoginInfo(userInfoEntity)
-            AuthTokenCache.accessToken = userInfo.accessToken
+            AppUserCache.accessToken = userInfo.accessToken
             emit(result)
         }.onError {
             emit(result)
@@ -76,7 +76,7 @@ class DefaultAppRepository(
 
             )
             appDao.setLoginInfo(userInfoEntity)
-            AuthTokenCache.accessToken = userInfo.accessToken
+            AppUserCache.accessToken = userInfo.accessToken
             emit(result)
         }.onError {
             emit(result)
@@ -87,7 +87,7 @@ class DefaultAppRepository(
         emit(Result.Progress())
         remoteLoginDataSource.logout(userInfo)
         appDao.clearLoginInfo()
-        AuthTokenCache.accessToken = null
+        AppUserCache.accessToken = null
         emit(Result.Success(Unit))
     }
 

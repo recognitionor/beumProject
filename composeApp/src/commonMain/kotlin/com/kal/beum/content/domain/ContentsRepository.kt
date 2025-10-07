@@ -6,8 +6,11 @@ import com.kal.beum.core.domain.Result
 interface ContentsRepository {
 
     suspend fun sendReply(
-        id: Int,
-        reply: String
+        boardId: Int,
+        content: String,
+        depth: Int,
+        parentId: Int,
+        devil: Boolean
     ): Result<Boolean, DataError.Remote>
 
     suspend fun getContentInfo(

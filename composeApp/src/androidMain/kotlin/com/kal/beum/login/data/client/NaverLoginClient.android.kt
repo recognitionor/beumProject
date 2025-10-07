@@ -1,8 +1,6 @@
 package com.kal.beum.login.data.client
 
-import com.kal.beum.common.SocialKey
 import com.kal.beum.core.domain.DataError
-import com.kal.beum.core.domain.Result
 import com.kal.beum.login.domain.LoginClient
 import com.kal.beum.login.domain.SocialToken
 import com.navercorp.nid.NaverIdLoginSDK

@@ -1,15 +1,12 @@
 package com.kal.beum.myinfo.data.repository
 
-import com.kal.beum.core.data.AuthTokenCache
+import com.kal.beum.core.data.AppUserCache
 import com.kal.beum.core.domain.DataError
 import com.kal.beum.core.domain.Result
 import com.kal.beum.core.domain.map
-import com.kal.beum.core.domain.onError
-import com.kal.beum.core.domain.onSuccess
 import com.kal.beum.login.domain.SocialToken
 import com.kal.beum.main.data.database.AppDao
 import com.kal.beum.main.data.mappers.toUserInfo
-import com.kal.beum.main.data.network.RemoteLoginDataSource
 import com.kal.beum.main.domain.UserInfo
 import com.kal.beum.myinfo.data.network.RemoteMyInfoDataSource
 import com.kal.beum.myinfo.data.toMyContent
@@ -29,7 +26,7 @@ class DefaultMyInfoRepository(
         )
         return when (result) {
             is Result.Success -> {
-                AuthTokenCache.accessToken = result.data.accessToken
+                AppUserCache.accessToken = result.data.accessToken
                 Result.Success(result.data)
             }
             is Result.Error -> Result.Error(DataError.Local.UNKNOWN)

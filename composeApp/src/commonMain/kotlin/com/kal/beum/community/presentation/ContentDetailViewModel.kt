@@ -3,6 +3,7 @@ package com.kal.beum.community.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kal.beum.content.domain.ContentsRepository
+import com.kal.beum.core.data.AppUserCache
 import com.kal.beum.core.domain.onError
 import com.kal.beum.core.domain.onSuccess
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +24,9 @@ class ContentDetailViewModel(private val contentDetailRepository: ContentsReposi
         viewModelScope.launch {
             val id = state.value.contentDetail?.id
             if (id != null) {
-                contentDetailRepository.sendReply(id, reply).onSuccess {
+                contentDetailRepository.sendReply(
+                    id, reply, depth = 0, parentId = id, devil = AppUserCache.isDevil
+                ).onSuccess {
 
                 }.onError {
 

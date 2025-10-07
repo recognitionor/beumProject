@@ -3,6 +3,7 @@ package com.kal.beum.main.presentation
 import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kal.beum.core.data.AppUserCache
 import com.kal.beum.core.domain.Result
 import com.kal.beum.core.domain.onError
 import com.kal.beum.core.domain.onProgress
@@ -39,12 +40,12 @@ class MainViewModel(private val appRepository: AppRepository) : ViewModel() {
     }
 
     private fun devilToggle(isDevil: Boolean) {
-        println("devilToggle ")
         viewModelScope.launch {
             appRepository.setIsDevil(isDevil)
             appRepository.getAppEntity().onEach { result ->
                 println("result : $result")
                 _state.update { it.copy(isDevil = result.isDevil) }
+                AppUserCache.isDevil = result.isDevil
             }.launchIn(this)
         }
     }

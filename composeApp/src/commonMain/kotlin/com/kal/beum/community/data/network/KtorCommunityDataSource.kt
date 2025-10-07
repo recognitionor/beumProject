@@ -2,9 +2,8 @@ package com.kal.beum.community.data.network
 
 import com.kal.beum.community.data.dto.CategoryDto
 import com.kal.beum.community.data.dto.CommunityDto
-import com.kal.beum.community.data.dto.CommunityItemDto
 import com.kal.beum.core.data.ApiConstants
-import com.kal.beum.core.data.AuthTokenCache
+import com.kal.beum.core.data.AppUserCache
 import com.kal.beum.core.domain.DataError
 import com.kal.beum.core.domain.Result
 import io.ktor.client.HttpClient
@@ -16,7 +15,7 @@ class KtorCommunityDataSource(private val httpClient: HttpClient) : RemoteCommun
     override suspend fun getCategoryList(): Result<List<CategoryDto>, DataError.Remote> {
         val response = httpClient.get(ApiConstants.Endpoints.CATEGORY_LIST) {
             headers {
-                AuthTokenCache.accessToken?.let {
+                AppUserCache.accessToken?.let {
                     append(ApiConstants.KEY.KEY_AUTH_TOKEN, it)
                 }
             }
@@ -33,7 +32,7 @@ class KtorCommunityDataSource(private val httpClient: HttpClient) : RemoteCommun
         println("KtorCommunityDataSource getCommunityList : $categoryId")
         val response = httpClient.get(ApiConstants.Endpoints.BOARDS) {
             headers {
-                AuthTokenCache.accessToken?.let {
+                AppUserCache.accessToken?.let {
                     append(ApiConstants.KEY.KEY_AUTH_TOKEN, it)
                 }
             }

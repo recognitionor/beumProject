@@ -1,10 +1,10 @@
 package com.kal.beum.content.data.network
 
 import com.kal.beum.content.data.dto.BoardDetailDto
-import com.kal.beum.content.data.dto.CommentDto
 import com.kal.beum.content.data.dto.CommentInfoDto
+import com.kal.beum.content.data.dto.CommentRequestDto
 import com.kal.beum.core.data.ApiConstants
-import com.kal.beum.core.data.AuthTokenCache
+import com.kal.beum.core.data.AppUserCache
 import com.kal.beum.core.domain.DataError
 import com.kal.beum.core.domain.Result
 import io.ktor.client.HttpClient
@@ -19,7 +19,7 @@ class KtorContentDataSource(private val httpClient: HttpClient) : RemoteContentD
     override suspend fun getContentDetail(contentId: Int): Result<BoardDetailDto, DataError.Remote> {
         val response = httpClient.get(ApiConstants.Endpoints.BOARD + "/$contentId") {
             headers {
-                AuthTokenCache.accessToken?.let {
+                AppUserCache.accessToken?.let {
                     append(ApiConstants.KEY.KEY_AUTH_TOKEN, it)
                 }
             }
@@ -35,7 +35,7 @@ class KtorContentDataSource(private val httpClient: HttpClient) : RemoteContentD
     override suspend fun getReply(contentId: Int): Result<CommentInfoDto, DataError.Remote> {
         val response = httpClient.get(ApiConstants.Endpoints.COMMENTS + "/$contentId") {
             headers {
-                AuthTokenCache.accessToken?.let {
+                AppUserCache.accessToken?.let {
                     append(ApiConstants.KEY.KEY_AUTH_TOKEN, it)
                 }
             }
@@ -48,10 +48,10 @@ class KtorContentDataSource(private val httpClient: HttpClient) : RemoteContentD
         }
     }
 
-    override suspend fun sendReply(commentDto: CommentDto): Result<Boolean, DataError.Remote> {
+    override suspend fun sendReply(commentDto: CommentRequestDto): Result<Boolean, DataError.Remote> {
         val response = httpClient.post(ApiConstants.Endpoints.COMMENT) {
             headers {
-                AuthTokenCache.accessToken?.let {
+                AppUserCache.accessToken?.let {
                     append(ApiConstants.KEY.KEY_AUTH_TOKEN, it)
                 }
             }
