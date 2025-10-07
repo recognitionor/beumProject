@@ -72,12 +72,13 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun MainScreen(navController: NavHostController = rememberNavController()) {
-    val viewModel = koinViewModel<MainViewModel>(key = "main")
+    val viewModel = koinViewModel<MainViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
+    println("!state.isSplashDone ${!state.isSplashDone}")
     if (!state.isSplashDone) {
-        SplashScreen()
+        SplashScreen(viewModel)
     } else {
         Scaffold(topBar = {}, bottomBar = {
             BottomNavigationBar(navController = navController, currentRoute, state.isDevil)
@@ -101,7 +102,7 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                         }
                         composable(Route.Community.toRoute()) {
                             val communityViewModel =
-                                koinViewModel<CommunityViewModel>(key = "Community")
+                                koinViewModel<CommunityViewModel>()
                             CommunityScreen(state.isDevil, communityViewModel, viewModel::onAction)
                         }
                         composable(Route.Level("1").toRoute()) { backStackEntry ->

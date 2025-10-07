@@ -24,15 +24,19 @@ class DefaultAppRepository(
     private val remoteLoginDataSource: RemoteLoginDataSource
 ) : AppRepository {
     override fun getLoginInfo(): Flow<UserInfo?> = flow {
+        println("getLoginInfo : ${AppUserCache.updateFCMToken}")
         val result = appDao.getLoginInfo()?.toUserInfo()
+        if (result != null && AppUserCache.updateFCMToken != null) {
+            remoteLoginDataSource.updateFcmToken(result, AppUserCache.updateFCMToken!!)
+            AppUserCache.updateFCMToken = null
+        }
+        AppUserCache.userInfo = result
         AppUserCache.accessToken = result?.accessToken
         emit(result)
     }
 
     override fun signup(
-        socialType: Int,
-        accessToken: String,
-        refreshToken: String
+        socialType: Int, accessToken: String, refreshToken: String
     ): Flow<Result<UserInfo, DataError.Remote>> = flow {
         println("DefaultAppRepository signup")
         emit(Result.Progress())
@@ -48,9 +52,14 @@ class DefaultAppRepository(
                 sessionKey = userInfo.sessionKey,
                 profileImageId = userInfo.profileImageId,
                 needSignUp = userInfo.needSignUp
-
             )
+            val fcmToken = AppUserCache.updateFCMToken
+            if (fcmToken != null) {
+                remoteLoginDataSource.updateFcmToken(userInfo, fcmToken)
+                AppUserCache.updateFCMToken = null
+            }
             appDao.setLoginInfo(userInfoEntity)
+            AppUserCache.userInfo = userInfo
             AppUserCache.accessToken = userInfo.accessToken
             emit(result)
         }.onError {
@@ -73,10 +82,15 @@ class DefaultAppRepository(
                 sessionKey = userInfo.sessionKey,
                 profileImageId = userInfo.profileImageId,
                 needSignUp = userInfo.needSignUp
-
             )
+            val fcmToken = AppUserCache.updateFCMToken
+            if (fcmToken != null) {
+                remoteLoginDataSource.updateFcmToken(userInfo, fcmToken)
+                AppUserCache.updateFCMToken = null
+            }
             appDao.setLoginInfo(userInfoEntity)
             AppUserCache.accessToken = userInfo.accessToken
+            AppUserCache.userInfo = userInfo
             emit(result)
         }.onError {
             emit(result)
@@ -88,6 +102,7 @@ class DefaultAppRepository(
         remoteLoginDataSource.logout(userInfo)
         appDao.clearLoginInfo()
         AppUserCache.accessToken = null
+        AppUserCache.userInfo = null
         emit(Result.Success(Unit))
     }
 

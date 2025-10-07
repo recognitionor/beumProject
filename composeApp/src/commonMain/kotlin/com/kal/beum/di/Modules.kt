@@ -34,7 +34,7 @@ import com.kal.beum.main.data.network.SdkLoginDataSource
 import com.kal.beum.main.domain.AppRepository
 import com.kal.beum.main.domain.SocialType
 import com.kal.beum.main.presentation.MainViewModel
-import com.kal.beum.myinfo.data.network.MockMyInfoDataSource
+import com.kal.beum.myinfo.data.network.KtorMyInfoDataSource
 import com.kal.beum.myinfo.data.network.RemoteMyInfoDataSource
 import com.kal.beum.myinfo.data.repository.DefaultMyInfoRepository
 import com.kal.beum.myinfo.domain.MyInfoRepository
@@ -89,7 +89,7 @@ val sharedModules = module {
 //    singleOf(::MockWriteDataSource).bind<RemoteWriteDataSource>()
 
     singleOf(::MockRankerUserInfoDataSource).bind<RemoteRankerUserInfoDataSource>()
-    singleOf(::MockMyInfoDataSource).bind<RemoteMyInfoDataSource>()
+    singleOf(::KtorMyInfoDataSource).bind<RemoteMyInfoDataSource>()
     singleOf(::MockRemoteNoticeDataSource).bind<RemoteNoticeDataSource>()
 
     singleOf(::DefaultAppRepository).bind<AppRepository>()

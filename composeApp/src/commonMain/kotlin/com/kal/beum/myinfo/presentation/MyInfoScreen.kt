@@ -75,6 +75,7 @@ fun MyInfoScreen(devil: Boolean, viewModel: MyInfoViewModel, action: (MainAction
                     modifier = Modifier.size(48.dp).clickable(
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() }) {
+                    println("state.myInfo ${state.myInfo}")
                     state.myInfo?.let {
                         action(MainAction.PushFullScreen(FullScreenType.SettingsScreen(it)))
                     }
@@ -274,17 +275,21 @@ fun MyInfoScreen(devil: Boolean, viewModel: MyInfoViewModel, action: (MainAction
                     }
 
                     3 -> {
-                        action(MainAction.PushFullScreen(FullScreenType.ReportConfirmDialog(onContinueClick = {
-                            action(MainAction.PopFullScreen)
-                            reportContent?.let {
-                                viewModel.reportUser(it)
-                            }
-                        }, onDismiss = {
-                            action(MainAction.PopFullScreen)
-                            reportPage = 0
-                            reportReasonIndex = -1
-                            reportContent = null
-                        })))
+                        action(
+                            MainAction.PushFullScreen(
+                                FullScreenType.ReportConfirmDialog(onContinueClick = {
+                                    action(MainAction.PopFullScreen)
+                                    reportContent?.let {
+                                        viewModel.reportUser(it)
+                                    }
+                                }, onDismiss = {
+                                    action(MainAction.PopFullScreen)
+                                    reportPage = 0
+                                    reportReasonIndex = -1
+                                    reportContent = null
+                                })
+                            )
+                        )
                     }
                 }
             }

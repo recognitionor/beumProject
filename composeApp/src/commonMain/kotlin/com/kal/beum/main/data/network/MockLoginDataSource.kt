@@ -48,4 +48,10 @@ class MockLoginDataSource : RemoteLoginDataSource {
     override suspend fun logout(userInfo: UserInfo): Result<Unit, DataError.Remote> {
         return Result.Success(Unit)
     }
+
+    override suspend fun updateFcmToken(
+        userInfo: UserInfo,
+        token: String
+    ) {
+    }
 }

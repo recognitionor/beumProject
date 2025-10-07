@@ -122,7 +122,7 @@ class MainViewModel(private val appRepository: AppRepository) : ViewModel() {
                 }
 
                 is Result.Success -> {
-                    println("Success :")
+                    println("Success : ${result.data.needSignUp}" )
                     if (result.data.needSignUp) {
                         _state.update {
                             it.copy(isProgress = false)

@@ -3,6 +3,7 @@ import KakaoSDKCommon
 import KakaoSDKAuth
 import Firebase
 import UserNotifications
+import ComposeApp
 
 @main
 struct iOSApp: App {
@@ -84,6 +85,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
             object: nil,
             userInfo: dataDict
           )
+            AppUserCache.shared.updateFCMToken = fcmToken
           // TODO: If necessary send token to application server.
           // Note: This callback is fired at each app startup and whenever a new token is generated.
         }

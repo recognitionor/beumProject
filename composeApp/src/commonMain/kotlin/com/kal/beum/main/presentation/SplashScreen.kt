@@ -49,18 +49,16 @@ import com.kal.beum.core.presentation.BeumTypo
 import com.kal.beum.main.domain.SocialType
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
-import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
-fun SplashScreen() {
+fun SplashScreen(viewModel: MainViewModel) {
     Column(
         modifier = Modifier.fillMaxSize().background(color = White),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        val viewModel = koinViewModel<MainViewModel>()
         val state by viewModel.state.collectAsStateWithLifecycle()
 
         val topSpacerHeight = remember { Animatable(300f) } // 시작은 250.dp

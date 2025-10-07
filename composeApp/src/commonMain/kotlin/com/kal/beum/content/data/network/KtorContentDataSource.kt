@@ -40,6 +40,7 @@ class KtorContentDataSource(private val httpClient: HttpClient) : RemoteContentD
                 }
             }
         }
+        println("getReply : $response")
         if (response.status.value == 200) {
             val replyInfo = response.body<CommentInfoDto>()
             return Result.Success(replyInfo)

@@ -15,6 +15,7 @@ import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.kal.beum.core.data.AppUserCache
 
 class FirebaseMessagingService : FirebaseMessagingService() {
 
@@ -83,8 +84,8 @@ class FirebaseMessagingService : FirebaseMessagingService() {
     }
 
     private fun sendRegistrationToServer(token: String?) {
-        // TODO: Implement this method to send token to your app server.
         Log.d(TAG, "sendRegistrationTokenToServer($token)")
+        AppUserCache.updateFCMToken = token
     }
 
     private fun sendNotification(messageBody: String) {

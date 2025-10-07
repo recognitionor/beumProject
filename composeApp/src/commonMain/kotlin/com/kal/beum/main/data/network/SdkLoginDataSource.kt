@@ -1,6 +1,7 @@
 package com.kal.beum.main.data.network
 
 import com.kal.beum.core.data.ApiConstants
+import com.kal.beum.core.data.AppUserCache
 import com.kal.beum.core.data.safeCall
 import com.kal.beum.core.domain.DataError
 import com.kal.beum.core.domain.Result
@@ -11,6 +12,7 @@ import com.kal.beum.main.domain.SocialType
 import com.kal.beum.main.domain.UserInfo
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.headers
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
@@ -32,7 +34,8 @@ class SdkLoginDataSource(
     ): Result<UserInfo, DataError.Remote> {
         println("signup : $socialType")
         return try {
-            val userInfo = fetchUserInfoFromServer(SocialToken(accessToken, refreshToken), socialType, true)
+            val userInfo =
+                fetchUserInfoFromServer(SocialToken(accessToken, refreshToken), socialType, true)
             println("signup userInfo : $userInfo")
             Result.Success(userInfo)
         } catch (e: CancellationException) {
@@ -64,6 +67,26 @@ class SdkLoginDataSource(
             loginClients[userInfo.socialType] ?: return Result.Error(DataError.Remote.UNKNOWN)
         client.logout()
         return Result.Success(Unit)
+    }
+
+    override suspend fun updateFcmToken(
+        userInfo: UserInfo,
+        token: String
+    ) {
+        println("updateFcmToken")
+        val response = httpClient.post(ApiConstants.Endpoints.FIREBASE_TOKEN) {
+            headers {
+                AppUserCache.accessToken?.let {
+                    append(ApiConstants.KEY.KEY_AUTH_TOKEN, it)
+                }
+            }
+            setBody(
+                mapOf(
+                    ApiConstants.KEY.KEY_TOKEN to token,
+                )
+            )
+        }
+        println("updateFcmToken response $response")
     }
 
     private suspend fun getSocialToken(socialType: Int): SocialToken {
