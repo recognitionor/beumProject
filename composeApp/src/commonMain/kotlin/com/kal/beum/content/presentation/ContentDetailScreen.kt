@@ -220,7 +220,7 @@ fun ContentDetailScreen(id: Int, backBtnClick: () -> Unit) {
                             contentDescription = ""
                         )
                         Text(
-                            text = state.contentDetail?.replyList?.size?.toString() ?: "0",
+                            text = state.contentDetail?.commentInfo?.comments?.size?.toString() ?: "0",
                             style = TextStyle(
                                 fontSize = 13.sp,
                                 lineHeight = 20.sp,
@@ -261,13 +261,13 @@ fun ContentDetailScreen(id: Int, backBtnClick: () -> Unit) {
 
                     Column {
                         LazyColumn(modifier = Modifier.weight(1f)) {
-                            items(state.contentDetail?.replyList?.size ?: 0) { index ->
-                                val reply = state.contentDetail?.replyList?.get(index)
+                            items(state.contentDetail?.commentInfo?.comments?.size ?: 0) { index ->
+                                val reply = state.contentDetail?.commentInfo?.comments?.get(index)
                                 reply?.let {
                                     Spacer(modifier = Modifier.height(16.dp))
-                                    ReplyView(it) { replyList ->
-                                        detailReplyInfo = replyList
-                                    }
+//                                    ReplyView(it) { replyList ->
+//                                        detailReplyInfo = replyList
+//                                    }
                                 }
                             }
                         }

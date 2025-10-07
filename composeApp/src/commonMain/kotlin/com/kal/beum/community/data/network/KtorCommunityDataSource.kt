@@ -14,7 +14,6 @@ import io.ktor.client.request.headers
 
 class KtorCommunityDataSource(private val httpClient: HttpClient) : RemoteCommunityDataSource {
     override suspend fun getCategoryList(): Result<List<CategoryDto>, DataError.Remote> {
-        println("KtorCommunityDataSource getCategoryList")
         val response = httpClient.get(ApiConstants.Endpoints.CATEGORY_LIST) {
             headers {
                 AuthTokenCache.accessToken?.let {

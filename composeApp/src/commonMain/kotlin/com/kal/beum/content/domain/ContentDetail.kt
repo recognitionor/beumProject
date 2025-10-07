@@ -12,5 +12,5 @@ data class ContentDetail(
     val likeCount: Int = 0,
     val viewCount: Int = 0,
     val lastModifiedTime: Long,
-    val replyList: List<ReplyInfo> = emptyList()
+    val commentInfo: CommentInfo
 )

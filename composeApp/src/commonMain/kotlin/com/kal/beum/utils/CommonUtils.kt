@@ -26,18 +26,20 @@ fun pxToDp(pxValue: Float): Dp {
 }
 
 fun stringTimeToLong(time: String): Long {
+    println("time : $time")
+    try {
+        // 만약 LocalDateTime으로 쓰고 싶으면:
+        val localDateTime = LocalDateTime.parse(time)
+        val epochMillisFromLocal = localDateTime.toInstant(TimeZone.UTC).toEpochMilliseconds()
+        println(epochMillisFromLocal) // 1758986208000
 
-    val instant = Instant.parse(time + "Z") // 'Z' 붙여서 UTC로 인식시킴
-    val epochMillis = instant.toEpochMilliseconds()
-
-    // 만약 LocalDateTime으로 쓰고 싶으면:
-    val localDateTime = LocalDateTime.parse(time)
-    val epochMillisFromLocal = localDateTime.toInstant(TimeZone.UTC).toEpochMilliseconds()
-    println(epochMillisFromLocal) // 1758986208000
-
-    // UTC 기준 epoch milli로 변환
-    val epochMilli = localDateTime.toInstant(TimeZone.UTC).toEpochMilliseconds()
-    return epochMilli
+        // UTC 기준 epoch milli로 변환
+        val epochMilli = localDateTime.toInstant(TimeZone.UTC).toEpochMilliseconds()
+        return epochMilli
+    }catch (e: Exception) {
+        e.printStackTrace()
+        return 0
+    }
 }
 
 fun formatWithComma(number: Int): String {

@@ -194,30 +194,6 @@ fun CommunityScreen(
                         )
                     }
                 }
-//                println("state.isDraftDialog : ${state.isDraftDialog}")
-//                if (state.isDraftDialog) {
-//                    if (state.writingTemp != null) {
-//                        onAction(
-//                            MainAction.PushFullScreen(
-//                                FullScreenType.DraftDialog(
-//                                    onNewClick = {
-//                                        onAction(MainAction.PopFullScreen)
-//                                        onAction(MainAction.PushFullScreen(FullScreenType.WritingScreen()))
-//                                    },
-//                                    onContinueClick = {
-//                                        onAction(MainAction.PopFullScreen)
-//                                        onAction(MainAction.PushFullScreen(FullScreenType.WritingScreen(state.writingTemp)))
-//                                    },
-//                                    onDismiss = {
-//                                        onAction(MainAction.PopFullScreen)
-//                                    })
-//                            )
-//                        )
-//                    } else {
-//                        onAction(MainAction.PushFullScreen(FullScreenType.WritingScreen()))
-//                    }
-//                    viewModel.onAction(CommunityAction.OnDraftDialog)
-//                }
             }
         }
     }

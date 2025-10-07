@@ -28,12 +28,12 @@ class DefaultCommunityRepository(
         return if (entity == null) {
             Result.Error(DataError.Local.EMPTY_TEMP_WRITING)
         } else {
-            println("getTempWriting : $entity")
             Result.Success(entity.toWritingData())
         }
     }
 
     override suspend fun getCategoryList(): Result<List<Category>, DataError.Remote> {
+        val test = remoteCommunityDataSource.getCategoryList().map { it.map { item -> item.toCategoryData() } }
         return remoteCommunityDataSource.getCategoryList()
             .map { it.map { item -> item.toCategoryData() } }
     }
@@ -49,5 +49,4 @@ class DefaultCommunityRepository(
             emit(Result.Error(DataError.Remote.REQUEST_ERROR))
         }
     }
-
 }

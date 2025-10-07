@@ -16,6 +16,8 @@ object ApiConstants {
         const val COMMENT = "/comment"
         const val BOARD = "/board"
         const val BOARDS = "/boards"
+
+        const val COMMENTS = "/comments"
         const val SIGNUP = "/signup"
         const val SIGNIN = "/signin"
 
