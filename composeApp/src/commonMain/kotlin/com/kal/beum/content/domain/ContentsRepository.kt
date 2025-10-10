@@ -9,7 +9,7 @@ interface ContentsRepository {
         boardId: Int,
         content: String,
         depth: Int,
-        parentId: Int,
+        parentId: Int?,
         devil: Boolean
     ): Result<Boolean, DataError.Remote>
 

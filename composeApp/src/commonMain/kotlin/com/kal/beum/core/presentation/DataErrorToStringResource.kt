@@ -28,6 +28,7 @@ fun DataError.toUiText(): UiText {
         DataError.Remote.FAILED_BOARD -> Res.string.error_board_failed
         DataError.Remote.FAILED_COMMENT -> Res.string.error_comment_failed
         DataError.Remote.REQUEST_ERROR -> Res.string.error_request_fail
+        DataError.Remote.REFRESH_TOKEN_FAILED -> Res.string.error_request_fail
     }
 
     return UiText.StringResourceId(stringRes)

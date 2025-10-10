@@ -13,6 +13,7 @@ interface RemoteLoginDataSource {
 
     suspend fun login(socialType: Int): Result<UserInfo, DataError.Remote>
     suspend fun logout(userInfo: UserInfo): Result<Unit, DataError.Remote>
-
+    suspend fun withdraw(): Result<Unit, DataError.Remote>
     suspend fun updateFcmToken(userInfo: UserInfo, token: String)
+    suspend fun refreshAccessToken(result: UserInfo): Result<UserInfo?, DataError.Remote>
 }

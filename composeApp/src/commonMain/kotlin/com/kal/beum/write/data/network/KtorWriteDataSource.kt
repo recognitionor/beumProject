@@ -11,12 +11,9 @@ import io.ktor.client.request.*
 class KtorWriteDataSource(private val httpClient: HttpClient) : RemoteWriteDataSource {
 
     override suspend fun submitWriting(writingSubmitRequest: WritingInfoRequest): Result<Boolean, DataError.Remote> {
-        println("AuthTokenCache.accessToken : ${AppUserCache.accessToken}")
-        println("AuthTokenCache.writingSubmitRequest : $writingSubmitRequest")
         val response = httpClient.post(ApiConstants.Endpoints.BOARD) {
-
             headers {
-                AppUserCache.accessToken?.let {
+                AppUserCache.userInfo?.accessToken?.let {
                     append(ApiConstants.KEY.KEY_AUTH_TOKEN, it)
                 }
             }

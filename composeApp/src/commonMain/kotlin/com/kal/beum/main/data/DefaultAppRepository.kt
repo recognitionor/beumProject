@@ -23,22 +23,51 @@ class DefaultAppRepository(
     private val writingDao: WritingDao,
     private val remoteLoginDataSource: RemoteLoginDataSource
 ) : AppRepository {
+
     override fun getLoginInfo(): Flow<UserInfo?> = flow {
-        println("getLoginInfo : ${AppUserCache.updateFCMToken}")
-        val result = appDao.getLoginInfo()?.toUserInfo()
-        if (result != null && AppUserCache.updateFCMToken != null) {
-            remoteLoginDataSource.updateFcmToken(result, AppUserCache.updateFCMToken!!)
-            AppUserCache.updateFCMToken = null
-        }
+        // 캐싱된 로그인 정보 가져 오기
+        var result = appDao.getLoginInfo()?.toUserInfo()
         AppUserCache.userInfo = result
-        AppUserCache.accessToken = result?.accessToken
+        if (result != null) {
+            val refreshedUserInfo = remoteLoginDataSource.refreshAccessToken(result)
+            println("한번에 : $refreshedUserInfo")
+            refreshedUserInfo.onSuccess {
+                result = it
+            }
+        } else {
+            emit(null)
+        }
+        result?.let {
+            println("setLoginInfo accessToken : ${it.accessToken}")
+            println("setLoginInfo refreshToken : ${it.refreshToken}")
+            appDao.setLoginInfo(
+                UserInfoEntity(
+                    userId = it.userId,
+                    nickName = it.nickName,
+                    socialType = it.socialType,
+                    email = it.email,
+                    accessToken = it.accessToken,
+                    refreshToken = it.refreshToken,
+                    sessionKey = it.sessionKey,
+                    profileImageId = it.profileImageId,
+                    needSignUp = it.needSignUp
+                )
+            )
+            if (AppUserCache.updateFCMToken != null) {
+                remoteLoginDataSource.updateFcmToken(result!!, AppUserCache.updateFCMToken!!)
+                AppUserCache.updateFCMToken = null
+            }
+        }
+        if (result == null) {
+            appDao.clearLoginInfo()
+            AppUserCache.userInfo = null
+        }
         emit(result)
     }
 
     override fun signup(
         socialType: Int, accessToken: String, refreshToken: String
     ): Flow<Result<UserInfo, DataError.Remote>> = flow {
-        println("DefaultAppRepository signup")
         emit(Result.Progress())
         val result = remoteLoginDataSource.signup(socialType, accessToken, refreshToken)
         result.onSuccess { userInfo ->
@@ -53,14 +82,13 @@ class DefaultAppRepository(
                 profileImageId = userInfo.profileImageId,
                 needSignUp = userInfo.needSignUp
             )
+            appDao.setLoginInfo(userInfoEntity)
+            AppUserCache.userInfo = userInfo
             val fcmToken = AppUserCache.updateFCMToken
             if (fcmToken != null) {
                 remoteLoginDataSource.updateFcmToken(userInfo, fcmToken)
                 AppUserCache.updateFCMToken = null
             }
-            appDao.setLoginInfo(userInfoEntity)
-            AppUserCache.userInfo = userInfo
-            AppUserCache.accessToken = userInfo.accessToken
             emit(result)
         }.onError {
             emit(result)
@@ -83,14 +111,13 @@ class DefaultAppRepository(
                 profileImageId = userInfo.profileImageId,
                 needSignUp = userInfo.needSignUp
             )
+            appDao.setLoginInfo(userInfoEntity)
+            AppUserCache.userInfo = userInfo
             val fcmToken = AppUserCache.updateFCMToken
             if (fcmToken != null) {
                 remoteLoginDataSource.updateFcmToken(userInfo, fcmToken)
                 AppUserCache.updateFCMToken = null
             }
-            appDao.setLoginInfo(userInfoEntity)
-            AppUserCache.accessToken = userInfo.accessToken
-            AppUserCache.userInfo = userInfo
             emit(result)
         }.onError {
             emit(result)
@@ -101,9 +128,21 @@ class DefaultAppRepository(
         emit(Result.Progress())
         remoteLoginDataSource.logout(userInfo)
         appDao.clearLoginInfo()
-        AppUserCache.accessToken = null
         AppUserCache.userInfo = null
         emit(Result.Success(Unit))
+    }
+
+    override fun withdraw(): Flow<Result<Unit, DataError.Remote>> = flow {
+        emit(Result.Progress())
+        val result = remoteLoginDataSource.withdraw()
+        AppUserCache.userInfo = null
+        appDao.clearLoginInfo()
+        result.onSuccess {
+            emit(Result.Success(Unit))
+        }.onError {
+            emit(Result.Error(DataError.Remote.REQUEST_ERROR))
+        }
+
     }
 
     override fun isOnBoardingDone(): Flow<Boolean> = flow {

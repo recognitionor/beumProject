@@ -7,6 +7,6 @@ data class CommentRequestDto(
     val boardId: Int,
     val content: String = "",
     val depth: Int,
-    val parentId: Int,
+    val parentId: Int? = null,
     val devil: Boolean
 )

@@ -42,7 +42,6 @@ import com.kal.beum.main.presentation.FullScreenType
 import com.kal.beum.main.presentation.MainAction
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
-import org.koin.compose.viewmodel.koinViewModel
 
 
 @Composable
@@ -126,7 +125,6 @@ fun CommunityScreen(
                                         )
                                     )
                                 )
-
                             }.background(
                                 color = if (isDevil) BeumColors.baseGrayLightGray800 else BeumColors.baseGrayLightGray50,
                                 shape = RoundedCornerShape(9.dp)

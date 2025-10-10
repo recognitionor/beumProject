@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class CommentInfoDto(
     val boardId: Int,
     val commentCount: Int,
-    val comments: List<String> = emptyList(),
+    val comments: List<CommentDetailDto> = emptyList(),
 )

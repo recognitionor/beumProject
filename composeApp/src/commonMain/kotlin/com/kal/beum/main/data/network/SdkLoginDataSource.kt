@@ -2,22 +2,22 @@ package com.kal.beum.main.data.network
 
 import com.kal.beum.core.data.ApiConstants
 import com.kal.beum.core.data.AppUserCache
-import com.kal.beum.core.data.safeCall
 import com.kal.beum.core.domain.DataError
 import com.kal.beum.core.domain.Result
 import com.kal.beum.login.data.dto.LoginResponseDto
+import com.kal.beum.login.data.dto.TokenSetDto
 import com.kal.beum.login.domain.LoginClient
 import com.kal.beum.login.domain.SocialToken
 import com.kal.beum.main.domain.SocialType
 import com.kal.beum.main.domain.UserInfo
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.forms.FormDataContent
 import io.ktor.client.request.headers
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.bodyAsText
-import io.ktor.http.ContentType
-import io.ktor.http.contentType
+import io.ktor.http.Parameters
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -28,9 +28,7 @@ class SdkLoginDataSource(
 ) : RemoteLoginDataSource {
 
     override suspend fun signup(
-        socialType: Int,
-        accessToken: String,
-        refreshToken: String
+        socialType: Int, accessToken: String, refreshToken: String
     ): Result<UserInfo, DataError.Remote> {
         println("signup : $socialType")
         return try {
@@ -69,14 +67,24 @@ class SdkLoginDataSource(
         return Result.Success(Unit)
     }
 
+    override suspend fun withdraw(): Result<Unit, DataError.Remote> {
+        val result = httpClient.post(ApiConstants.Endpoints.WITHDRAW) {
+            headers {
+                AppUserCache.userInfo?.accessToken?.let {
+                    append(ApiConstants.KEY.KEY_AUTH_TOKEN, it)
+                }
+            }
+        }
+        println("withdraw result : $result")
+        return Result.Success(Unit)
+    }
+
     override suspend fun updateFcmToken(
-        userInfo: UserInfo,
-        token: String
+        userInfo: UserInfo, token: String
     ) {
-        println("updateFcmToken")
         val response = httpClient.post(ApiConstants.Endpoints.FIREBASE_TOKEN) {
             headers {
-                AppUserCache.accessToken?.let {
+                AppUserCache.userInfo?.accessToken?.let {
                     append(ApiConstants.KEY.KEY_AUTH_TOKEN, it)
                 }
             }
@@ -87,6 +95,36 @@ class SdkLoginDataSource(
             )
         }
         println("updateFcmToken response $response")
+    }
+
+    override suspend fun refreshAccessToken(result: UserInfo): Result<UserInfo?, DataError.Remote> {
+        val response = httpClient.post(ApiConstants.Endpoints.REFRESH_ACCESS_TOKEN) {
+            headers {
+                append(ApiConstants.KEY.KEY_AUTH_TOKEN, result.accessToken)
+            }
+            setBody(FormDataContent(Parameters.build {
+                append(
+                    ApiConstants.KEY.KEY_REFRESH_TOKEN, result.refreshToken
+                )
+            }))
+        }
+        if (response.status.value == 200) {
+            try {
+                val refreshTokenSet = response.body<TokenSetDto>()
+                val tempResult = result.copy(
+                    refreshToken = refreshTokenSet.refreshToken,
+                    accessToken = refreshTokenSet.accessToken
+                )
+                // 만약에 리프레시된 토큰이 존재하면 토큰값 변경 해서 return
+                return Result.Success(tempResult)
+            } catch (_: Exception) {
+            }
+            // 리프레시 된 토큰이 없는경우 그대로 사용
+            return Result.Success(result)
+        } else {
+            // 리프레시 시도시 에러가 나는 경우는 Null 을 반환 하여 새로이 로그인 하도록 유도.
+            return Result.Success(null)
+        }
     }
 
     private suspend fun getSocialToken(socialType: Int): SocialToken {
@@ -105,8 +143,6 @@ class SdkLoginDataSource(
     private suspend fun fetchUserInfoFromServer(
         socialToken: SocialToken, socialType: Int, needSignup: Boolean = false
     ): UserInfo {
-        println("fetchUserInfoFromServer : $socialType-$socialToken")
-
         val path = if (needSignup) {
             ApiConstants.Endpoints.SIGNUP
         } else {

@@ -122,7 +122,7 @@ class MainViewModel(private val appRepository: AppRepository) : ViewModel() {
                 }
 
                 is Result.Success -> {
-                    println("Success : ${result.data.needSignUp}" )
+                    println("Success : ${result.data.needSignUp}")
                     if (result.data.needSignUp) {
                         _state.update {
                             it.copy(isProgress = false)
@@ -130,7 +130,6 @@ class MainViewModel(private val appRepository: AppRepository) : ViewModel() {
                         pushFullScreen(FullScreenType.SignUpDialog(onDismiss = {
                             popFullScreen()
                         }, signUpClick = {
-
                             socialSignUp(
                                 socialCode, result.data.accessToken, result.data.refreshToken
                             )
@@ -168,11 +167,24 @@ class MainViewModel(private val appRepository: AppRepository) : ViewModel() {
         }
     }
 
+    fun withdraw() {
+        appRepository.withdraw().onEach { result ->
+            result.onSuccess {
+                clearFullScreen()
+                _state.update { it.copy(userInfo = null, isSplashDone = false, isProgress = false) }
+            }
+            result.onError {
+                _state.update { it.copy(userInfo = null, isSplashDone = false, isProgress = false) }
+            }
+            result.onProgress {
+                _state.update { it.copy(isProgress = true) }
+            }
+        }.launchIn(viewModelScope)
+    }
+
     fun getTempWriting() {
-        println("getTempWriting~~~~~~~~")
         viewModelScope.launch {
             appRepository.getTempWriting().onSuccess { result ->
-                println("result temp  : $result")
                 _state.update { it.copy(writingTemp = result, isDraftDialog = true) }
             }.onError {
                 _state.update { it -> it.copy(writingTemp = null, isDraftDialog = true) }
@@ -195,6 +207,7 @@ class MainViewModel(private val appRepository: AppRepository) : ViewModel() {
             is MainAction.OnDraftDialog -> {
                 _state.update { it.copy(isDraftDialog = !it.isDraftDialog) }
             }
+            is MainAction.Withdraw -> withdraw()
         }
     }
 }

@@ -15,7 +15,7 @@ class KtorCommunityDataSource(private val httpClient: HttpClient) : RemoteCommun
     override suspend fun getCategoryList(): Result<List<CategoryDto>, DataError.Remote> {
         val response = httpClient.get(ApiConstants.Endpoints.CATEGORY_LIST) {
             headers {
-                AppUserCache.accessToken?.let {
+                AppUserCache.userInfo?.accessToken?.let {
                     append(ApiConstants.KEY.KEY_AUTH_TOKEN, it)
                 }
             }
@@ -32,7 +32,7 @@ class KtorCommunityDataSource(private val httpClient: HttpClient) : RemoteCommun
         println("KtorCommunityDataSource getCommunityList : $categoryId")
         val response = httpClient.get(ApiConstants.Endpoints.BOARDS) {
             headers {
-                AppUserCache.accessToken?.let {
+                AppUserCache.userInfo?.accessToken?.let {
                     append(ApiConstants.KEY.KEY_AUTH_TOKEN, it)
                 }
             }

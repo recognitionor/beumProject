@@ -19,7 +19,7 @@ class KtorContentDataSource(private val httpClient: HttpClient) : RemoteContentD
     override suspend fun getContentDetail(contentId: Int): Result<BoardDetailDto, DataError.Remote> {
         val response = httpClient.get(ApiConstants.Endpoints.BOARD + "/$contentId") {
             headers {
-                AppUserCache.accessToken?.let {
+                AppUserCache.userInfo?.accessToken?.let {
                     append(ApiConstants.KEY.KEY_AUTH_TOKEN, it)
                 }
             }
@@ -35,9 +35,13 @@ class KtorContentDataSource(private val httpClient: HttpClient) : RemoteContentD
     override suspend fun getReply(contentId: Int): Result<CommentInfoDto, DataError.Remote> {
         val response = httpClient.get(ApiConstants.Endpoints.COMMENTS + "/$contentId") {
             headers {
-                AppUserCache.accessToken?.let {
+                AppUserCache.userInfo?.accessToken?.let {
                     append(ApiConstants.KEY.KEY_AUTH_TOKEN, it)
                 }
+            }
+
+            url {
+                parameters.append(ApiConstants.KEY.KEY_USER_ID, AppUserCache.userInfo?.userId ?: "")
             }
         }
         println("getReply : $response")
@@ -52,7 +56,7 @@ class KtorContentDataSource(private val httpClient: HttpClient) : RemoteContentD
     override suspend fun sendReply(commentDto: CommentRequestDto): Result<Boolean, DataError.Remote> {
         val response = httpClient.post(ApiConstants.Endpoints.COMMENT) {
             headers {
-                AppUserCache.accessToken?.let {
+                AppUserCache.userInfo?.accessToken?.let {
                     append(ApiConstants.KEY.KEY_AUTH_TOKEN, it)
                 }
             }

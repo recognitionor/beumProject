@@ -25,7 +25,7 @@ class ContentDetailViewModel(private val contentDetailRepository: ContentsReposi
             val id = state.value.contentDetail?.id
             if (id != null) {
                 contentDetailRepository.sendReply(
-                    id, reply, depth = 0, parentId = id, devil = AppUserCache.isDevil
+                    id, reply, depth = 0, parentId = null, devil = AppUserCache.isDevil
                 ).onSuccess {
 
                 }.onError {
@@ -38,6 +38,7 @@ class ContentDetailViewModel(private val contentDetailRepository: ContentsReposi
     }
 
     fun getContentDetail(id: Int) {
+        println("getContentDetail : $id")
         viewModelScope.launch {
             contentDetailRepository.getContentInfo(id).onSuccess { contentDetail ->
                 _state.update { it.copy(contentDetail = contentDetail) }

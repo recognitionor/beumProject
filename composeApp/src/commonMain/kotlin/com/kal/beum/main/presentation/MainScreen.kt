@@ -101,8 +101,7 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                             HomeScreen(state.isDevil, homeViewModel, viewModel::onAction)
                         }
                         composable(Route.Community.toRoute()) {
-                            val communityViewModel =
-                                koinViewModel<CommunityViewModel>()
+                            val communityViewModel = koinViewModel<CommunityViewModel>()
                             CommunityScreen(state.isDevil, communityViewModel, viewModel::onAction)
                         }
                         composable(Route.Level("1").toRoute()) { backStackEntry ->
@@ -177,16 +176,9 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                         }
 
                         is FullScreenType.ContentDetailScreen -> {
-                            println("FullScreenType.ContentDetailScreen")
                             ContentDetailScreen(content.id) {
                                 viewModel.onAction(MainAction.PopFullScreen)
                             }
-                            content.id
-
-
-                            ContentDetailScreen(content.id, {
-                                viewModel.onAction(MainAction.PopFullScreen)
-                            })
                         }
 
                         is FullScreenType.DraftDialog -> {
@@ -227,7 +219,10 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                         }
 
                         is FullScreenType.SignUpDialog -> {
-                            SignupDialog(content.onDismiss, content.signUpClick)
+                            SignupDialog(content.onDismiss) {
+                                viewModel.onAction(MainAction.PopFullScreen)
+                                content.signUpClick()
+                            }
                         }
 
                         is FullScreenType.ProgressDialog -> {

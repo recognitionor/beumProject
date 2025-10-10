@@ -23,7 +23,7 @@ class KtorMyInfoDataSource(private val httpClient: HttpClient) : RemoteMyInfoDat
         println("getMyContents start : $userId")
         val result = httpClient.get(ApiConstants.Endpoints.MY_BOARD_INFO) {
             headers {
-                AppUserCache.accessToken?.let {
+                AppUserCache.userInfo?.accessToken?.let {
                     append(ApiConstants.KEY.KEY_AUTH_TOKEN, it)
                 }
             }
@@ -46,7 +46,7 @@ class KtorMyInfoDataSource(private val httpClient: HttpClient) : RemoteMyInfoDat
         println("getMyReply start : $userId")
         val result = httpClient.get(ApiConstants.Endpoints.MY_COMMENT_LIST) {
             headers {
-                AppUserCache.accessToken?.let {
+                AppUserCache.userInfo?.accessToken?.let {
                     append(ApiConstants.KEY.KEY_AUTH_TOKEN, it)
                 }
             }

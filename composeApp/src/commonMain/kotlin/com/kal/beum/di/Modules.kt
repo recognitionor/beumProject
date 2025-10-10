@@ -10,7 +10,10 @@ import com.kal.beum.community.presentation.ContentDetailViewModel
 import com.kal.beum.content.data.network.KtorContentDataSource
 import com.kal.beum.content.data.network.RemoteContentDataSource
 import com.kal.beum.content.data.repository.DefaultContentDetailRepository
+import com.kal.beum.content.data.repository.DefaultReplyRepository
 import com.kal.beum.content.domain.ContentsRepository
+import com.kal.beum.content.domain.ReplyRepository
+import com.kal.beum.content.presentation.ReplyDetailViewModel
 import com.kal.beum.core.data.HttpClientFactory
 import com.kal.beum.core.data.database.DatabaseFactory
 import com.kal.beum.getPlatformContext
@@ -86,7 +89,6 @@ val sharedModules = module {
     singleOf(::MockHomeDataSource).bind<RemoteHomeDataSource>()
     singleOf(::KtorCommunityDataSource).bind<RemoteCommunityDataSource>()
     singleOf(::MockWriteCategoryDataSource).bind<RemoteWriteCategoryDataSource>()
-//    singleOf(::MockWriteDataSource).bind<RemoteWriteDataSource>()
 
     singleOf(::MockRankerUserInfoDataSource).bind<RemoteRankerUserInfoDataSource>()
     singleOf(::KtorMyInfoDataSource).bind<RemoteMyInfoDataSource>()
@@ -101,6 +103,7 @@ val sharedModules = module {
     singleOf(::DefaultRankerUserInfoRepository).bind<RankerUserInfoRepository>()
     singleOf(::DefaultMyInfoRepository).bind<MyInfoRepository>()
     singleOf(::DefaultNoticeRepository).bind<NoticeRepository>()
+    singleOf(::DefaultReplyRepository).bind<ReplyRepository>()
 
     viewModelOf(::HomeViewModel)
     viewModelOf(::MainViewModel)
@@ -110,6 +113,7 @@ val sharedModules = module {
     viewModelOf(::RankingViewModel)
     viewModelOf(::MyInfoViewModel)
     viewModelOf(::NoticeViewModel)
+    viewModelOf(::ReplyDetailViewModel)
 
     single { get<AppDatabase>().appDao }
     single { get<AppDatabase>().writingDao }

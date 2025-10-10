@@ -31,16 +31,18 @@ import beumproject.composeapp.generated.resources.ic_dot
 import beumproject.composeapp.generated.resources.ic_reply
 import beumproject.composeapp.generated.resources.ic_small_heart
 import beumproject.composeapp.generated.resources.sf_pro
+import com.kal.beum.content.domain.CommentDetail
 import com.kal.beum.content.domain.ReplyInfo
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumDimen
 import com.kal.beum.core.presentation.BeumTypo
 import com.kal.beum.utils.formatTimeAgo
+import com.kal.beum.utils.stringTimeToLong
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun ReplyView(replyInfo: ReplyInfo, selectedDetailReview: (ReplyInfo) -> Unit) {
+fun ReplyView(replyInfo: CommentDetail, selectedDetailReview: (CommentDetail) -> Unit) {
     Row {
 
         Box(
@@ -64,7 +66,7 @@ fun ReplyView(replyInfo: ReplyInfo, selectedDetailReview: (ReplyInfo) -> Unit) {
         Column {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
-                    text = replyInfo.writer, style = TextStyle(
+                    text = replyInfo.user.nickname, style = TextStyle(
                         fontSize = BeumTypo.TypoScaleText100,
                         lineHeight = BeumDimen.lineHeightBody3,
                         fontFamily = FontFamily(Font(Res.font.sf_pro)),
@@ -75,7 +77,7 @@ fun ReplyView(replyInfo: ReplyInfo, selectedDetailReview: (ReplyInfo) -> Unit) {
                 Spacer(modifier = Modifier.width(6.dp))
 
                 Text(
-                    text = formatTimeAgo(replyInfo.lastModifiedTime), style = TextStyle(
+                    text = formatTimeAgo(stringTimeToLong(replyInfo.createdAt)), style = TextStyle(
                         fontSize = BeumTypo.TypoScaleText100,
                         lineHeight = 20.sp,
                         fontFamily = FontFamily(Font(Res.font.sf_pro)),
@@ -144,7 +146,7 @@ fun ReplyView(replyInfo: ReplyInfo, selectedDetailReview: (ReplyInfo) -> Unit) {
                 Image(painter = painterResource(Res.drawable.ic_reply), contentDescription = "")
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    text = replyInfo.replyList.size.toString(), style = TextStyle(
+                    text = replyInfo.reReplyCount.toString(), style = TextStyle(
                         fontSize = 13.sp,
                         lineHeight = 20.sp,
                         fontFamily = FontFamily(Font(Res.font.sf_pro)),
@@ -155,10 +157,12 @@ fun ReplyView(replyInfo: ReplyInfo, selectedDetailReview: (ReplyInfo) -> Unit) {
                 Spacer(modifier = Modifier.weight(1f))
             }
             Spacer(modifier = Modifier.height(12.dp))
+
             Text(
                 modifier = Modifier.clickable {
-                    selectedDetailReview.invoke(replyInfo)
-                }, text = "답글 ${replyInfo.replyList.size}개 더 보기", style = TextStyle(
+                    selectedDetailReview(replyInfo)
+                }, text = if (replyInfo.reReplyCount > 0) "답글 ${replyInfo.reReplyCount}개 더 보기" else "답글 달기",
+                    style = TextStyle(
                     fontSize = BeumTypo.TypoScaleText150,
                     lineHeight = 20.sp,
                     fontFamily = FontFamily(Font(Res.font.sf_pro)),

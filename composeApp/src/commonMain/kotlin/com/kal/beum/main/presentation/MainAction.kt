@@ -12,6 +12,7 @@ sealed interface MainAction {
     data class ToastMessage(val toastInfo: ToastInfo? = null) : MainAction
     data object LogOut : MainAction
 
+    data object Withdraw : MainAction
     object GetTempWriting : MainAction
 
     object OnDraftDialog : MainAction

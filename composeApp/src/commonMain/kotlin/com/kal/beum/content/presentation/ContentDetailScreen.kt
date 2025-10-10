@@ -45,7 +45,7 @@ import beumproject.composeapp.generated.resources.ic_reply
 import beumproject.composeapp.generated.resources.icon_arrow_right_black
 import beumproject.composeapp.generated.resources.sf_pro
 import com.kal.beum.community.presentation.ContentDetailViewModel
-import com.kal.beum.content.domain.ReplyInfo
+import com.kal.beum.content.domain.CommentDetail
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumTypo
 import com.kal.beum.utils.formatTimeAgo
@@ -57,7 +57,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun ContentDetailScreen(id: Int, backBtnClick: () -> Unit) {
     val viewModel = koinViewModel<ContentDetailViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
-    var detailReplyInfo by remember { mutableStateOf<ReplyInfo?>(null) }
+    var detailReplyInfo by remember { mutableStateOf<CommentDetail?>(null) }
 
     LaunchedEffect(Unit) {
         viewModel.getContentDetail(id)
@@ -220,8 +220,8 @@ fun ContentDetailScreen(id: Int, backBtnClick: () -> Unit) {
                             contentDescription = ""
                         )
                         Text(
-                            text = state.contentDetail?.commentInfo?.comments?.size?.toString() ?: "0",
-                            style = TextStyle(
+                            text = state.contentDetail?.commentInfo?.comments?.size?.toString()
+                                ?: "0", style = TextStyle(
                                 fontSize = 13.sp,
                                 lineHeight = 20.sp,
                                 fontFamily = FontFamily(Font(Res.font.sf_pro)),
@@ -265,9 +265,9 @@ fun ContentDetailScreen(id: Int, backBtnClick: () -> Unit) {
                                 val reply = state.contentDetail?.commentInfo?.comments?.get(index)
                                 reply?.let {
                                     Spacer(modifier = Modifier.height(16.dp))
-//                                    ReplyView(it) { replyList ->
-//                                        detailReplyInfo = replyList
-//                                    }
+                                    ReplyView(it) { replyList ->
+                                        detailReplyInfo = replyList
+                                    }
                                 }
                             }
                         }

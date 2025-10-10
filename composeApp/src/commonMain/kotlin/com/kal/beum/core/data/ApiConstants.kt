@@ -9,7 +9,13 @@ object ApiConstants {
         const val KEY_IS_DEVIL = "isDevil"
         const val KEY_SIZE = "size"
 
+        const val KEY_BOARD_ID = "boardId"
+
+        const val KEY_USER_ID = "userId"
         const val KEY_TOKEN = "token"
+
+        const val KEY_REFRESH_TOKEN = "refreshToken"
+
         const val KEY_PAGE = "page"
         const val KEY_CATEGORY_ID = "categoryId"
     }
@@ -18,16 +24,14 @@ object ApiConstants {
         const val COMMENT = "/comment"
         const val BOARD = "/board"
         const val BOARDS = "/boards"
-
         const val FIREBASE_TOKEN = "/firebase-token"
-
+        const val REFRESH_ACCESS_TOKEN = "/refreshAccessToken"
         const val MY_BOARD_INFO = "/my-board-info"
-
         const val MY_COMMENT_LIST = "/my-comment-list"
         const val COMMENTS = "/comments"
         const val SIGNUP = "/signup"
+        const val WITHDRAW = "/withdraw"
         const val SIGNIN = "/signin"
-
         const val CATEGORY_LIST = "category-list"
     }
 }

@@ -6,15 +6,14 @@ import kotlinx.serialization.Serializable
 data class CommunityCommentItemDto(
     val id: Int,
     val title: String,
-    val writer: String,
+    val writer: String = "",
     val content: String,
-    val boardType: String?,
     val categoryId: Int,
     val categoryName: String,
     val tags: List<String>,
     val replyCount: Int,
     val likeCount: Int,
     val createTime: String,
-    val devil: Boolean,
+    val isDevil: Boolean,
     val like: Boolean,
 )

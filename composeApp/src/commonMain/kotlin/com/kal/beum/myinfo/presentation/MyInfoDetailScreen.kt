@@ -17,6 +17,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import beumproject.composeapp.generated.resources.*
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumTypo
@@ -35,7 +36,6 @@ fun MyInfoDetailScreen(info: UserInfo, action: (MainAction) -> Unit) {
                 BeumColors.White
             )
         ) {
-            Spacer(modifier = Modifier.height(50.dp))
             Row(
                 verticalAlignment = Alignment.CenterVertically, modifier = Modifier.background(
                     BeumColors.White
@@ -71,9 +71,7 @@ fun MyInfoDetailScreen(info: UserInfo, action: (MainAction) -> Unit) {
 
             Row(
                 modifier = Modifier.fillMaxWidth().height(56.dp).background(color = BeumColors.White)
-                    .padding(start = 20.dp, top = 0.dp, end = 20.dp, bottom = 0.dp).clickable {
-                        action(MainAction.PushFullScreen(FullScreenType.MyInfoDetailScreen(info)))
-                    }, verticalAlignment = Alignment.CenterVertically
+                    .padding(start = 20.dp, top = 0.dp, end = 20.dp, bottom = 0.dp), verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = "닉네임", style = TextStyle(
@@ -101,9 +99,7 @@ fun MyInfoDetailScreen(info: UserInfo, action: (MainAction) -> Unit) {
 
             Row(
                 modifier = Modifier.fillMaxWidth().height(56.dp).background(color = BeumColors.White)
-                    .padding(start = 20.dp, top = 0.dp, end = 20.dp, bottom = 0.dp).clickable {
-                        action(MainAction.PushFullScreen(FullScreenType.MyInfoDetailScreen(info)))
-                    }, verticalAlignment = Alignment.CenterVertically
+                    .padding(start = 20.dp, top = 0.dp, end = 20.dp, bottom = 0.dp), verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = "이메일", style = TextStyle(
@@ -161,6 +157,25 @@ fun MyInfoDetailScreen(info: UserInfo, action: (MainAction) -> Unit) {
                         textAlign = TextAlign.Center,
                     )
                 )
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth().height(56.dp).background(color = BeumColors.White)
+                    .padding(start = 20.dp, top = 0.dp, end = 20.dp, bottom = 0.dp).clickable {
+                        action(MainAction.Withdraw)
+                    }, verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "회원 탈퇴", style = TextStyle(
+                        fontSize = 16.sp,
+                        lineHeight = 20.96.sp,
+                        fontFamily = FontFamily(Font(Res.font.Pretendard_Medium)),
+                        fontWeight = FontWeight(700),
+                        color = BeumColors.baseGrayLightGray800,
+                        textAlign = TextAlign.Center,
+                    )
+                )
+                Spacer(modifier = Modifier.weight(1f))
             }
         }
     }
