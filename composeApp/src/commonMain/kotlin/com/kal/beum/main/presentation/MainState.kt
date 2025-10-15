@@ -1,9 +1,7 @@
 package com.kal.beum.main.presentation
 
-import androidx.compose.runtime.Composable
 import com.kal.beum.core.presentation.ToastInfo
 import com.kal.beum.main.domain.UserInfo
-import com.kal.beum.myinfo.domain.MyInfo
 import com.kal.beum.write.domain.WritingCategory
 import com.kal.beum.write.domain.WritingData
 
@@ -47,7 +45,6 @@ data class MainState(
     val showToast: ToastInfo? = null,
     val isProgress: Boolean = false,
     val fullScreenStack: List<FullScreenType> = emptyList(),
-    val fullScreen: List<@Composable() (() -> Unit)?> = emptyList(),
     val isFullScreen: Boolean = false,
     val writingTemp: WritingData? = null,
     val isDraftDialog: Boolean = false

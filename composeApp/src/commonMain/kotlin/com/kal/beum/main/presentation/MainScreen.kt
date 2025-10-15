@@ -3,8 +3,13 @@ package com.kal.beum.main.presentation
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -152,7 +157,6 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
 
     println("state.isFullScreen ${state.isFullScreen}")
     // ✅ 여기에 전역 fullScreen 처리!
-    println("state.fullScreen ${state.fullScreen}")
 
     Box(modifier = Modifier.fillMaxSize()) {
 
@@ -161,9 +165,11 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
         } else {
             state.fullScreenStack.forEach { content ->
                 Box(
-                    Modifier.fillMaxSize().clickable(
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() }) { /* 이벤트 소모만! */ }) {
+                    Modifier.fillMaxSize()
+                        .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom))
+                        .clickable(
+                            indication = null,
+                            interactionSource = remember { MutableInteractionSource() }) { /* 이벤트 소모만! */ }) {
                     when (content) {
                         is FullScreenType.MyInfoDetailScreen -> {
                             println("FullScreenType.MyInfoDetailScreen")
@@ -176,7 +182,7 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                         }
 
                         is FullScreenType.ContentDetailScreen -> {
-                            ContentDetailScreen(content.id) {
+                            ContentDetailScreen(content.id, viewModel::onAction) {
                                 viewModel.onAction(MainAction.PopFullScreen)
                             }
                         }

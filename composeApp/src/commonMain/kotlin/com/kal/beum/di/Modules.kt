@@ -6,7 +6,6 @@ import com.kal.beum.community.data.network.RemoteCommunityDataSource
 import com.kal.beum.community.data.repository.DefaultCommunityRepository
 import com.kal.beum.community.domain.CommunityRepository
 import com.kal.beum.community.presentation.CommunityViewModel
-import com.kal.beum.community.presentation.ContentDetailViewModel
 import com.kal.beum.content.data.network.KtorContentDataSource
 import com.kal.beum.content.data.network.RemoteContentDataSource
 import com.kal.beum.content.data.repository.DefaultContentDetailRepository
@@ -108,7 +107,6 @@ val sharedModules = module {
     viewModelOf(::HomeViewModel)
     viewModelOf(::MainViewModel)
     viewModelOf(::CommunityViewModel)
-    viewModelOf(::ContentDetailViewModel)
     viewModelOf(::WritingViewModel)
     viewModelOf(::RankingViewModel)
     viewModelOf(::MyInfoViewModel)

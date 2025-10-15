@@ -13,6 +13,7 @@ import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.client.statement.bodyAsText
 
 class KtorContentDataSource(private val httpClient: HttpClient) : RemoteContentDataSource {
 
@@ -44,9 +45,10 @@ class KtorContentDataSource(private val httpClient: HttpClient) : RemoteContentD
                 parameters.append(ApiConstants.KEY.KEY_USER_ID, AppUserCache.userInfo?.userId ?: "")
             }
         }
-        println("getReply : $response")
+        println("getReply : $response" )
         if (response.status.value == 200) {
             val replyInfo = response.body<CommentInfoDto>()
+            println("getReply replyInfo : $replyInfo" )
             return Result.Success(replyInfo)
         } else {
             return Result.Error(DataError.Remote.REQUEST_ERROR)
@@ -64,6 +66,38 @@ class KtorContentDataSource(private val httpClient: HttpClient) : RemoteContentD
                 commentDto
             )
         }
+        return if (response.status.value == 200) {
+            Result.Success(true)
+        } else {
+            Result.Error(DataError.Remote.FAILED_BOARD)
+        }
+    }
+
+    override suspend fun likeBoard(boardId: Int): Result<Boolean, DataError.Remote> {
+        val response = httpClient.post(ApiConstants.Endpoints.LIKE_BOARD + "/$boardId") {
+            headers {
+                AppUserCache.userInfo?.accessToken?.let {
+                    append(ApiConstants.KEY.KEY_AUTH_TOKEN, it)
+                }
+            }
+        }
+        println("likeBoard response ${response.bodyAsText()}")
+        return if (response.status.value == 200) {
+            Result.Success(true)
+        } else {
+            Result.Error(DataError.Remote.FAILED_BOARD)
+        }
+    }
+
+    override suspend fun likeComment(replyId: Int): Result<Boolean, DataError.Remote> {
+        val response = httpClient.post(ApiConstants.Endpoints.LIKE_REPLY + "/$replyId") {
+            headers {
+                AppUserCache.userInfo?.accessToken?.let {
+                    append(ApiConstants.KEY.KEY_AUTH_TOKEN, it)
+                }
+            }
+        }
+        println("likeComment response ${response.bodyAsText()}")
         return if (response.status.value == 200) {
             Result.Success(true)
         } else {

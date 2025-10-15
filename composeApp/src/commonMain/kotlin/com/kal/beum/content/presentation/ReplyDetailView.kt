@@ -41,7 +41,6 @@ import beumproject.composeapp.generated.resources.ic_more_medium
 import beumproject.composeapp.generated.resources.ic_reply
 import beumproject.composeapp.generated.resources.ic_small_heart
 import beumproject.composeapp.generated.resources.sf_pro
-import com.kal.beum.community.presentation.ContentDetailViewModel
 import com.kal.beum.content.domain.CommentDetail
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumDimen
@@ -56,6 +55,7 @@ fun ReplyDetailView(replyInfo: CommentDetail, backBtnClick: () -> Unit) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
+        viewModel.initLikeMe(replyInfo.likeIsMe == true)
         viewModel.getReplyList(replyInfo.id)
     }
     Box(
@@ -142,11 +142,14 @@ fun ReplyDetailView(replyInfo: CommentDetail, backBtnClick: () -> Unit) {
                             painter = painterResource(Res.drawable.angel_abled),
                             contentDescription = "",
                         )
-                        Image(
-                            modifier = Modifier.size(12.dp).align(Alignment.BottomStart),
-                            painter = painterResource(Res.drawable.ic_small_heart),
-                            contentDescription = ""
-                        )
+
+//                        Image(
+//                            modifier = Modifier.size(12.dp).align(Alignment.BottomStart).clickable {
+//                                viewModel.onAction(ReplyAction.OnReplyLikeClicked(replyInfo))
+//                            },
+//                            painter = painterResource(Res.drawable.ic_small_heart),
+//                            contentDescription = ""
+//                        )
                     }
                 }
                 Spacer(modifier = Modifier.fillMaxWidth().height(8.dp))
@@ -168,11 +171,9 @@ fun ReplyDetailView(replyInfo: CommentDetail, backBtnClick: () -> Unit) {
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.padding(horizontal = 14.dp)
                 ) {
-                    Image(
-                        modifier = Modifier.size(20.dp),
-                        painter = painterResource(Res.drawable.heart),
-                        contentDescription = ""
-                    )
+                    LikeButton(state.isLikeMe) {
+                        viewModel.onAction(ReplyAction.OnReplyLikeClicked(replyInfo))
+                    }
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = replyInfo.likeCount.toString(), style = TextStyle(
@@ -188,7 +189,7 @@ fun ReplyDetailView(replyInfo: CommentDetail, backBtnClick: () -> Unit) {
                     Image(painter = painterResource(Res.drawable.ic_reply), contentDescription = "")
                     Spacer(modifier = Modifier.height(4.dp))
                     Text(
-                        text = "replyInfo.replyList.size.toString()", style = TextStyle(
+                        text = replyInfo.reReplyCount.toString(), style = TextStyle(
                             fontSize = 13.sp,
                             lineHeight = 20.sp,
                             fontFamily = FontFamily(Font(Res.font.sf_pro)),
@@ -323,7 +324,10 @@ fun ReplyDetailView(replyInfo: CommentDetail, backBtnClick: () -> Unit) {
 //                Text(text = "test")
 //            }
 
-            ReplyField {  }
+            ReplyField {
+                viewModel.onAction(ReplyAction.OnSendReply(replyInfo, it))
+
+            }
         }
     }
 }

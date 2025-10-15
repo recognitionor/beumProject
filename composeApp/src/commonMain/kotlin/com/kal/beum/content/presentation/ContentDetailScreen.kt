@@ -39,29 +39,50 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import beumproject.composeapp.generated.resources.Res
 import beumproject.composeapp.generated.resources.ic_angel_emoji
-import beumproject.composeapp.generated.resources.ic_heart_empty
 import beumproject.composeapp.generated.resources.ic_more_vertical_medium
 import beumproject.composeapp.generated.resources.ic_reply
 import beumproject.composeapp.generated.resources.icon_arrow_right_black
 import beumproject.composeapp.generated.resources.sf_pro
+import com.kal.beum.community.presentation.CommunityAction
 import com.kal.beum.community.presentation.ContentDetailViewModel
 import com.kal.beum.content.domain.CommentDetail
+import com.kal.beum.content.domain.ContentsRepository
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumTypo
+import com.kal.beum.core.presentation.ToastInfo
+import com.kal.beum.main.presentation.FullScreenType
+import com.kal.beum.main.presentation.MainAction
 import com.kal.beum.utils.formatTimeAgo
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
-import org.koin.compose.viewmodel.koinViewModel
+import org.koin.compose.koinInject
 
 @Composable
-fun ContentDetailScreen(id: Int, backBtnClick: () -> Unit) {
-    val viewModel = koinViewModel<ContentDetailViewModel>()
+fun ContentDetailScreen(id: Int, action: (MainAction) -> Unit, backBtnClick: () -> Unit) {
+    val contentDetailRepository = koinInject<ContentsRepository>()
+    val viewModel = remember { ContentDetailViewModel(contentDetailRepository) }
+
+    println("ContentDetailScreen viewModel : ${viewModel.toString()}")
     val state by viewModel.state.collectAsStateWithLifecycle()
     var detailReplyInfo by remember { mutableStateOf<CommentDetail?>(null) }
 
     LaunchedEffect(Unit) {
         viewModel.getContentDetail(id)
     }
+
+    if (state.isError) {
+        action(MainAction.PopFullScreen)
+        action(MainAction.ToastMessage(ToastInfo("게시글 불러오기에 실패 했습니다.", 2000)))
+        return
+    }
+
+    if (state.isProgress) {
+        action(MainAction.PushFullScreen(FullScreenType.ProgressDialog))
+    } else {
+        action(MainAction.CloseFullScreen(FullScreenType.ProgressDialog))
+    }
+
+
     if (detailReplyInfo != null) {
         detailReplyInfo?.let {
             ReplyDetailView(it, backBtnClick = {
@@ -200,10 +221,12 @@ fun ContentDetailScreen(id: Int, backBtnClick: () -> Unit) {
                         modifier = Modifier.height(20.dp).fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Image(
-                            painter = painterResource(Res.drawable.ic_heart_empty),
-                            contentDescription = ""
-                        )
+                        LikeButton(state.contentDetail?.like == true) {
+                            state.contentDetail?.let {
+                                viewModel.onAction(CommunityAction.OnContentLikeClicked(it))
+                            }
+                        }
+                        Spacer(modifier = Modifier.width(2.dp))
                         Text(
                             text = state.contentDetail?.likeCount?.toString() ?: "0",
                             style = TextStyle(
@@ -265,7 +288,9 @@ fun ContentDetailScreen(id: Int, backBtnClick: () -> Unit) {
                                 val reply = state.contentDetail?.commentInfo?.comments?.get(index)
                                 reply?.let {
                                     Spacer(modifier = Modifier.height(16.dp))
-                                    ReplyView(it) { replyList ->
+                                    ReplyView(it, {
+                                        viewModel.onAction(CommunityAction.OnCommentLikeClicked(it))
+                                    }) { replyList ->
                                         detailReplyInfo = replyList
                                     }
                                 }
@@ -312,5 +337,5 @@ fun ContentDetailScreen(id: Int, backBtnClick: () -> Unit) {
             }
         }
     }
-
 }
+

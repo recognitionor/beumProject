@@ -40,8 +40,8 @@ class CommunityViewModel(private val communityRepository: CommunityRepository) :
     private fun getItemsByCategory(category: Category, isDevil: Boolean) {
         println("getItemsByCategory")
         viewModelScope.launch {
-            communityRepository.getCommunityList(0, 10, isDevil, category).onEach {
-                it.onSuccess { community ->
+            communityRepository.getCommunityList(0, 10, isDevil, category).onEach { result ->
+                result.onSuccess { community ->
                     _state.update { it -> it.copy(onProgress = true) }
                     println("onSuccess")
                     if (community.boardList.isNotEmpty()) {
@@ -96,15 +96,30 @@ class CommunityViewModel(private val communityRepository: CommunityRepository) :
         }.start()
     }
 
+    private fun likeComment() {
+        viewModelScope.launch {
+        }.start()
+    }
 
     fun onAction(action: CommunityAction) {
         when (action) {
             is CommunityAction.OnTabSelected -> {
+                if (state.value.selectedCategoryId == action.index) {
+                    return
+                }
                 _state.update {
-                    println("action.index : ${action.index}")
                     it.copy(selectedCategoryId = action.index)
                 }
                 getItemsByCategory(state.value.categoryList[action.index], action.isDevil)
+            }
+
+            is CommunityAction.OnContentLikeClicked -> {
+                println("OnContentLikeClicked")
+            }
+
+            is CommunityAction.OnCommentLikeClicked -> {
+                println("OnCommentLikeClicked")
+                likeComment()
             }
         }
     }

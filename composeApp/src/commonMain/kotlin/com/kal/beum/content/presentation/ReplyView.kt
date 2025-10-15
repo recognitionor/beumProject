@@ -29,10 +29,8 @@ import beumproject.composeapp.generated.resources.heart
 import beumproject.composeapp.generated.resources.ic_angel_emoji
 import beumproject.composeapp.generated.resources.ic_dot
 import beumproject.composeapp.generated.resources.ic_reply
-import beumproject.composeapp.generated.resources.ic_small_heart
 import beumproject.composeapp.generated.resources.sf_pro
 import com.kal.beum.content.domain.CommentDetail
-import com.kal.beum.content.domain.ReplyInfo
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumDimen
 import com.kal.beum.core.presentation.BeumTypo
@@ -42,7 +40,7 @@ import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun ReplyView(replyInfo: CommentDetail, selectedDetailReview: (CommentDetail) -> Unit) {
+fun ReplyView(replyInfo: CommentDetail, likeClicked: () -> Unit, selectedDetailReview: (CommentDetail) -> Unit) {
     Row {
 
         Box(
@@ -94,14 +92,8 @@ fun ReplyView(replyInfo: CommentDetail, selectedDetailReview: (CommentDetail) ->
                         painter = painterResource(Res.drawable.angel_abled),
                         contentDescription = "",
                     )
-                    Image(
-                        modifier = Modifier.size(12.dp).align(Alignment.BottomStart),
-                        painter = painterResource(Res.drawable.ic_small_heart),
-                        contentDescription = ""
-                    )
+
                 }
-
-
 
                 Spacer(modifier = Modifier.width(6.dp))
                 Text(
@@ -126,11 +118,9 @@ fun ReplyView(replyInfo: CommentDetail, selectedDetailReview: (CommentDetail) ->
             )
             Spacer(modifier = Modifier.height(10.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Image(
-                    modifier = Modifier.size(20.dp),
-                    painter = painterResource(Res.drawable.heart),
-                    contentDescription = ""
-                )
+                LikeButton(replyInfo.likeIsMe) {
+                    likeClicked()
+                }
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = replyInfo.likeCount.toString(), style = TextStyle(
@@ -161,8 +151,9 @@ fun ReplyView(replyInfo: CommentDetail, selectedDetailReview: (CommentDetail) ->
             Text(
                 modifier = Modifier.clickable {
                     selectedDetailReview(replyInfo)
-                }, text = if (replyInfo.reReplyCount > 0) "답글 ${replyInfo.reReplyCount}개 더 보기" else "답글 달기",
-                    style = TextStyle(
+                },
+                text = if (replyInfo.reReplyCount > 0) "답글 ${replyInfo.reReplyCount}개 더 보기" else "답글 달기",
+                style = TextStyle(
                     fontSize = BeumTypo.TypoScaleText150,
                     lineHeight = 20.sp,
                     fontFamily = FontFamily(Font(Res.font.sf_pro)),

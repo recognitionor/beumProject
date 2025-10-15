@@ -2,27 +2,37 @@ package com.kal.beum.content.data.repository
 
 import com.kal.beum.content.data.dto.CommentRequestDto
 import com.kal.beum.content.data.network.RemoteContentDataSource
+import com.kal.beum.content.domain.CommentDetail
 import com.kal.beum.content.domain.CommentInfo
 import com.kal.beum.content.domain.ReplyRepository
 import com.kal.beum.core.domain.DataError
 import com.kal.beum.core.domain.Result
+import com.kal.beum.core.domain.onSuccess
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 class DefaultReplyRepository(private val remoteContentDataSource: RemoteContentDataSource) :
     ReplyRepository {
-    override suspend fun sendReply(
-        boardId: Int, content: String, depth: Int, parentId: Int?, devil: Boolean
-    ): Result<Boolean, DataError.Remote> {
-        println("sendReply")
-        val commentDto = CommentRequestDto(
-            boardId = boardId, content = content, depth = depth, parentId = parentId, devil = devil
-        )
-        remoteContentDataSource.sendReply(commentDto)
-        return Result.Error(DataError.Remote.REQUEST_ERROR)
+
+    override suspend fun sendReply(commentInfo: CommentInfo): Flow<Result<Boolean, DataError.Remote>> = flow {
     }
 
     override suspend fun getReplyList(contentId: Int): Result<CommentInfo, DataError.Remote> {
         println("getReplyList")
         remoteContentDataSource.getReply(contentId)
         return Result.Error(DataError.Remote.REQUEST_ERROR)
+    }
+
+    override suspend fun likeReply(commentInfo: CommentDetail): Result<CommentDetail, DataError.Remote> {
+        println("likeReply start : $commentInfo")
+        remoteContentDataSource.likeBoard(commentInfo.id).onSuccess {
+            val contentDetailTemp = commentInfo.copy(
+                likeIsMe = !commentInfo.likeIsMe,
+                likeCount = if (commentInfo.likeIsMe) commentInfo.likeCount - 1 else commentInfo.likeCount + 1
+            )
+            println("likeReply  end : $contentDetailTemp")
+            return Result.Success(contentDetailTemp)
+        }
+        return Result.Success(commentInfo)
     }
 }

@@ -1,6 +1,5 @@
 package com.kal.beum.main.presentation
 
-import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kal.beum.core.data.AppUserCache
@@ -66,16 +65,18 @@ class MainViewModel(private val appRepository: AppRepository) : ViewModel() {
         _state.update { it.copy(fullScreenStack = _state.value.fullScreenStack + screen) }
     }
 
+    private fun popFullScreen(screen: FullScreenType) {
+        _state.update { it.copy(fullScreenStack = state.value.fullScreenStack.filterNot { it == screen }) }
+    }
+
 
     private fun popFullScreen() {
         println("popFullScreen")
-        _state.update { it.copy(fullScreen = state.value.fullScreen.dropLast(1)) }
         _state.update { it.copy(fullScreenStack = state.value.fullScreenStack.dropLast(1)) }
     }
 
     private fun clearFullScreen() {
         println("clearFullScreen")
-        _state.update { it.copy(fullScreen = emptyList(), isSplashDone = false) }
         _state.update { it.copy(fullScreenStack = emptyList(), isSplashDone = false) }
     }
 
@@ -208,6 +209,7 @@ class MainViewModel(private val appRepository: AppRepository) : ViewModel() {
                 _state.update { it.copy(isDraftDialog = !it.isDraftDialog) }
             }
             is MainAction.Withdraw -> withdraw()
+            is MainAction.CloseFullScreen -> { popFullScreen(action.fullScreen) }
         }
     }
 }

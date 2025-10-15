@@ -7,6 +7,8 @@ sealed interface MainAction {
     data class ToggleDevil(val isDevil: Boolean) : MainAction
     data class PushFullScreen(val fullScreen: FullScreenType) : MainAction
 
+    data class CloseFullScreen(val fullScreen: FullScreenType) : MainAction
+
     data object PopFullScreen : MainAction
     data object ClearFullScreen : MainAction
     data class ToastMessage(val toastInfo: ToastInfo? = null) : MainAction

@@ -12,5 +12,6 @@ data class ContentDetail(
     val likeCount: Int = 0,
     val viewCount: Int = 0,
     val lastModifiedTime: Long,
-    val commentInfo: CommentInfo
+    val commentInfo: CommentInfo,
+    val like: Boolean
 )

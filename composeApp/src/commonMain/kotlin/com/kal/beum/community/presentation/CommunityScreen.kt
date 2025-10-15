@@ -65,7 +65,7 @@ fun CommunityScreen(
     if (state.onProgress) {
         onAction(MainAction.PushFullScreen(FullScreenType.ProgressDialog))
     } else {
-        onAction(MainAction.PopFullScreen)
+        onAction(MainAction.CloseFullScreen(FullScreenType.ProgressDialog))
     }
 
     Column {

@@ -10,4 +10,7 @@ interface RemoteContentDataSource {
     suspend fun getContentDetail(contentId: Int): Result<BoardDetailDto, DataError.Remote>
     suspend fun getReply(contentId: Int): Result<CommentInfoDto, DataError.Remote>
     suspend fun sendReply(commentDto: CommentRequestDto): Result<Boolean, DataError.Remote>
+    suspend fun likeBoard(boardId: Int): Result<Boolean, DataError.Remote>
+
+    suspend fun likeComment(replyId: Int): Result<Boolean, DataError.Remote>
 }

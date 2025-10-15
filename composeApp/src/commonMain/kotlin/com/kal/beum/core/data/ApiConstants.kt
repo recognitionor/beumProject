@@ -33,5 +33,7 @@ object ApiConstants {
         const val WITHDRAW = "/withdraw"
         const val SIGNIN = "/signin"
         const val CATEGORY_LIST = "category-list"
+        const val LIKE_BOARD = "/like-board"
+        const val LIKE_REPLY = "/like-comment"
     }
 }

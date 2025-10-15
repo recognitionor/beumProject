@@ -2,6 +2,7 @@ package com.kal.beum.content.domain
 
 import com.kal.beum.core.domain.DataError
 import com.kal.beum.core.domain.Result
+import kotlinx.coroutines.flow.Flow
 
 interface ContentsRepository {
 
@@ -11,9 +12,17 @@ interface ContentsRepository {
         depth: Int,
         parentId: Int?,
         devil: Boolean
-    ): Result<Boolean, DataError.Remote>
+    ): Flow<Result<CommentDetail, DataError.Remote>>
 
     suspend fun getContentInfo(
         id: Int
+    ): Flow<Result<ContentDetail, DataError.Remote>>
+
+    suspend fun likeBoardToggle(
+        contentDetail: ContentDetail
     ): Result<ContentDetail, DataError.Remote>
+
+    suspend fun likeCommentToggle(
+        commentDetail: CommentDetail
+    ): Result<CommentDetail, DataError.Remote>
 }
