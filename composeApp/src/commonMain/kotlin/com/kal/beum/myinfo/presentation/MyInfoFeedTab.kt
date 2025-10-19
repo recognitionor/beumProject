@@ -46,6 +46,7 @@ fun MyInfoFeedTab(
     devil: Boolean,
     list: List<MyContent>,
     selectedTabIndex: Int,
+    writeClick: () -> Unit,
     onItemClick: (MyContent) -> Unit,
     onTabSelected: (Int) -> Unit
 ) {
@@ -76,14 +77,13 @@ fun MyInfoFeedTab(
                         )
                     )
                 }, selected = selectedTabIndex == index, onClick = {
-                    println("index : $index")
-                    onTabSelected.invoke(index)
+                    onTabSelected(index)
                 })
             }
         }
 
         Box(
-            modifier = Modifier.fillMaxWidth().fillMaxHeight()
+            modifier = Modifier.fillMaxWidth().fillMaxHeight().padding(bottom = 10.dp)
                 .background(BeumColors.baseGrayLightGray75),
             contentAlignment = Alignment.Center,
 
@@ -108,7 +108,9 @@ fun MyInfoFeedTab(
                     Spacer(modifier = Modifier.height(10.dp))
 
                     Text(
-                        text = "고민글 작성하기", style = TextStyle(
+                        modifier = Modifier.clickable {
+                            writeClick()
+                        }, text = "고민글 작성하기", style = TextStyle(
                             fontSize = BeumTypo.TypoScaleText150,
                             fontFamily = FontFamily(Font(Res.font.sf_pro)),
                             fontWeight = FontWeight(500),

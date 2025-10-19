@@ -127,13 +127,13 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                     MainAction.PushFullScreen(
                         FullScreenType.DraftDialog(onNewClick = {
                             viewModel.onAction(MainAction.PopFullScreen)
-                            viewModel.onAction(MainAction.PushFullScreen(FullScreenType.WritingScreen()))
+                            viewModel.onAction(MainAction.PushFullScreen(FullScreenType.WritingScreen(callBack = state.onWritingComplete)))
                         }, onContinueClick = {
                             viewModel.onAction(MainAction.PopFullScreen)
                             viewModel.onAction(
                                 MainAction.PushFullScreen(
                                     FullScreenType.WritingScreen(
-                                        state.writingTemp
+                                        state.writingTemp, state.onWritingComplete
                                     )
                                 )
                             )
@@ -143,7 +143,7 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                     )
                 )
             } else {
-                viewModel.onAction(MainAction.PushFullScreen(FullScreenType.WritingScreen()))
+                viewModel.onAction(MainAction.PushFullScreen(FullScreenType.WritingScreen(callBack = state.onWritingComplete)))
             }
             viewModel.onAction(MainAction.OnDraftDialog)
         }
@@ -195,7 +195,7 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
 
                         is FullScreenType.WritingScreen -> {
                             println("WritingScreen")
-                            WritingScreen(content.tempWriting, viewModel::onAction)
+                            WritingScreen(content.tempWriting, viewModel::onAction, content.callBack)
                         }
 
                         is FullScreenType.NoticeScreen -> {

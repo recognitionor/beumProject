@@ -2,6 +2,7 @@ package com.kal.beum.write.data.repository
 
 import com.kal.beum.core.domain.DataError
 import com.kal.beum.core.domain.Result
+import com.kal.beum.core.domain.onSuccess
 import com.kal.beum.write.data.database.WritingDao
 import com.kal.beum.write.data.database.WritingEntity
 import com.kal.beum.write.data.network.RemoteWriteDataSource
@@ -14,7 +15,13 @@ class DefaultWritingRepository(
 ) : WritingRepository {
 
     override suspend fun submitWriting(writingSubmitRequest: WritingInfoRequest): Result<Boolean, DataError.Remote> {
-        return remoteWriteDataSource.submitWriting(writingSubmitRequest)
+        val result = remoteWriteDataSource.submitWriting(writingSubmitRequest)
+        result.onSuccess {
+            if (it) {
+                writingDao.deleteWritingById(1)
+            }
+        }
+        return result
     }
 
     override suspend fun clearTempWritingTitle(): Result<Boolean, DataError.Local> {
@@ -25,7 +32,6 @@ class DefaultWritingRepository(
     override suspend fun saveTempWritingTitle(title: String): Result<Boolean, DataError.Local> {
         val writingEntity = writingDao.getWritingById(1)
         if (writingEntity == null) {
-            println("writingEntity.toString() 1")
             writingDao.insertOrReplaceWriting(
                 WritingEntity(
                     id = 1,
@@ -39,7 +45,6 @@ class DefaultWritingRepository(
                 )
             )
         } else {
-            println("writingEntity.toString() 2 : $writingEntity - $title")
             writingDao.updateTitle(writingEntity.id, title)
         }
         return Result.Success(true)

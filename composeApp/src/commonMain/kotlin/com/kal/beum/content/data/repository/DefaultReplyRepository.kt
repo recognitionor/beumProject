@@ -7,6 +7,7 @@ import com.kal.beum.content.domain.CommentInfo
 import com.kal.beum.content.domain.ReplyRepository
 import com.kal.beum.core.domain.DataError
 import com.kal.beum.core.domain.Result
+import com.kal.beum.core.domain.onError
 import com.kal.beum.core.domain.onSuccess
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -14,7 +15,18 @@ import kotlinx.coroutines.flow.flow
 class DefaultReplyRepository(private val remoteContentDataSource: RemoteContentDataSource) :
     ReplyRepository {
 
-    override suspend fun sendReply(commentInfo: CommentInfo): Flow<Result<Boolean, DataError.Remote>> = flow {
+    override suspend fun sendReply(
+        boardId: Int, content: String, depth: Int, parentId: Int?, devil: Boolean
+    ): Flow<Result<Boolean, DataError.Remote>> = flow {
+        emit(Result.Progress())
+        val result = remoteContentDataSource.sendReply(
+            CommentRequestDto(
+                boardId, content, depth, parentId, devil
+            )
+        )
+        result.onSuccess { emit(Result.Success(true)) }.onError {
+            emit(Result.Error(DataError.Remote.REQUEST_ERROR))
+        }
     }
 
     override suspend fun getReplyList(contentId: Int): Result<CommentInfo, DataError.Remote> {

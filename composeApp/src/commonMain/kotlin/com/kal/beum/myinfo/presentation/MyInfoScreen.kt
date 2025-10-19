@@ -73,13 +73,13 @@ fun MyInfoScreen(devil: Boolean, viewModel: MyInfoViewModel, action: (MainAction
                 Spacer(modifier = Modifier.weight(1f))
                 Box(
                     modifier = Modifier.size(48.dp).clickable(
-                    indication = null,
-                    interactionSource = remember { MutableInteractionSource() }) {
-                    println("state.myInfo ${state.myInfo}")
-                    state.myInfo?.let {
-                        action(MainAction.PushFullScreen(FullScreenType.SettingsScreen(it)))
-                    }
-                }, contentAlignment = Alignment.Center
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }) {
+                        println("state.myInfo ${state.myInfo}")
+                        state.myInfo?.let {
+                            action(MainAction.PushFullScreen(FullScreenType.SettingsScreen(it)))
+                        }
+                    }, contentAlignment = Alignment.Center
                 ) {
                     Image(
                         modifier = Modifier.size(24.dp),
@@ -201,14 +201,19 @@ fun MyInfoScreen(devil: Boolean, viewModel: MyInfoViewModel, action: (MainAction
 
             Spacer(modifier = Modifier.height(20.dp))
 
-
             MyInfoFeedTab(
                 devil,
                 list = if (myInfoSelectedTabIndex == 0) state.myContent else state.myReply,
                 selectedTabIndex = myInfoSelectedTabIndex,
+                writeClick = {
+                    state.myInfo?.userId?.let { userId ->
+                        action(MainAction.NewWriting {
+                            viewModel.getMyContent(userId.toInt())
+                        })
+                    }
+                },
                 onItemClick = {
-                    reportPage = 1
-                    reportContent = it
+                    action(MainAction.PushFullScreen(FullScreenType.ContentDetailScreen(it.id)))
                 },
                 onTabSelected = {
                     myInfoSelectedTabIndex = it

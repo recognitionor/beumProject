@@ -5,9 +5,14 @@ import androidx.lifecycle.viewModelScope
 import com.kal.beum.content.domain.CommentDetail
 import com.kal.beum.content.domain.CommentInfo
 import com.kal.beum.content.domain.ReplyRepository
+import com.kal.beum.core.data.AppUserCache
+import com.kal.beum.core.domain.DataError
+import com.kal.beum.core.domain.Result
 import com.kal.beum.core.domain.onSuccess
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -42,7 +47,28 @@ class ReplyDetailViewModel(private val replyRepository: ReplyRepository) : ViewM
     }
 
     fun sendReply(replyDetail: CommentDetail, content: String) {
-        println("sendReply")
+        println("sendReply : $replyDetail")
+        viewModelScope.launch {
+            replyRepository.sendReply(
+                replyDetail.boardId,
+                replyDetail.content,
+                replyDetail.depth + 1,
+                replyDetail.id,
+                AppUserCache.isDevil
+            ).onEach { result ->
+                when (result) {
+                    is Result.Error<DataError.Remote> -> {
+                    }
+
+                    is Result.Progress -> {
+                    }
+
+                    is Result.Success<Boolean> -> {
+                        // Optionally update state with new reply
+                    }
+                }
+            }.launchIn(viewModelScope)
+        }
     }
 
     fun onAction(action: ReplyAction) {

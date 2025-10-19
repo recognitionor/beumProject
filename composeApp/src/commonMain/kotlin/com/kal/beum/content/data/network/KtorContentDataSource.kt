@@ -66,6 +66,7 @@ class KtorContentDataSource(private val httpClient: HttpClient) : RemoteContentD
                 commentDto
             )
         }
+        println("response.body() : ${response.bodyAsText()}")
         return if (response.status.value == 200) {
             Result.Success(true)
         } else {

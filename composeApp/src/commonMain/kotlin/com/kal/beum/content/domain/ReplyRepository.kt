@@ -6,7 +6,11 @@ import kotlinx.coroutines.flow.Flow
 
 interface ReplyRepository {
     suspend fun sendReply(
-        commentInfo: CommentInfo
+        boardId: Int,
+        content: String,
+        depth: Int,
+        parentId: Int?,
+        devil: Boolean
     ): Flow<Result<Boolean, DataError.Remote>>
 
     suspend fun getReplyList(

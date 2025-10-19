@@ -90,7 +90,9 @@ fun CommunityScreen(
                 Text(
                     modifier = Modifier.clip(RoundedCornerShape(12.dp)).clickable {
                         viewModel.onAction(CommunityAction.OnTabSelected(it, isDevil))
-                    }.padding(start = 22.dp, end = 22.dp), text = state.categoryList[it].category, style = TextStyle(
+                    }.padding(start = 22.dp, end = 22.dp),
+                    text = state.categoryList[it].category,
+                    style = TextStyle(
                         fontSize = BeumTypo.TypoScaleText150,
                         lineHeight = 20.96.sp,
                         fontFamily = FontFamily(Font(Res.font.sf_pro)),
@@ -104,7 +106,7 @@ fun CommunityScreen(
         }
         if (state.communityList.isNotEmpty()) {
             val communityList = state.communityList[state.selectedCategoryId]
-            Box (modifier = Modifier.background(if (isDevil)BeumColors.DarkGray50 else BeumColors.baseGrayLightGray75)) {
+            Box(modifier = Modifier.background(if (isDevil) BeumColors.DarkGray50 else BeumColors.baseGrayLightGray75)) {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize()
                         .padding(start = 20.dp, end = 20.dp, top = 16.dp, bottom = 24.dp),
@@ -182,8 +184,9 @@ fun CommunityScreen(
                             color = BeumColors.angelSkyblue,
                             shape = RoundedCornerShape(size = 100.dp)
                         ).clip(shape = RoundedCornerShape(size = 100.dp)).clickable {
-                            onAction(MainAction.GetTempWriting)
-//                            viewModel.onAction(CommunityAction.GetTempWriting)
+                            onAction(MainAction.NewWriting {
+                                println("~~~")
+                            })
                         }) {
                         Image(
                             painter = painterResource(Res.drawable.ic_add_medium),

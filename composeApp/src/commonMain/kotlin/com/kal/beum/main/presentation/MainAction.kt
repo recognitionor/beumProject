@@ -17,5 +17,7 @@ sealed interface MainAction {
     data object Withdraw : MainAction
     object GetTempWriting : MainAction
 
+    data class NewWriting(val callback: () -> Unit) : MainAction
+
     object OnDraftDialog : MainAction
 }

@@ -116,7 +116,9 @@ fun HomeScreen(
         ) {
             Text(
                 modifier = Modifier.clickable {
-                    onAction(MainAction.GetTempWriting)
+                    onAction(MainAction.NewWriting {
+                        println("New Writing Callback")
+                    })
                 },
                 text = "고민을 남겨보세요", style = TextStyle(
                     fontSize = BeumDimen.TypoScaleText300,

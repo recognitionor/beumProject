@@ -58,7 +58,11 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WritingScreen(writingData: WritingData? = null, onAction: (MainAction) -> Unit) {
+fun WritingScreen(
+    writingData: WritingData? = null,
+    onAction: (MainAction) -> Unit,
+    callBack: (() -> Unit)?
+) {
     val viewModel = koinViewModel<WritingViewModel>()
     // 진입할 때 상태 초기화
     LaunchedEffect(Unit) {
@@ -86,6 +90,7 @@ fun WritingScreen(writingData: WritingData? = null, onAction: (MainAction) -> Un
         if (state.closeMessage?.isNotEmpty() == true) {
             onAction(MainAction.ToastMessage(ToastInfo("게시글이 등록되었습니다.")))
         }
+        callBack?.invoke()
         onAction(MainAction.PopFullScreen)
         viewModel.onAction(WritingAction.Reset)
     }

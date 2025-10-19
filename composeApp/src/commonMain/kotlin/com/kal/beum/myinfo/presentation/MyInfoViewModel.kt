@@ -20,7 +20,7 @@ class MyInfoViewModel(private val myInfoRepository: MyInfoRepository) : ViewMode
         viewModelScope, SharingStarted.WhileSubscribed(5000L), _state.value
     )
 
-    private fun getMyContent(userId: Int) {
+    public fun getMyContent(userId: Int) {
         viewModelScope.launch {
             myInfoRepository.getMyContents(userId).onSuccess { myContents ->
                 _state.update { it.copy(myContent = myContents) }

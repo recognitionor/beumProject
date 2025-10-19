@@ -15,7 +15,7 @@ sealed class FullScreenType {
         val onDismiss: (selectItem: WritingCategory?) -> Unit
     ) : FullScreenType()
 
-    data class WritingScreen(val tempWriting: WritingData? = null) : FullScreenType()
+    data class WritingScreen(val tempWriting: WritingData? = null, val  callBack:(() -> Unit)?) : FullScreenType()
 
     object ProgressDialog : FullScreenType()
 
@@ -47,5 +47,6 @@ data class MainState(
     val fullScreenStack: List<FullScreenType> = emptyList(),
     val isFullScreen: Boolean = false,
     val writingTemp: WritingData? = null,
+    val onWritingComplete: (() -> Unit)? = null,
     val isDraftDialog: Boolean = false
 )

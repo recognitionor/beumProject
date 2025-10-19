@@ -55,7 +55,7 @@ fun ReplyDetailView(replyInfo: CommentDetail, backBtnClick: () -> Unit) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
-        viewModel.initLikeMe(replyInfo.likeIsMe == true)
+        viewModel.initLikeMe(replyInfo.likeIsMe)
         viewModel.getReplyList(replyInfo.id)
     }
     Box(

@@ -193,6 +193,11 @@ class MainViewModel(private val appRepository: AppRepository) : ViewModel() {
         }.start()
     }
 
+    fun newWriting(callback: () -> Unit) {
+        _state.update { it.copy(onWritingComplete = callback) }
+        getTempWriting()
+    }
+
     fun onAction(action: MainAction) {
         when (action) {
             is MainAction.ToggleDevil -> devilToggle(action.isDevil)
@@ -210,6 +215,7 @@ class MainViewModel(private val appRepository: AppRepository) : ViewModel() {
             }
             is MainAction.Withdraw -> withdraw()
             is MainAction.CloseFullScreen -> { popFullScreen(action.fullScreen) }
+            is MainAction.NewWriting -> newWriting(action.callback)
         }
     }
 }

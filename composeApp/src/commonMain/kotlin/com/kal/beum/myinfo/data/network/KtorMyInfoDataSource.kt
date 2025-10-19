@@ -30,11 +30,11 @@ class KtorMyInfoDataSource(private val httpClient: HttpClient) : RemoteMyInfoDat
             setBody(UserRequestDto(userId.toString(), AppUserCache.userInfo?.nickName ?: ""))
             url {
                 parameters.append(ApiConstants.KEY.KEY_PAGE, 0.toString())
-                parameters.append(ApiConstants.KEY.KEY_SIZE, 0.toString())
+                parameters.append(ApiConstants.KEY.KEY_SIZE, 10.toString())
                 parameters.append(ApiConstants.KEY.KEY_IS_DEVIL, AppUserCache.isDevil.toString())
             }
         }
-        println("getMyContents : $result")
+        println("getMyContents!!!!! : $result")
         return if (result.status.value == 200) {
             Result.Success(result.body<MyBoardInfoDto>())
         } else {
@@ -53,7 +53,7 @@ class KtorMyInfoDataSource(private val httpClient: HttpClient) : RemoteMyInfoDat
             setBody(UserRequestDto(userId.toString(), AppUserCache.userInfo?.nickName ?: ""))
             url {
                 parameters.append(ApiConstants.KEY.KEY_PAGE, 0.toString())
-                parameters.append(ApiConstants.KEY.KEY_SIZE, 0.toString())
+                parameters.append(ApiConstants.KEY.KEY_SIZE, 10.toString())
                 parameters.append(ApiConstants.KEY.KEY_IS_DEVIL, AppUserCache.isDevil.toString())
             }
         }
