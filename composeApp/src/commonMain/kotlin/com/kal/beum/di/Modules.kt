@@ -21,6 +21,7 @@ import com.kal.beum.home.data.network.RemoteHomeDataSource
 import com.kal.beum.home.data.repository.DefaultHomeRepository
 import com.kal.beum.home.domain.HomeRepository
 import com.kal.beum.home.presentation.HomeViewModel
+import com.kal.beum.level.data.network.KtorRankerUserInfoDataSource
 import com.kal.beum.level.data.network.MockRankerUserInfoDataSource
 import com.kal.beum.level.data.network.RemoteRankerUserInfoDataSource
 import com.kal.beum.level.data.repository.DefaultRankerUserInfoRepository

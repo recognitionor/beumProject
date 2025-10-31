@@ -23,7 +23,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -81,7 +89,6 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
-    println("!state.isSplashDone ${!state.isSplashDone}")
     if (!state.isSplashDone) {
         SplashScreen(viewModel)
     } else {
@@ -127,7 +134,13 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                     MainAction.PushFullScreen(
                         FullScreenType.DraftDialog(onNewClick = {
                             viewModel.onAction(MainAction.PopFullScreen)
-                            viewModel.onAction(MainAction.PushFullScreen(FullScreenType.WritingScreen(callBack = state.onWritingComplete)))
+                            viewModel.onAction(
+                                MainAction.PushFullScreen(
+                                    FullScreenType.WritingScreen(
+                                        callBack = state.onWritingComplete
+                                    )
+                                )
+                            )
                         }, onContinueClick = {
                             viewModel.onAction(MainAction.PopFullScreen)
                             viewModel.onAction(
@@ -155,7 +168,6 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
         }
     }
 
-    println("state.isFullScreen ${state.isFullScreen}")
     // ✅ 여기에 전역 fullScreen 처리!
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -195,7 +207,9 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
 
                         is FullScreenType.WritingScreen -> {
                             println("WritingScreen")
-                            WritingScreen(content.tempWriting, viewModel::onAction, content.callBack)
+                            WritingScreen(
+                                content.tempWriting, viewModel::onAction, content.callBack
+                            )
                         }
 
                         is FullScreenType.NoticeScreen -> {
@@ -259,13 +273,67 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
 
 @Composable
 fun BottomNavigationBar(navController: NavController, currentRoute: String?, devil: Boolean) {
-    NavigationBar(
+    val shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)
 
-        modifier = Modifier.clip(
-            RoundedCornerShape(
-                topStart = 32.dp, topEnd = 32.dp
+
+
+    NavigationBar(
+        modifier = Modifier.clip(shape).drawWithContent {
+            val topStartRadius = 32.dp.toPx()
+            val topEndRadius = 32.dp.toPx()
+            val borderWidth = 2.dp.toPx()
+            val borderColor = BeumColors.BlackAlpha10
+
+            drawContent() // NavigationBar의 내용 먼저 그림
+
+            val width = size.width
+
+            // 1. 그라디언트(Brush) 정의
+            // 보더의 양 끝(width * 0.1 지점)에서 투명하게 시작/끝나고, 중앙에서 불투명한 파란색이 되도록 설정
+            val gradientBrush = Brush.linearGradient(
+                colors = listOf(
+                    borderColor.copy(alpha = 0.1f),    // 0% 지점 (왼쪽 끝, 투명)
+                    borderColor,                     // 80% 지점 (완전히 불투명)
+                    borderColor.copy(alpha = 0.1f)     // 100% 지점 (오른쪽 끝, 투명)
+                ),
+                start = Offset(0f, 0f),
+                end = Offset(width, 0f),
+                tileMode = TileMode.Clamp
             )
-        ), containerColor = if (devil) BeumColors.baseGrayLightGray800 else Color.White // 여기 추가
+
+            // 2. Path 정의 (이전 코드와 동일, 전체 상단 라인을 정의)
+            val path = Path().apply {
+                // 시작점을 (0, 0)으로 가정하고 Top-Left Radius의 끝점에서 시작하도록 조정
+                moveTo(0f, topStartRadius)
+
+                // Arc for top-left corner
+                arcTo(
+                    rect = Rect(0f, 0f, topStartRadius * 2, topStartRadius * 2),
+                    startAngleDegrees = 180f,
+                    sweepAngleDegrees = 90f,
+                    forceMoveTo = false
+                )
+
+                // Line across the top
+                lineTo(width - topEndRadius, 0f)
+
+                // Arc for top-right corner
+                arcTo(
+                    rect = Rect(width - topEndRadius * 2, 0f, width, topEndRadius * 2),
+                    startAngleDegrees = 270f,
+                    sweepAngleDegrees = 90f,
+                    forceMoveTo = false
+                )
+            }
+
+            // 3. Path를 Brush로 그리기
+            drawPath(
+                path = path,
+                brush = gradientBrush, // Color 대신 Brush 사용
+                style = Stroke(width = borderWidth, cap = StrokeCap.Round)
+            )
+        },
+        containerColor = if (devil) BeumColors.baseGrayLightGray800 else Color.White // 여기 추가
     ) {
         val selectedTintColor = if (devil) Color.White else BeumColors.baseGrayLightGray800
         val unSelectedTintColor = if (devil) BeumColors.transparentWhite else Color.Unspecified
@@ -338,7 +406,7 @@ fun BottomNavigationBar(navController: NavController, currentRoute: String?, dev
                 }
             }, label = {
                 Text(
-                    "레벨", style = TextStyle(
+                    "랭킹", style = TextStyle(
                         fontSize = BeumTypo.TypoScaleText25,
                         lineHeight = 10.sp,
                         fontFamily = FontFamily(Font(Res.font.sf_pro)),

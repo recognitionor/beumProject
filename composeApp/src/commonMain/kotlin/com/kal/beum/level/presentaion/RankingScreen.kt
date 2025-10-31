@@ -80,6 +80,7 @@ fun RankingScreen(
                     showDetailInfoIndex = -1
                 }, // 닫힐 때 None으로 초기화
                 containerColor = if (isDevil) Color(0xCC000000) else Color(0xCCFFFFFF),
+                dragHandle = null,
             ) {
                 RankDetailInfo(isDevil, state.rankerUserList[showDetailInfoIndex]) {}
             }

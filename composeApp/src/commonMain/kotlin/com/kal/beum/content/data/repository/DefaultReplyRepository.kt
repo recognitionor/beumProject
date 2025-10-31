@@ -2,12 +2,14 @@ package com.kal.beum.content.data.repository
 
 import com.kal.beum.content.data.dto.CommentRequestDto
 import com.kal.beum.content.data.network.RemoteContentDataSource
+import com.kal.beum.content.data.toCommentInfo
 import com.kal.beum.content.domain.CommentDetail
 import com.kal.beum.content.domain.CommentInfo
 import com.kal.beum.content.domain.ReplyRepository
 import com.kal.beum.core.domain.DataError
 import com.kal.beum.core.domain.Result
 import com.kal.beum.core.domain.onError
+import com.kal.beum.core.domain.onProgress
 import com.kal.beum.core.domain.onSuccess
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -18,6 +20,7 @@ class DefaultReplyRepository(private val remoteContentDataSource: RemoteContentD
     override suspend fun sendReply(
         boardId: Int, content: String, depth: Int, parentId: Int?, devil: Boolean
     ): Flow<Result<Boolean, DataError.Remote>> = flow {
+        println("***************")
         emit(Result.Progress())
         val result = remoteContentDataSource.sendReply(
             CommentRequestDto(
@@ -29,15 +32,23 @@ class DefaultReplyRepository(private val remoteContentDataSource: RemoteContentD
         }
     }
 
-    override suspend fun getReplyList(contentId: Int): Result<CommentInfo, DataError.Remote> {
-        println("getReplyList")
-        remoteContentDataSource.getReply(contentId)
+    override suspend fun getReplyList(
+        boardId: Int,
+        commentId: Int?
+    ): Result<CommentInfo, DataError.Remote> {
+        remoteContentDataSource.getReply(boardId, commentId)
+            .onSuccess { commentInfoDto ->
+                return Result.Success(commentInfoDto.toCommentInfo())
+            }
+            .onError {
+                return Result.Error(it)
+            }
         return Result.Error(DataError.Remote.REQUEST_ERROR)
     }
 
     override suspend fun likeReply(commentInfo: CommentDetail): Result<CommentDetail, DataError.Remote> {
         println("likeReply start : $commentInfo")
-        remoteContentDataSource.likeBoard(commentInfo.id).onSuccess {
+        remoteContentDataSource.likeComment(commentInfo.id).onSuccess {
             val contentDetailTemp = commentInfo.copy(
                 likeIsMe = !commentInfo.likeIsMe,
                 likeCount = if (commentInfo.likeIsMe) commentInfo.likeCount - 1 else commentInfo.likeCount + 1

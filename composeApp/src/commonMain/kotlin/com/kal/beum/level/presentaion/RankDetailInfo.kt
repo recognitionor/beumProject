@@ -59,7 +59,7 @@ fun RankDetailInfo(isDevil: Boolean, ranker: RankerUserInfo, onClickItem: () -> 
 
         if (ranker.profileImageUrl.isNotEmpty()) {
             Box(
-                modifier = Modifier.width(24.dp).height(24.dp).background(
+                modifier = Modifier.width(48.dp).height(48.dp).background(
                     color = Color.Transparent,
                     shape = RoundedCornerShape(size = 20.dp)
                 )
@@ -67,7 +67,7 @@ fun RankDetailInfo(isDevil: Boolean, ranker: RankerUserInfo, onClickItem: () -> 
                 AsyncImage(
                     model = ranker.profileImageUrl,
                     contentDescription = "",
-                    modifier = Modifier.size(24.dp)
+                    modifier = Modifier.size(48.dp)
                 )
             }
 
@@ -77,7 +77,7 @@ fun RankDetailInfo(isDevil: Boolean, ranker: RankerUserInfo, onClickItem: () -> 
                     width = 0.625.dp,
                     color = BeumColors.baseAlphaWhiteLightWhite500A,
                     shape = RoundedCornerShape(size = 20.dp)
-                ).width(24.dp).height(24.dp).background(
+                ).width(48.dp).height(48.dp).background(
                     color = if (isDevil) BeumColors.DevilPrimary else Color(0xFF45CAF7),
                     shape = RoundedCornerShape(size = 20.dp)
                 )
@@ -85,7 +85,7 @@ fun RankDetailInfo(isDevil: Boolean, ranker: RankerUserInfo, onClickItem: () -> 
                 Image(
                     painter = painterResource(if (isDevil) Res.drawable.devil else Res.drawable.angel),
                     contentDescription = "",
-                    modifier = Modifier.size(40.dp)
+                    modifier = Modifier.size(48.dp)
                 )
             }
         }

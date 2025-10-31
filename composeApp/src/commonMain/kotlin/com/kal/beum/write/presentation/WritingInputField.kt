@@ -45,6 +45,7 @@ import beumproject.composeapp.generated.resources.sf_pro
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumDimen
 import com.kal.beum.core.presentation.BeumTypo
+import com.kal.beum.utils.pxToDp
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 
@@ -59,7 +60,7 @@ fun WriteEditText(
     onTextChange: (String) -> Unit
 ) {
     Box(
-        modifier = Modifier.height(height).padding(start = 20.dp, end = 20.dp).border(
+        modifier = Modifier.height(height).border(
             width = 1.dp, color = BeumColors.baseGrayLightGray200, shape = RoundedCornerShape(12.dp)
         ).clip(RoundedCornerShape(16.dp)).background(Color.White)
     ) {
@@ -116,7 +117,7 @@ fun WriteEditText(
                         Row {
                             val isDevil = content.toBoolean()
                             Row(
-                                modifier = Modifier.fillMaxHeight().defaultMinSize(minWidth = 55.dp)
+                                modifier = Modifier.height(32.dp).defaultMinSize(minWidth = 55.dp)
                                     .clip(RoundedCornerShape(82.dp)) // 먼저 모양을 깎고
                                     .background(color = if (isDevil) Color.White else Color.Black) // 그 위에 배경 색상
                                     .border(
@@ -150,7 +151,7 @@ fun WriteEditText(
                                 )
                             }
                             Row(
-                                modifier = Modifier.fillMaxHeight().defaultMinSize(minWidth = 55.dp)
+                                modifier = Modifier.height(32.dp).defaultMinSize(minWidth = 55.dp)
                                     .clip(RoundedCornerShape(82.dp)) // 먼저 모양을 깎고
                                     .background(color = if (!isDevil) Color.White else Color.Black) // 그 위에 배경 색상
                                     .border(
@@ -198,6 +199,8 @@ fun WriteEditText(
                                 color = BeumColors.baseAlphaWhiteLightWhite,
                                 shape = RoundedCornerShape(size = 8.dp)
                             ).padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp)
+                            ,
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
                                 text = content, style = TextStyle(
@@ -205,6 +208,7 @@ fun WriteEditText(
                                     lineHeight = BeumDimen.TypoLienheigtLineheight200,
                                     fontFamily = FontFamily(Font(Res.font.sf_pro)),
                                     fontWeight = FontWeight(500),
+                                    textAlign = TextAlign.Center,
                                     color = BeumColors.baseGrayLightGray900,
                                 )
                             )
@@ -259,7 +263,7 @@ fun WriteEditText(
                                 )
                                 Spacer(modifier = Modifier.weight(1f))
                                 Image(
-                                    modifier = Modifier.width(16.dp).height(16.dp)
+                                    modifier = Modifier.width(20.dp).height(16.dp)
                                         .align(Alignment.CenterVertically).clickable {
                                             onTextChange.invoke("")
                                         },

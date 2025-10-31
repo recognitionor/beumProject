@@ -24,9 +24,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
@@ -46,8 +43,7 @@ import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumDimen
 import com.kal.beum.core.presentation.BeumTypo
 import com.kal.beum.main.presentation.MainAction
-import com.kal.beum.utils.formatTimeAgo
-import kotlinx.datetime.Month
+import com.kal.beum.utils.formatTimeAgoFromLong
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -169,7 +165,7 @@ fun NoticeScreen(action: (MainAction) -> Unit) {
                                     Spacer(modifier = Modifier.weight(1f))
 
                                     Text(
-                                        text = formatTimeAgo(item.createdAt), style = TextStyle(
+                                        text = formatTimeAgoFromLong(item.createdAt), style = TextStyle(
                                             fontSize = 13.sp,
                                             lineHeight = BeumTypo.lineHeightCaption1,
                                             fontFamily = FontFamily(Font(Res.font.sf_pro)),

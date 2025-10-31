@@ -23,7 +23,7 @@ class DefaultContentDetailRepository(private val remoteContentDataSource: Remote
     override suspend fun sendReply(
         boardId: Int, content: String, depth: Int, parentId: Int?, devil: Boolean
     ): Flow<Result<CommentDetail, DataError.Remote>> = flow {
-        println("sendReply")
+        println("sendReply@@@@@@@@@@@@")
         emit(Result.Progress())
         val commentDto = CommentRequestDto(
             boardId = boardId, content = content, depth = depth, parentId = parentId, devil = devil
@@ -68,6 +68,7 @@ class DefaultContentDetailRepository(private val remoteContentDataSource: Remote
         if (replyResult is Result.Error) {
             emit(Result.Error(replyResult.error))
         }
+        println("replyResult : $replyResult")
         val replyInfo = (replyResult as Result.Success).data
 
         val contentDetail = ContentDetail(

@@ -100,6 +100,8 @@ class CommunityViewModel(private val communityRepository: CommunityRepository) :
         viewModelScope.launch {
         }.start()
     }
+    private fun loadMoreComments() {
+    }
 
     fun onAction(action: CommunityAction) {
         when (action) {
@@ -120,6 +122,10 @@ class CommunityViewModel(private val communityRepository: CommunityRepository) :
             is CommunityAction.OnCommentLikeClicked -> {
                 println("OnCommentLikeClicked")
                 likeComment()
+            }
+
+            is CommunityAction.LoadMoreComments -> {
+                loadMoreComments()
             }
         }
     }

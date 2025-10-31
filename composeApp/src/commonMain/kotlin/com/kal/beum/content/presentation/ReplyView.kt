@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import beumproject.composeapp.generated.resources.Res
 import beumproject.composeapp.generated.resources.angel_abled
-import beumproject.composeapp.generated.resources.heart
 import beumproject.composeapp.generated.resources.ic_angel_emoji
 import beumproject.composeapp.generated.resources.ic_dot
 import beumproject.composeapp.generated.resources.ic_reply
@@ -34,7 +33,7 @@ import com.kal.beum.content.domain.CommentDetail
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumDimen
 import com.kal.beum.core.presentation.BeumTypo
-import com.kal.beum.utils.formatTimeAgo
+import com.kal.beum.utils.formatTimeAgoFromLong
 import com.kal.beum.utils.stringTimeToLong
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
@@ -75,7 +74,7 @@ fun ReplyView(replyInfo: CommentDetail, likeClicked: () -> Unit, selectedDetailR
                 Spacer(modifier = Modifier.width(6.dp))
 
                 Text(
-                    text = formatTimeAgo(stringTimeToLong(replyInfo.createdAt)), style = TextStyle(
+                    text = formatTimeAgoFromLong(stringTimeToLong(replyInfo.createdAt)), style = TextStyle(
                         fontSize = BeumTypo.TypoScaleText100,
                         lineHeight = 20.sp,
                         fontFamily = FontFamily(Font(Res.font.sf_pro)),

@@ -8,6 +8,7 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
+import kotlin.math.abs
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.DurationUnit
 
@@ -36,7 +37,7 @@ fun stringTimeToLong(time: String): Long {
         // UTC 기준 epoch milli로 변환
         val epochMilli = localDateTime.toInstant(TimeZone.UTC).toEpochMilliseconds()
         return epochMilli
-    }catch (e: Exception) {
+    } catch (e: Exception) {
         e.printStackTrace()
         return 0
     }
@@ -56,7 +57,7 @@ fun formatWithComma(number: Int): String {
     return sb.reverse().toString()
 }
 
-fun formatTimeAgo(timestampMillis: Long): String {
+fun formatTimeAgoFromLong(timestampMillis: Long): String {
     val now = Clock.System.now().toEpochMilliseconds()
     val diffMillis = now - timestampMillis
     val duration = diffMillis.milliseconds
@@ -67,5 +68,34 @@ fun formatTimeAgo(timestampMillis: Long): String {
     } else {
         val hours = duration.toInt(DurationUnit.HOURS)
         "${hours}시간 전"
+    }
+}
+
+fun timeAgoFromIsoString(isoString: String, timeZone: TimeZone = TimeZone.currentSystemDefault()): String {
+    println("timeAgoFromIsoString : $isoString" )
+    val now = Clock.System.now()
+    val thenInstant = runCatching { Instant.parse(isoString) }.getOrElse {
+        // 오프셋 없는 경우 → 로컬 시간으로 해석
+        LocalDateTime.parse(isoString).toInstant(timeZone)
+    }
+
+    val future = thenInstant > now
+    val diffSeconds = abs(thenInstant.epochSeconds - now.epochSeconds)
+
+    val minutes = diffSeconds / 60
+    val hours = diffSeconds / 3600
+    val days = diffSeconds / (3600 * 24)
+    val months = days / 30
+    val years = days / 365
+
+    val suffix = if (future) "후" else "전"
+
+    return when {
+        diffSeconds < 60 -> "${diffSeconds}초$suffix"
+        minutes < 60 -> "${minutes}분$suffix"
+        hours < 24 -> "${hours}시간$suffix"
+        days < 30 -> "${days}일$suffix"
+        months < 12 -> "${months}달$suffix"
+        else -> "${years}년$suffix"
     }
 }

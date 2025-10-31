@@ -27,7 +27,6 @@ class KtorMyInfoDataSource(private val httpClient: HttpClient) : RemoteMyInfoDat
                     append(ApiConstants.KEY.KEY_AUTH_TOKEN, it)
                 }
             }
-            setBody(UserRequestDto(userId.toString(), AppUserCache.userInfo?.nickName ?: ""))
             url {
                 parameters.append(ApiConstants.KEY.KEY_PAGE, 0.toString())
                 parameters.append(ApiConstants.KEY.KEY_SIZE, 10.toString())
@@ -50,19 +49,20 @@ class KtorMyInfoDataSource(private val httpClient: HttpClient) : RemoteMyInfoDat
                     append(ApiConstants.KEY.KEY_AUTH_TOKEN, it)
                 }
             }
-            setBody(UserRequestDto(userId.toString(), AppUserCache.userInfo?.nickName ?: ""))
+//            setBody(UserRequestDto(userId.toString(), AppUserCache.userInfo?.nickName ?: ""))
             url {
                 parameters.append(ApiConstants.KEY.KEY_PAGE, 0.toString())
                 parameters.append(ApiConstants.KEY.KEY_SIZE, 10.toString())
                 parameters.append(ApiConstants.KEY.KEY_IS_DEVIL, AppUserCache.isDevil.toString())
             }
         }
-        println("getMyContents : $result")
-        return if (result.status.value == 200) {
-            Result.Success(result.body<MyBoardInfoDto>())
-        } else {
-            Result.Error(DataError.Remote.REQUEST_ERROR)
-        }
+//        println("getMyContents : $result")
+//        return if (result.status.value == 200) {
+//            Result.Success(result.body<MyBoardInfoDto>())
+//        } else {
+//            Result.Error(DataError.Remote.REQUEST_ERROR)
+//        }
+        return Result.Error(DataError.Remote.REQUEST_ERROR)
     }
 
     override suspend fun reportUser(myContentId: Int): Result<Unit, DataError.Remote> {

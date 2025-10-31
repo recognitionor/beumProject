@@ -14,7 +14,7 @@ interface ReplyRepository {
     ): Flow<Result<Boolean, DataError.Remote>>
 
     suspend fun getReplyList(
-        contentId: Int
+        boardId: Int, commentId: Int? = null
     ): Result<CommentInfo, DataError.Remote>
 
     suspend fun likeReply(

@@ -225,6 +225,7 @@ fun MyInfoScreen(devil: Boolean, viewModel: MyInfoViewModel, action: (MainAction
                     }, // 닫힐 때 None으로 초기화
                     sheetState = sheetState,
                     containerColor = Color.White,
+                    dragHandle = null,
                     modifier = Modifier.wrapContentHeight().fillMaxWidth()
                 ) {
                     ModeToggleBottomSheet(
@@ -245,6 +246,7 @@ fun MyInfoScreen(devil: Boolean, viewModel: MyInfoViewModel, action: (MainAction
                             },
                             sheetState = sheetState,
                             containerColor = BeumColors.baseGrayLightGray75,
+                            dragHandle = null,
                             modifier = Modifier.wrapContentHeight().fillMaxWidth()
                         ) {
                             ReportBottomSheetPage({
@@ -268,6 +270,7 @@ fun MyInfoScreen(devil: Boolean, viewModel: MyInfoViewModel, action: (MainAction
                                 reportContent = null
                             }, // 닫힐 때 None으로 초기화
                             sheetState = sheetState,
+                            dragHandle = null,
                             containerColor = BeumColors.baseGrayLightGray75,
                             modifier = Modifier.fillMaxWidth().wrapContentHeight()
                                 .wrapContentHeight()

@@ -17,12 +17,16 @@ object ApiConstants {
         const val KEY_REFRESH_TOKEN = "refreshToken"
 
         const val KEY_PAGE = "page"
+
+        const val KEY_PARENT_ID = "parentId"
         const val KEY_CATEGORY_ID = "categoryId"
     }
 
     object Endpoints {
         const val COMMENT = "/comment"
         const val BOARD = "/board"
+
+        const val USER_SORTED = "/user-sorted"
         const val BOARDS = "/boards"
         const val FIREBASE_TOKEN = "/firebase-token"
         const val REFRESH_ACCESS_TOKEN = "/refreshAccessToken"

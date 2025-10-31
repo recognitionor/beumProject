@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -18,15 +19,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -45,26 +45,29 @@ import beumproject.composeapp.generated.resources.icon_arrow_right_black
 import beumproject.composeapp.generated.resources.sf_pro
 import com.kal.beum.community.presentation.CommunityAction
 import com.kal.beum.community.presentation.ContentDetailViewModel
-import com.kal.beum.content.domain.CommentDetail
 import com.kal.beum.content.domain.ContentsRepository
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumTypo
 import com.kal.beum.core.presentation.ToastInfo
 import com.kal.beum.main.presentation.FullScreenType
 import com.kal.beum.main.presentation.MainAction
-import com.kal.beum.utils.formatTimeAgo
+import com.kal.beum.utils.formatTimeAgoFromLong
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.koinInject
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ContentDetailScreen(id: Int, action: (MainAction) -> Unit, backBtnClick: () -> Unit) {
     val contentDetailRepository = koinInject<ContentsRepository>()
     val viewModel = remember { ContentDetailViewModel(contentDetailRepository) }
 
-    println("ContentDetailScreen viewModel : ${viewModel.toString()}")
+    println("ContentDetailScreen viewModel : $viewModel")
     val state by viewModel.state.collectAsStateWithLifecycle()
-    var detailReplyInfo by remember { mutableStateOf<CommentDetail?>(null) }
+
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = false
+    )
 
     LaunchedEffect(Unit) {
         viewModel.getContentDetail(id)
@@ -83,10 +86,11 @@ fun ContentDetailScreen(id: Int, action: (MainAction) -> Unit, backBtnClick: () 
     }
 
 
-    if (detailReplyInfo != null) {
-        detailReplyInfo?.let {
+    if (state.selectedCommentDetail != null) {
+        state.selectedCommentDetail?.let {
             ReplyDetailView(it, backBtnClick = {
-                detailReplyInfo = null
+                viewModel.selectComment()
+                viewModel.updateContentDetail(it)
             })
         }
     } else {
@@ -108,6 +112,17 @@ fun ContentDetailScreen(id: Int, action: (MainAction) -> Unit, backBtnClick: () 
 
                     Spacer(modifier = Modifier.weight(1f))
                     Image(
+                        modifier = Modifier.clickable {
+                            println("clickable")
+
+//                            action(
+//                                MainAction.PushFullScreen(
+//                                    FullScreenType.ReportConfirmDialog(
+//                                        {},
+//                                        {})
+//                                )
+//                            )
+                        },
                         painter = painterResource(Res.drawable.ic_more_vertical_medium),
                         contentDescription = ""
                     )
@@ -151,7 +166,7 @@ fun ContentDetailScreen(id: Int, action: (MainAction) -> Unit, backBtnClick: () 
                             Spacer(modifier = Modifier.height(2.dp))
                             state.contentDetail?.lastModifiedTime?.let {
                                 Text(
-                                    text = formatTimeAgo(it), style = TextStyle(
+                                    text = formatTimeAgoFromLong(it), style = TextStyle(
                                         fontSize = BeumTypo.TypoScaleText75,
                                         fontFamily = FontFamily(Font(Res.font.sf_pro)),
                                         fontWeight = FontWeight(400),
@@ -283,19 +298,23 @@ fun ContentDetailScreen(id: Int, action: (MainAction) -> Unit, backBtnClick: () 
                     )
 
                     Column {
-                        LazyColumn(modifier = Modifier.weight(1f)) {
-                            items(state.contentDetail?.commentInfo?.comments?.size ?: 0) { index ->
-                                val reply = state.contentDetail?.commentInfo?.comments?.get(index)
-                                reply?.let {
-                                    Spacer(modifier = Modifier.height(16.dp))
-                                    ReplyView(it, {
-                                        viewModel.onAction(CommunityAction.OnCommentLikeClicked(it))
-                                    }) { replyList ->
-                                        detailReplyInfo = replyList
-                                    }
-                                }
-                            }
+                        Box(modifier = Modifier.weight(1f)) {
+                            CommentListView(state, viewModel, false, true)
                         }
+
+//                        LazyColumn(modifier = Modifier.weight(1f)) {
+//                            items(state.contentDetail?.commentInfo?.comments?.size ?: 0) { index ->
+//                                val reply = state.contentDetail?.commentInfo?.comments?.get(index)
+//                                reply?.let {
+//                                    Spacer(modifier = Modifier.height(16.dp))
+//                                    ReplyView(it, {
+//                                        viewModel.onAction(CommunityAction.OnCommentLikeClicked(it))
+//                                    }) { replyList ->
+//                                        detailReplyInfo = replyList
+//                                    }
+//                                }
+//                            }
+//                        }
 
                         Box(
                             modifier = Modifier.fillMaxWidth().height(2.dp)
@@ -303,7 +322,7 @@ fun ContentDetailScreen(id: Int, action: (MainAction) -> Unit, backBtnClick: () 
                         )
                         Row(
                             modifier = Modifier.height(72.dp).padding(top = 12.dp),
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Box(
                                 modifier = Modifier.border(

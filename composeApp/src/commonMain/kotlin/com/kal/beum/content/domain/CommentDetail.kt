@@ -13,5 +13,6 @@ data class CommentDetail(
     val parentId: Int? = null,
     val reReplyCount: Int,
     val user: CommentUserDto,
-    val createdAt: String
+    val createdAt: String,
+    val replyList: List<CommentDetail> = emptyList()
 )

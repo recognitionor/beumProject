@@ -96,7 +96,7 @@ fun WritingScreen(
     }
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
-            modifier = Modifier.fillMaxSize().background(Color.White).padding(top = 40.dp)
+            modifier = Modifier.fillMaxSize().background(Color.White).padding(top = 40.dp, start = 16.dp, end = 16.dp)
                 .verticalScroll(
                     rememberScrollState()
                 ), horizontalAlignment = Alignment.CenterHorizontally
@@ -105,7 +105,6 @@ fun WritingScreen(
                 modifier = Modifier.height(48.dp).fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Spacer(modifier = Modifier.width(20.dp))
                 Image(
                     painter = painterResource(Res.drawable.ic_close),
                     contentDescription = "",
@@ -133,7 +132,7 @@ fun WritingScreen(
                     width = 1.dp,
                     color = BeumColors.baseGrayLightGray200,
                     shape = RoundedCornerShape(size = 12.dp)
-                ).width(358.dp).height(43.dp).background(
+                ).height(43.dp).background(
                     color = BeumColors.baseGrayLightGray75, shape = RoundedCornerShape(size = 12.dp)
                 ).clickable {
                     currentInfoBottomSheetType = InfoBottomSheetType.GuideInfo()
@@ -226,8 +225,7 @@ fun WritingScreen(
                     viewModel.onAction(WritingAction.Submit)
                 },
                 enabled = checkValidContent(state),
-                modifier = Modifier.fillMaxWidth().height(52.dp)
-                    .padding(start = 20.dp, end = 20.dp),
+                modifier = Modifier.fillMaxWidth().height(52.dp),
                 shape = RoundedCornerShape(12.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = BeumColors.angelSkyblue, contentColor = Color.White
@@ -253,6 +251,7 @@ fun WritingScreen(
                         currentInfoBottomSheetType = InfoBottomSheetType.None
                     }, // 닫힐 때 None으로 초기화
                     sheetState = sheetState,
+                    dragHandle = null,
                     containerColor = Color.White,
                     modifier = Modifier.wrapContentHeight().fillMaxWidth()
                 ) {
@@ -267,6 +266,7 @@ fun WritingScreen(
                 ModalBottomSheet(
                     onDismissRequest = { showPointSettingSheet = false },
                     sheetState = sheetState,
+                    dragHandle = null,
                     modifier = Modifier.wrapContentHeight().fillMaxWidth()
                 ) {
                     // 아래에 들어가는 UI가 이미지랑 비슷하게 작성
@@ -281,6 +281,7 @@ fun WritingScreen(
                 ModalBottomSheet(
                     onDismissRequest = { showCategorySheet = false },
                     sheetState = sheetState,
+                    dragHandle = null,
                     modifier = Modifier.wrapContentHeight().fillMaxWidth()
                 ) {
                     // 아래에 들어가는 UI가 이미지랑 비슷하게 작성

@@ -124,7 +124,7 @@ fun HomeScreen(
                     fontSize = BeumDimen.TypoScaleText300,
                     lineHeight = BeumDimen.baseLineheightTextLineheight300,
                     fontFamily = FontFamily(Font(Res.font.sf_pro)),
-                    fontWeight = FontWeight(700),
+                    fontWeight = FontWeight.Bold,
                     color = if (toggle) BeumColors.Black else BeumColors.White,
                     textAlign = TextAlign.Center,
                 )

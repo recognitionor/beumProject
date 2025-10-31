@@ -3,7 +3,6 @@ package com.kal.beum.content.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kal.beum.content.domain.CommentDetail
-import com.kal.beum.content.domain.CommentInfo
 import com.kal.beum.content.domain.ReplyRepository
 import com.kal.beum.core.data.AppUserCache
 import com.kal.beum.core.domain.DataError
@@ -24,16 +23,22 @@ class ReplyDetailViewModel(private val replyRepository: ReplyRepository) : ViewM
         viewModelScope, SharingStarted.WhileSubscribed(5000L), _state.value
     )
 
-    fun initLikeMe(isLikeMe: Boolean) {
-        _state.update { it.copy(isLikeMe = isLikeMe) }
-
+    fun initReplyInfo(commentDetail: CommentDetail) {
+        _state.update { it.copy(replyInfo = commentDetail) }
     }
 
-    fun getReplyList(contentId: Int) {
-        println("getReplyList")
+    fun getReplyList(boardId: Int, commentId: Int) {
+        println("getReplyList~~~~~~~~~~~~~~~~~~~~~ : $boardId")
         viewModelScope.launch {
-            replyRepository.getReplyList(contentId).onSuccess { commentInfo ->
-                _state.update { it.copy(commentInfo) }
+            replyRepository.getReplyList(boardId, commentId).onSuccess { commentInfo ->
+                _state.update {
+                    it.copy(
+                        replyInfo = state.value.replyInfo?.copy(
+                            reReplyCount = commentInfo.commentCount,
+                            replyList = commentInfo.comments
+                        )
+                    )
+                }
             }
         }
     }
@@ -41,17 +46,24 @@ class ReplyDetailViewModel(private val replyRepository: ReplyRepository) : ViewM
     fun likeReply(replyDetail: CommentDetail) {
         viewModelScope.launch {
             replyRepository.likeReply(replyDetail).onSuccess { result ->
-                _state.update { it.copy(isLikeMe = !state.value.isLikeMe) }
+                println("getReplyList~~~~~~~~~~~~~~~~~~~~~ : $result")
+                _state.update {
+                    it.copy(
+                        replyInfo = state.value.replyInfo?.copy(
+                            likeIsMe = result.likeIsMe, likeCount = result.likeCount
+                        )
+                    )
+                }
             }
         }
     }
 
     fun sendReply(replyDetail: CommentDetail, content: String) {
-        println("sendReply : $replyDetail")
+        println("sendReply : $replyDetail , $content")
         viewModelScope.launch {
             replyRepository.sendReply(
                 replyDetail.boardId,
-                replyDetail.content,
+                content,
                 replyDetail.depth + 1,
                 replyDetail.id,
                 AppUserCache.isDevil

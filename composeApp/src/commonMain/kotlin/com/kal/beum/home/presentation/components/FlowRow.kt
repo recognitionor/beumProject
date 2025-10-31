@@ -155,23 +155,42 @@ fun MarqueeLazyRowStyled(isDevil: Boolean, texts: List<String>, loadMore: () -> 
 private fun MarqueeStyledRow(texts: List<String>, isDevil: Boolean) {
     val devilColor = Brush.linearGradient(
         colors = listOf(
-            Color(0xFF696C70), Color(0xFF33383E), Color(0xFF2B3036)
+            Color(0xFF393E44), Color(0xFF2B3036)
         ), start = Offset(0f, 0f),          // 좌상단
         end = Offset(1000f, 1000f)       // 우하단 방향
     )
 
-    val angelColor = Brush.verticalGradient(
+    val devilBorderColor = Brush.linearGradient(
+        colors = listOf(
+            Color(0xFF696C70), Color(0xFF33383E),Color(0xFF2B3036)
+        ), start = Offset(0f, 0f),          // 좌상단
+        end = Offset(1000f, 1000f)       // 우하단 방향
+    )
+
+    val angelColor = Brush.linearGradient(
+        colors = listOf(
+            Color(0xFFFFFFFF), Color(0xFFFFFFFF), Color(0xFFFFFFFF)
+        ),
+        start = Offset(0f, 0f),
+        end = Offset(1000f, 1000f)
+    )
+
+    val angelBorderColor = Brush.linearGradient(
         colors = listOf(
             Color(0xFFFFFFFF), Color(0xFFF2EFED), Color(0xFFF3F3F3)
-        )
+        ), start = Offset(0f, 0f),          // 좌상단
+        end = Offset(1000f, 1000f)       // 우하단 방향
     )
 
     Row {
         texts.forEach { msg ->
             Box(
-                modifier = Modifier.height(40.dp).clip(RoundedCornerShape(pxToDp(100f)))
-                    .background(brush = if (isDevil) devilColor else angelColor)
-                    .padding(end = 16.dp, bottom = 2.dp, start = 16.dp) // 간격 최소화
+                modifier = Modifier.height(40.dp).clip(RoundedCornerShape(pxToDp(100f))).border(
+                    width = 1.dp,
+                    brush = if (isDevil) devilBorderColor else angelBorderColor,
+                    shape = RoundedCornerShape(pxToDp(100f))
+                ).background(brush = if (isDevil) devilColor else angelColor)
+                    .padding(end = 16.dp, bottom = 2.dp, start = 16.dp)
                     .wrapContentWidth(Alignment.CenterHorizontally),
                 contentAlignment = Alignment.Center
             ) {

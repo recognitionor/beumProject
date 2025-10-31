@@ -74,7 +74,7 @@ fun ReportBottomSheetPage(sheetState: () -> Unit, reportClick: () -> Unit) {
                 Spacer(modifier = Modifier.width(8.dp))
 
                 Text(
-                    text = "사용자 신고", style = TextStyle(
+                    text = "신고하기", style = TextStyle(
                         fontSize = BeumTypo.TypoScaleText300,
                         fontFamily = FontFamily(Font(Res.font.sf_pro)),
                         fontWeight = FontWeight(500),
@@ -85,6 +85,30 @@ fun ReportBottomSheetPage(sheetState: () -> Unit, reportClick: () -> Unit) {
 
             Spacer(modifier = Modifier.height(24.dp))
 
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp)
+                    .clickable {
+                        reportClick.invoke()
+                    }, verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    modifier = Modifier.size(20.dp),
+                    painter = painterResource(Res.drawable.ic_report),
+                    contentDescription = ""
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+
+                Text(
+                    text = "신고하기", style = TextStyle(
+                        fontSize = BeumTypo.TypoScaleText300,
+                        fontFamily = FontFamily(Font(Res.font.sf_pro)),
+                        fontWeight = FontWeight(500),
+                        color = Color(0xFFFE5B58),
+                    )
+                )
+            }
+
+            Spacer(modifier = Modifier.height(24.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp, vertical = 10.dp),

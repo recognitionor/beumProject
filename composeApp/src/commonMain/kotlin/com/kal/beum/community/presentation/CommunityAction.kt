@@ -10,4 +10,6 @@ sealed interface CommunityAction {
 
     data class OnCommentLikeClicked(val commentDetail: CommentDetail) : CommunityAction
 
+    data class LoadMoreComments(val commentDetail: CommentDetail) : CommunityAction
+
 }

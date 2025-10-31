@@ -11,6 +11,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.kal.beum.core.presentation.BeumColors
@@ -46,12 +47,15 @@ fun InfoBottomSheet(type: InfoBottomSheetType, onConfirm: () -> Unit) {
         Spacer(modifier = Modifier.height(16.dp))
 
         bullets.forEach { bullet ->
-            Row(verticalAlignment = Alignment.Top) {
-                Text(
-                    text = "• ", fontSize = 16.sp, color = Color.Black
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Box(
+                    modifier = Modifier
+                        .size(6.dp)
+                        .background(color = BeumColors.angelSkyblue, shape = androidx.compose.foundation.shape.CircleShape)
                 )
+                Spacer(modifier = Modifier.width(10.dp))
                 Text(
-                    text = bullet, fontSize = 16.sp, color = Color.DarkGray
+                    text = bullet, fontSize = 16.sp, color = Color.DarkGray, textAlign = TextAlign.Start,
                 )
             }
             Spacer(modifier = Modifier.height(8.dp))

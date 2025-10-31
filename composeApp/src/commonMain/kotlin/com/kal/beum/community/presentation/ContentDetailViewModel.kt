@@ -64,6 +64,20 @@ class ContentDetailViewModel(private val contentDetailRepository: ContentsReposi
         }
     }
 
+    fun updateContentDetail(commentDetail: CommentDetail) {
+        _state.update { state ->
+            state.copy(
+                contentDetail = state.contentDetail?.copy(
+                    commentInfo = state.contentDetail.commentInfo.copy(
+                        comments = state.contentDetail.commentInfo.comments.map {
+                            if (it.id == commentDetail.id) commentDetail else it
+                        }
+                    )
+                )
+            )
+        }
+    }
+
     fun getContentDetail(id: Int) {
         println("getContentDetail : $id")
         viewModelScope.launch {
@@ -79,11 +93,20 @@ class ContentDetailViewModel(private val contentDetailRepository: ContentsReposi
 
                     is Result.Success<ContentDetail> -> {
                         println("Result.Success : ${result.data}")
-                        _state.update { it.copy(contentDetail = result.data, isProgress = false) }
+                        _state.update {
+                            it.copy(
+                                contentDetail = result.data, isProgress = false
+                            )
+                        }
                     }
                 }
             }.launchIn(viewModelScope)
         }
+    }
+
+    fun selectComment(commentDetail: CommentDetail? = null) {
+        println("selectComment : $commentDetail")
+        _state.update { it.copy(selectedCommentDetail = commentDetail) }
     }
 
     fun likeContent(contentDetail: ContentDetail) {
@@ -100,6 +123,10 @@ class ContentDetailViewModel(private val contentDetailRepository: ContentsReposi
         }
     }
 
+    private fun loadMoreComments() {
+
+    }
+
     fun likeComment(commentDetail: CommentDetail) {
         viewModelScope.launch {
             contentDetailRepository.likeCommentToggle(commentDetail).onSuccess { result ->
@@ -109,8 +136,7 @@ class ContentDetailViewModel(private val contentDetailRepository: ContentsReposi
                             commentInfo = state.contentDetail.commentInfo.copy(
                                 comments = state.contentDetail.commentInfo.comments.map {
                                     if (it.id == result.id) result else it
-                                }
-                            )
+                                })
                         )
                     )
                 }
@@ -132,6 +158,12 @@ class ContentDetailViewModel(private val contentDetailRepository: ContentsReposi
             is CommunityAction.OnCommentLikeClicked -> {
                 likeComment(action.commentDetail)
             }
+
+            is CommunityAction.LoadMoreComments -> {
+                loadMoreComments()
+            }
         }
     }
+
+
 }
