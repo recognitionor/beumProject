@@ -27,7 +27,6 @@ class WritingViewModel(
     )
 
     private fun getWriteCategoryList() {
-        println("getWriteCategoryList()")
         viewModelScope.launch {
             writeCategoryRepository.getWriteCategory().onSuccess { result ->
                 _state.update { it.copy(writeCategoryMap = result) }
@@ -46,13 +45,14 @@ class WritingViewModel(
             _state.update { it.copy(submitProgress = true) }
 
             println("tags : ${state.value.tags}")
-
+            val categoryName = state.value.selectedCategory?.category ?: ""
             val writingSubmitRequest = WritingInfoRequest(
                 title = state.value.title,
                 content = state.value.content,
                 tags = parseTagsFromString(state.value.tags),
                 devil = state.value.isDevil,
                 categoryId = state.value.selectedCategory?.categoryId ?: -1,
+                categoryName = categoryName,
                 rewardPoint = state.value.rewardPoint
             )
             writingRepository.submitWriting(writingSubmitRequest).onSuccess { result ->
@@ -143,10 +143,8 @@ class WritingViewModel(
             }
 
             WritingAction.SaveTempWriting -> {
-                val isEmpty = state.value.tags.isEmpty() &&
-                        state.value.title.isEmpty() &&
-                        state.value.content.isEmpty() &&
-                        state.value.selectedCategory == null
+                val isEmpty =
+                    state.value.tags.isEmpty() && state.value.title.isEmpty() && state.value.content.isEmpty() && state.value.selectedCategory == null
                 if (isEmpty) {
                     viewModelScope.launch {
                         println("clearTempWritingTitle")

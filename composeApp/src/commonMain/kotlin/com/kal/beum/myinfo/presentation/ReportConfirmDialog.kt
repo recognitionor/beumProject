@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -35,13 +36,14 @@ fun ReportConfirmDialog(onDismiss: () -> Unit, onContinueClick: () -> Unit) {
                 top = BeumDimen.Px125RemSpacing08,
                 end = 20.dp,
                 bottom = BeumDimen.Px075RemSpacing06
-            ).fillMaxWidth().height(200.dp).background(
+            ).fillMaxWidth().wrapContentHeight().background(
                 color = BeumColors.White, shape = RoundedCornerShape(
                     topStart = 12.dp, topEnd = 12.dp, bottomStart = 12.dp, bottomEnd = 12.dp
                 )
             ), contentAlignment = Alignment.Center
         ) {
             Column(modifier = Modifier.padding(horizontal = 20.dp)) {
+                Spacer(Modifier.height(20.dp))
                 Text(
                     text = "해당 사용자를 신고하시겠습니까?", style = TextStyle(
                         fontSize = BeumTypo.TypoScaleText400,
@@ -102,6 +104,7 @@ fun ReportConfirmDialog(onDismiss: () -> Unit, onContinueClick: () -> Unit) {
                         )
                     }
                 }
+                Spacer(Modifier.height(20.dp))
             }
         }
     }

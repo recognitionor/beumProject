@@ -7,6 +7,7 @@ import com.kal.beum.core.domain.Result
 import com.kal.beum.write.domain.WritingInfoRequest
 import io.ktor.client.*
 import io.ktor.client.request.*
+import io.ktor.client.statement.bodyAsText
 
 class KtorWriteDataSource(private val httpClient: HttpClient) : RemoteWriteDataSource {
 
@@ -21,6 +22,7 @@ class KtorWriteDataSource(private val httpClient: HttpClient) : RemoteWriteDataS
                 writingSubmitRequest
             )
         }
+        println("submitWriting : ${response.bodyAsText()}")
         return if (response.status.value == 200) {
             Result.Success(true)
         } else {

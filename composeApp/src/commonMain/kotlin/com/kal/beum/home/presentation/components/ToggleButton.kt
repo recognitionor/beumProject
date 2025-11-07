@@ -35,7 +35,7 @@ fun ToggleButton(toggle: Boolean, toggleClicked: (Boolean) -> Unit) {
     var isToggled by remember { mutableStateOf(toggle) }
 
     Box(
-        modifier = Modifier.height(48.dp).border(
+        modifier = Modifier.height(48.dp).width(104.dp).border(
             width = 0.dp, color = Color.Transparent, shape = RoundedCornerShape(size = 100.dp)
         ).clip(RoundedCornerShape(size = 100.dp)).wrapContentSize(Alignment.Center)
             .background(if (isToggled) Color.Black else Color.White).clickable {
@@ -50,11 +50,11 @@ fun ToggleButton(toggle: Boolean, toggleClicked: (Boolean) -> Unit) {
 
             Box(
                 Modifier.clip(RoundedCornerShape(90))
-                    .background(if (isToggled) Color.Transparent else Color.Black).width(64.dp),
+                    .background(if (isToggled) Color.Transparent else Color.Black).width(48.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Image(
-                    modifier = Modifier.size(48.dp),
+                    modifier = Modifier.size(32.dp),
                     painter = if (isToggled) painterResource(Res.drawable.angel_disabled) else painterResource(
                         Res.drawable.angel_abled
                     ),
@@ -64,11 +64,11 @@ fun ToggleButton(toggle: Boolean, toggleClicked: (Boolean) -> Unit) {
 
             Box(
                 Modifier.clip(RoundedCornerShape(90))
-                    .background(if (isToggled) Color.White else Color.Transparent).width(64.dp),
+                    .background(if (isToggled) Color.White else Color.Transparent).width(48.dp),
                 contentAlignment = Alignment.Center
             ) {
                 Image(
-                    modifier = Modifier.size(48.dp),
+                    modifier = Modifier.size(32.dp),
                     painter = if (isToggled) painterResource(Res.drawable.devil_abled) else painterResource(
                         Res.drawable.devil_disabled
                     ),

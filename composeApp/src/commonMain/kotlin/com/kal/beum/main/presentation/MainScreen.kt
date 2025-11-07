@@ -100,7 +100,7 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
             Box(modifier = Modifier.fillMaxSize()) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = if (state.isDevil) BeumColors.baseGrayLightGray800 else BeumColors.baseCoolGrayLightGray100
+                    color = state.surfaceColor
                 ) {
                     NavHost(
                         navController = navController,

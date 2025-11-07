@@ -1,5 +1,6 @@
 package com.kal.beum.main.presentation
 
+import androidx.compose.ui.graphics.Color
 import com.kal.beum.core.presentation.ToastInfo
 import com.kal.beum.main.domain.UserInfo
 import com.kal.beum.write.domain.WritingCategory
@@ -15,7 +16,8 @@ sealed class FullScreenType {
         val onDismiss: (selectItem: WritingCategory?) -> Unit
     ) : FullScreenType()
 
-    data class WritingScreen(val tempWriting: WritingData? = null, val  callBack:(() -> Unit)?) : FullScreenType()
+    data class WritingScreen(val tempWriting: WritingData? = null, val callBack: (() -> Unit)?) :
+        FullScreenType()
 
     object ProgressDialog : FullScreenType()
 
@@ -48,5 +50,6 @@ data class MainState(
     val isFullScreen: Boolean = false,
     val writingTemp: WritingData? = null,
     val onWritingComplete: (() -> Unit)? = null,
-    val isDraftDialog: Boolean = false
+    val isDraftDialog: Boolean = false,
+    val surfaceColor: Color = Color.Transparent,
 )

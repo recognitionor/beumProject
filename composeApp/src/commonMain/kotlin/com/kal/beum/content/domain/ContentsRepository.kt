@@ -7,15 +7,15 @@ import kotlinx.coroutines.flow.Flow
 interface ContentsRepository {
 
     suspend fun sendReply(
-        boardId: Int,
-        content: String,
-        depth: Int,
-        parentId: Int?,
-        devil: Boolean
+        boardId: Int, content: String, depth: Int, parentId: Int?, devil: Boolean
     ): Flow<Result<CommentDetail, DataError.Remote>>
 
     suspend fun getContentInfo(
         id: Int
+    ): Flow<Result<ContentDetail, DataError.Remote>>
+
+    suspend fun reportContent(
+        boardId: Int, reportContent: String, reportId: Int, reportType: String, reportedUserId: String
     ): Flow<Result<ContentDetail, DataError.Remote>>
 
     suspend fun likeBoardToggle(

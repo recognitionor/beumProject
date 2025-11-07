@@ -2,6 +2,7 @@ package com.kal.beum.content.data.repository
 
 import com.kal.beum.content.data.dto.CommentRequestDto
 import com.kal.beum.content.data.dto.CommentUserDto
+import com.kal.beum.content.data.dto.ReportRequestDto
 import com.kal.beum.content.data.network.RemoteContentDataSource
 import com.kal.beum.content.data.toCommentInfo
 import com.kal.beum.content.domain.CommentDetail
@@ -23,7 +24,6 @@ class DefaultContentDetailRepository(private val remoteContentDataSource: Remote
     override suspend fun sendReply(
         boardId: Int, content: String, depth: Int, parentId: Int?, devil: Boolean
     ): Flow<Result<CommentDetail, DataError.Remote>> = flow {
-        println("sendReply@@@@@@@@@@@@")
         emit(Result.Progress())
         val commentDto = CommentRequestDto(
             boardId = boardId, content = content, depth = depth, parentId = parentId, devil = devil
@@ -87,6 +87,12 @@ class DefaultContentDetailRepository(private val remoteContentDataSource: Remote
             like = content.like,
         )
         emit(Result.Success(contentDetail))
+    }
+
+    override suspend fun reportContent(
+        boardId: Int, reportContent: String, reportId: Int, reportType: String, reportedUserId: String
+    ): Flow<Result<ContentDetail, DataError.Remote>> = flow {
+        remoteContentDataSource.reportContent(ReportRequestDto(boardId, reportContent, reportId, reportType, reportedUserId))
     }
 
     override suspend fun likeBoardToggle(contentDetail: ContentDetail): Result<ContentDetail, DataError.Remote> {

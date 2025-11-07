@@ -6,6 +6,8 @@ import com.kal.beum.content.domain.CommentInfo
 sealed interface ReplyAction {
     data class OnReplyLikeClicked(val replyDetail: CommentDetail) : ReplyAction
 
+    data class OnSubReplyLikeClicked(val replyDetail: CommentDetail) : ReplyAction
+
     data class OnSendReply(val replyDetail: CommentDetail, val content: String) : ReplyAction
 
 

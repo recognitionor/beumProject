@@ -48,7 +48,7 @@ import org.koin.compose.viewmodel.koinViewModel
 fun HomeScreen(
     toggle: Boolean, viewModel: HomeViewModel, onAction: (MainAction) -> Unit
 ) {
-    val state by viewModel.state.collectAsStateWithLifecycle()
+    onAction(MainAction.SurfaceColor(if (toggle) BeumColors.baseGrayLightGray800 else BeumColors.baseCoolGrayLightGray100))
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

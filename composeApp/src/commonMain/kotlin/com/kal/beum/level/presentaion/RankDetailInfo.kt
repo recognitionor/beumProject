@@ -46,6 +46,7 @@ fun RankDetailInfo(isDevil: Boolean, ranker: RankerUserInfo, onClickItem: () -> 
             }, verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
+            modifier = Modifier.width(30.dp),
             text = ranker.rank.toString(), style = TextStyle(
                 fontSize = 16.sp,
                 lineHeight = BeumTypo.lineHeightBody3,

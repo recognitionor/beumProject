@@ -17,6 +17,7 @@ class DefaultWritingRepository(
     override suspend fun submitWriting(writingSubmitRequest: WritingInfoRequest): Result<Boolean, DataError.Remote> {
         val result = remoteWriteDataSource.submitWriting(writingSubmitRequest)
         result.onSuccess {
+            // 제출이 성공하면 임시 저장된 글 삭제
             if (it) {
                 writingDao.deleteWritingById(1)
             }

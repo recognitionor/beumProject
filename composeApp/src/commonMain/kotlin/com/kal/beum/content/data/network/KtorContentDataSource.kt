@@ -3,6 +3,7 @@ package com.kal.beum.content.data.network
 import com.kal.beum.content.data.dto.BoardDetailDto
 import com.kal.beum.content.data.dto.CommentInfoDto
 import com.kal.beum.content.data.dto.CommentRequestDto
+import com.kal.beum.content.data.dto.ReportRequestDto
 import com.kal.beum.core.data.ApiConstants
 import com.kal.beum.core.data.AppUserCache
 import com.kal.beum.core.domain.DataError
@@ -48,6 +49,7 @@ class KtorContentDataSource(private val httpClient: HttpClient) : RemoteContentD
             if (commentId != null) {
                 url {
                     parameters.append(ApiConstants.KEY.KEY_PARENT_ID, commentId.toString())
+                    parameters.append(ApiConstants.KEY.KEY_CATEGORY_NAME, "test")
                 }
             }
         }
@@ -110,6 +112,25 @@ class KtorContentDataSource(private val httpClient: HttpClient) : RemoteContentD
             Result.Success(true)
         } else {
             Result.Error(DataError.Remote.FAILED_BOARD)
+        }
+    }
+
+    override suspend fun reportContent(reportRequestDto: ReportRequestDto): Result<Boolean, DataError.Remote> {
+        val response = httpClient.post(ApiConstants.Endpoints.REPORT) {
+            headers {
+                AppUserCache.userInfo?.accessToken?.let {
+                    append(ApiConstants.KEY.KEY_AUTH_TOKEN, it)
+                }
+            }
+            setBody(
+                reportRequestDto
+            )
+        }
+        println("reportContent response ${response.bodyAsText()}")
+        return if (response.status.value == 200) {
+            Result.Success(true)
+        } else {
+            Result.Error(DataError.Remote.REQUEST_ERROR)
         }
     }
 }

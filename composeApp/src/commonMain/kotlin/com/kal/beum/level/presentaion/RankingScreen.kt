@@ -1,5 +1,6 @@
 package com.kal.beum.level.presentaion
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -45,8 +46,8 @@ fun RankingScreen(
     LaunchedEffect(Unit) {
         viewModel.getRankerList(isDevil)
     }
-
-    Column {
+    onAction(MainAction.SurfaceColor(if (isDevil) BeumColors.DarkGray50 else BeumColors.White))
+    Column(modifier = Modifier.background(if(isDevil) BeumColors.DarkGray50 else BeumColors.White)) {
         Row(
             modifier = Modifier.fillMaxWidth().height(64.dp).padding(horizontal = 20.dp),
             verticalAlignment = Alignment.CenterVertically

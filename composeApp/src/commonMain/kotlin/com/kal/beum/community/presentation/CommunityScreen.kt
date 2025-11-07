@@ -20,6 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,11 +36,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import beumproject.composeapp.generated.resources.Res
 import beumproject.composeapp.generated.resources.ic_add_medium
 import beumproject.composeapp.generated.resources.sf_pro
+import com.kal.beum.community.domain.Category
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumTypo
 import com.kal.beum.home.presentation.components.ToggleButton
 import com.kal.beum.main.presentation.FullScreenType
 import com.kal.beum.main.presentation.MainAction
+import kotlinx.coroutines.flow.distinctUntilChanged
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 
@@ -52,6 +55,20 @@ fun CommunityScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val listState = rememberLazyListState()
+
+//    LaunchedEffect(listState, comments.size, isLoading, hasMore) {
+//        snapshotFlow {
+//            val lastVisible = listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: -1
+//            val total = listState.layoutInfo.totalItemsCount
+//            lastVisible to total
+//        }.distinctUntilChanged().collect { (last, total) ->
+//            println("~~!~!~!")
+//            if (!isLoading && hasMore && total > 0 && last >= total - 1 - prefetch) {
+//                println("trigger")
+////                    viewModel.onAction(CommunityAction.LoadMoreComments)
+//            }
+//        }
+//    }
 
     LaunchedEffect(isDevil) {
         viewModel.getCategory(isDevil)
@@ -67,7 +84,7 @@ fun CommunityScreen(
     } else {
         onAction(MainAction.CloseFullScreen(FullScreenType.ProgressDialog))
     }
-
+    onAction(MainAction.SurfaceColor(if (isDevil) BeumColors.DarkGray50 else BeumColors.baseGrayLightGray75))
     Column {
         Box(
             modifier = Modifier.fillMaxWidth().height(64.dp).padding(start = 26.dp),
@@ -104,8 +121,8 @@ fun CommunityScreen(
 
             }
         }
-        if (state.communityList.isNotEmpty()) {
-            val communityList = state.communityList[state.selectedCategoryId]
+        if (state.communityListTemp.isNotEmpty()) {
+            val communityList = state.communityListTemp
             Box(modifier = Modifier.background(if (isDevil) BeumColors.DarkGray50 else BeumColors.baseGrayLightGray75)) {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize()
@@ -184,8 +201,10 @@ fun CommunityScreen(
                             color = BeumColors.angelSkyblue,
                             shape = RoundedCornerShape(size = 100.dp)
                         ).clip(shape = RoundedCornerShape(size = 100.dp)).clickable {
+                            println("close")
                             onAction(MainAction.NewWriting {
-                                println("~~~")
+                                val tempCategory = state.categoryList.find { it.id == state.selectedCategoryId } ?: Category(-1, "전체")
+                                viewModel.getItemsByCategoryTemp(tempCategory, isDevil)
                             })
                         }) {
                         Image(

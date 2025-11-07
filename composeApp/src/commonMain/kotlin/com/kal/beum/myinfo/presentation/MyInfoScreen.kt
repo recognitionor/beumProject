@@ -51,6 +51,7 @@ fun MyInfoScreen(devil: Boolean, viewModel: MyInfoViewModel, action: (MainAction
         skipPartiallyExpanded = false
     )
     val scope = rememberCoroutineScope()
+    action(MainAction.SurfaceColor(BeumColors.baseCoolGrayLightGray100))
 
     Box {
         Column(

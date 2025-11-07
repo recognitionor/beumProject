@@ -2,15 +2,14 @@ package com.kal.beum.community.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kal.beum.common.BeumConstants
 import com.kal.beum.content.domain.CommentDetail
-import com.kal.beum.content.domain.CommentInfo
 import com.kal.beum.content.domain.ContentDetail
 import com.kal.beum.content.domain.ContentsRepository
 import com.kal.beum.core.data.AppUserCache
 import com.kal.beum.core.domain.DataError
 import com.kal.beum.core.domain.Result
 import com.kal.beum.core.domain.onError
-import com.kal.beum.core.domain.onProgress
 import com.kal.beum.core.domain.onSuccess
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -71,10 +70,34 @@ class ContentDetailViewModel(private val contentDetailRepository: ContentsReposi
                     commentInfo = state.contentDetail.commentInfo.copy(
                         comments = state.contentDetail.commentInfo.comments.map {
                             if (it.id == commentDetail.id) commentDetail else it
-                        }
-                    )
+                        })
                 )
             )
+        }
+    }
+
+    fun reportContent(reasonId: Int) {
+        val contentDetail = state.value.contentDetail
+        contentDetail?.let {
+            viewModelScope.launch {
+                contentDetailRepository.reportContent(
+                    it.id, BeumConstants.REPORT_REASONS[reasonId], reasonId, "BOARD", it.writer
+                ).onEach { result ->
+                    when (result) {
+                        is Result.Error<DataError.Remote> -> {
+                            println("reportContent Result.Error : ")
+                        }
+
+                        is Result.Progress -> {
+                            println("reportContent Result.Progress : ")
+                        }
+
+                        is Result.Success<ContentDetail> -> {
+                            println("reportContent Result.Success : ${result.data}")
+                        }
+                    }
+                }.launchIn(viewModelScope)
+            }
         }
     }
 

@@ -18,6 +18,7 @@ import com.kal.beum.write.data.toWritingData
 import com.kal.beum.write.domain.WritingData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlin.collections.addAll
 
 class DefaultCommunityRepository(
     private val writingDao: WritingDao,
@@ -33,9 +34,10 @@ class DefaultCommunityRepository(
     }
 
     override suspend fun getCategoryList(): Result<List<Category>, DataError.Remote> {
-        val test = remoteCommunityDataSource.getCategoryList().map { it.map { item -> item.toCategoryData() } }
-        return remoteCommunityDataSource.getCategoryList()
-            .map { it.map { item -> item.toCategoryData() } }
+        return remoteCommunityDataSource.getCategoryList().map { list ->
+            val allCategory = Category(id = -1, category = "전체")
+            list.map { it.toCategoryData() }.let { mutableListOf(allCategory).apply { addAll(it) } }
+        }
     }
 
     override suspend fun getCommunityList(

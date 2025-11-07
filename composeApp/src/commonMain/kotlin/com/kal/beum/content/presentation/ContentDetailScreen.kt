@@ -4,13 +4,13 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,12 +21,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
@@ -43,6 +46,7 @@ import beumproject.composeapp.generated.resources.ic_more_vertical_medium
 import beumproject.composeapp.generated.resources.ic_reply
 import beumproject.composeapp.generated.resources.icon_arrow_right_black
 import beumproject.composeapp.generated.resources.sf_pro
+import com.kal.beum.common.BeumConstants
 import com.kal.beum.community.presentation.CommunityAction
 import com.kal.beum.community.presentation.ContentDetailViewModel
 import com.kal.beum.content.domain.ContentsRepository
@@ -51,6 +55,8 @@ import com.kal.beum.core.presentation.BeumTypo
 import com.kal.beum.core.presentation.ToastInfo
 import com.kal.beum.main.presentation.FullScreenType
 import com.kal.beum.main.presentation.MainAction
+import com.kal.beum.myinfo.presentation.ReportBottomSheetPage
+import com.kal.beum.myinfo.presentation.ReportDetailBottomSheet
 import com.kal.beum.utils.formatTimeAgoFromLong
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
@@ -61,6 +67,8 @@ import org.koin.compose.koinInject
 fun ContentDetailScreen(id: Int, action: (MainAction) -> Unit, backBtnClick: () -> Unit) {
     val contentDetailRepository = koinInject<ContentsRepository>()
     val viewModel = remember { ContentDetailViewModel(contentDetailRepository) }
+    var reportButton by remember { mutableStateOf(false) }
+    var reportDetailButton by remember { mutableStateOf(false) }
 
     println("ContentDetailScreen viewModel : $viewModel")
     val state by viewModel.state.collectAsStateWithLifecycle()
@@ -68,6 +76,12 @@ fun ContentDetailScreen(id: Int, action: (MainAction) -> Unit, backBtnClick: () 
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = false
     )
+
+    LaunchedEffect(reportDetailButton) {
+        if (reportDetailButton) {
+            sheetState.expand() // 시트 열릴 때 전부 보이도록 확장
+        }
+    }
 
     LaunchedEffect(Unit) {
         viewModel.getContentDetail(id)
@@ -114,7 +128,7 @@ fun ContentDetailScreen(id: Int, action: (MainAction) -> Unit, backBtnClick: () 
                     Image(
                         modifier = Modifier.clickable {
                             println("clickable")
-
+                            reportButton = true
 //                            action(
 //                                MainAction.PushFullScreen(
 //                                    FullScreenType.ReportConfirmDialog(
@@ -351,6 +365,44 @@ fun ContentDetailScreen(id: Int, action: (MainAction) -> Unit, backBtnClick: () 
                             }
                         }
                         Spacer(modifier = Modifier.height(16.dp))
+                    }
+                }
+            }
+            if (reportButton) {
+                ModalBottomSheet(
+                    onDismissRequest = {
+                        reportButton = false
+                    },
+                    sheetState = sheetState,
+                    containerColor = BeumColors.baseGrayLightGray75,
+                    dragHandle = null,
+                    modifier = Modifier.wrapContentHeight().fillMaxWidth()
+                ) {
+                    ReportBottomSheetPage({
+                        reportButton = false
+                    }) {
+                        reportButton = false
+                        reportDetailButton = true
+                    }
+                }
+            }
+            if (reportDetailButton) {
+                ModalBottomSheet(
+                    onDismissRequest = {
+                        reportDetailButton = false
+                    }, // 닫힐 때 None으로 초기화
+                    sheetState = sheetState,
+                    dragHandle = null,
+                    containerColor = BeumColors.baseGrayLightGray75,
+                    modifier = Modifier.fillMaxWidth().fillMaxHeight(0.85f)
+                ) {
+                    ReportDetailBottomSheet {
+                        reportDetailButton = false
+                        action(MainAction.PushFullScreen(FullScreenType.ReportConfirmDialog({
+                            action(MainAction.PopFullScreen)
+                        }, {
+                            viewModel.reportContent(it)
+                        })))
                     }
                 }
             }

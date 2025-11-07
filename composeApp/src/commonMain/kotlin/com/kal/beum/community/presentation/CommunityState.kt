@@ -8,7 +8,9 @@ import com.kal.beum.write.domain.WritingData
 data class CommunityState(
     val categoryList: List<Category> = emptyList(),
     val selectedCategoryId: Int = 0,
+    val communityListPage: Int = 0,
     val communityList: List<List<CommunityItem>> = emptyList(),
+    val communityListTemp: List<CommunityItem> = emptyList(),
     val writingTemp: WritingData? = null,
     val isDraftDialog: Boolean = false,
     val onProgress: Boolean = false

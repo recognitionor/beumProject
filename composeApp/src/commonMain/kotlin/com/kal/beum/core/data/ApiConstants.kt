@@ -20,6 +20,8 @@ object ApiConstants {
 
         const val KEY_PARENT_ID = "parentId"
         const val KEY_CATEGORY_ID = "categoryId"
+
+        const val KEY_CATEGORY_NAME = "categoryName"
     }
 
     object Endpoints {
@@ -39,5 +41,7 @@ object ApiConstants {
         const val CATEGORY_LIST = "category-list"
         const val LIKE_BOARD = "/like-board"
         const val LIKE_REPLY = "/like-comment"
+
+        const val REPORT = "/report"
     }
 }

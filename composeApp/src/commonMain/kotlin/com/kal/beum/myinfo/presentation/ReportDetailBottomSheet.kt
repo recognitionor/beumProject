@@ -39,9 +39,10 @@ import org.jetbrains.compose.resources.Font
 
 @Composable
 fun ReportDetailBottomSheet(report: (Int) -> Unit) {
-    var reportReasonIndex by remember { mutableStateOf(-1) }
+    var reportReasonIndex by remember { mutableStateOf(0) }
 
     Column(modifier = Modifier.padding(horizontal = 20.dp)) {
+        Spacer(modifier = Modifier.height(20.dp))
         Text(
             text = "신고하는 이유를 선택해주세요.", style = TextStyle(
                 fontSize = BeumTypo.TypoScaleText400,
@@ -111,5 +112,6 @@ fun ReportDetailBottomSheet(report: (Int) -> Unit) {
                 )
             )
         }
+        Spacer(modifier = Modifier.height(20.dp))
     }
 }

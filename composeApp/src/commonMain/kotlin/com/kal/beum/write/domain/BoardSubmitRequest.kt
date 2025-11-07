@@ -17,6 +17,7 @@ data class WritingInfoRequest(
     val title: String,
     val content: String,
     val categoryId: Int,
+    val categoryName: String,
     val rewardPoint: Int,
     val tags: List<String>,
     val devil: Boolean

@@ -56,13 +56,12 @@ class KtorMyInfoDataSource(private val httpClient: HttpClient) : RemoteMyInfoDat
                 parameters.append(ApiConstants.KEY.KEY_IS_DEVIL, AppUserCache.isDevil.toString())
             }
         }
-//        println("getMyContents : $result")
-//        return if (result.status.value == 200) {
-//            Result.Success(result.body<MyBoardInfoDto>())
-//        } else {
-//            Result.Error(DataError.Remote.REQUEST_ERROR)
-//        }
-        return Result.Error(DataError.Remote.REQUEST_ERROR)
+        println("getMyContents : $result")
+        return if (result.status.value == 200) {
+            Result.Success(result.body<MyBoardInfoDto>())
+        } else {
+            Result.Error(DataError.Remote.REQUEST_ERROR)
+        }
     }
 
     override suspend fun reportUser(myContentId: Int): Result<Unit, DataError.Remote> {

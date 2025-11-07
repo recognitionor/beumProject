@@ -40,7 +40,10 @@ class KtorCommunityDataSource(private val httpClient: HttpClient) : RemoteCommun
                 parameters.append(ApiConstants.KEY.KEY_PAGE, page.toString())
                 parameters.append(ApiConstants.KEY.KEY_SIZE, size.toString())
                 parameters.append(ApiConstants.KEY.KEY_IS_DEVIL, isDevil.toString())
-                parameters.append(ApiConstants.KEY.KEY_CATEGORY_ID, categoryId.toString())
+                if (categoryId > 0) {
+                    parameters.append(ApiConstants.KEY.KEY_CATEGORY_ID, categoryId.toString())
+                }
+
             }
         }
         return if (response.status.value == 200 && response.body<CommunityDto>().boardList.isNotEmpty()) {

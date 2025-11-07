@@ -225,8 +225,8 @@ fun ReplyDetailView(replyInfoParam: CommentDetail, backBtnClick: (replyInfo: Com
 
             Column {
                 LazyColumn(Modifier.weight(1f)) {
-                    items(replyInfo.reReplyCount) {
-                        val item = replyInfo
+                    items(replyInfo.replyList.size) {
+                        val item = replyInfo.replyList[it]
                         Column(modifier = Modifier.padding(vertical = 8.dp, horizontal = 20.dp)) {
                             Row(
                                 verticalAlignment = Alignment.CenterVertically
@@ -308,8 +308,8 @@ fun ReplyDetailView(replyInfoParam: CommentDetail, backBtnClick: (replyInfo: Com
                                 modifier = Modifier.padding(horizontal = 14.dp)
                             ) {
 
-                                LikeButton(replyInfo.likeIsMe) {
-                                    println("like")
+                                LikeButton(item.likeIsMe) {
+                                    viewModel.onAction(ReplyAction.OnSubReplyLikeClicked(item))
                                 }
 
                                 Spacer(modifier = Modifier.height(4.dp))

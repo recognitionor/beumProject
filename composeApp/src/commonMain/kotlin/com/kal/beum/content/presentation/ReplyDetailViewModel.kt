@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlin.onSuccess
 
 class ReplyDetailViewModel(private val replyRepository: ReplyRepository) : ViewModel() {
     private val _state = MutableStateFlow(ReplyStateState())
@@ -31,6 +32,7 @@ class ReplyDetailViewModel(private val replyRepository: ReplyRepository) : ViewM
         println("getReplyList~~~~~~~~~~~~~~~~~~~~~ : $boardId")
         viewModelScope.launch {
             replyRepository.getReplyList(boardId, commentId).onSuccess { commentInfo ->
+                println("getReplyList~~~~~~~~~~~~~~~~~~~~~Result : $commentInfo")
                 _state.update {
                     it.copy(
                         replyInfo = state.value.replyInfo?.copy(
@@ -46,7 +48,6 @@ class ReplyDetailViewModel(private val replyRepository: ReplyRepository) : ViewM
     fun likeReply(replyDetail: CommentDetail) {
         viewModelScope.launch {
             replyRepository.likeReply(replyDetail).onSuccess { result ->
-                println("getReplyList~~~~~~~~~~~~~~~~~~~~~ : $result")
                 _state.update {
                     it.copy(
                         replyInfo = state.value.replyInfo?.copy(
@@ -57,6 +58,30 @@ class ReplyDetailViewModel(private val replyRepository: ReplyRepository) : ViewM
             }
         }
     }
+
+    fun likeSubReply(replyDetail: CommentDetail) {
+        viewModelScope.launch {
+            replyRepository.likeReply(replyDetail).onSuccess { result ->
+                _state.update { stateValue ->
+                    stateValue.copy(
+                        replyInfo = stateValue.replyInfo?.copy(
+                            replyList = stateValue.replyInfo.replyList.map { item ->
+                                if (item.id == result.id) {
+                                    item.copy(
+                                        likeIsMe = result.likeIsMe,
+                                        likeCount = result.likeCount
+                                    )
+                                } else {
+                                    item
+                                }
+                            }
+                        )
+                    )
+                }
+            }
+        }
+    }
+
 
     fun sendReply(replyDetail: CommentDetail, content: String) {
         println("sendReply : $replyDetail , $content")
@@ -85,13 +110,11 @@ class ReplyDetailViewModel(private val replyRepository: ReplyRepository) : ViewM
 
     fun onAction(action: ReplyAction) {
         when (action) {
-            is ReplyAction.OnReplyLikeClicked -> {
-                likeReply(action.replyDetail)
-            }
+            is ReplyAction.OnReplyLikeClicked -> likeReply(action.replyDetail)
 
-            is ReplyAction.OnSendReply -> {
-                sendReply(action.replyDetail, action.content)
-            }
+            is ReplyAction.OnSendReply -> sendReply(action.replyDetail, action.content)
+
+            is ReplyAction.OnSubReplyLikeClicked -> likeSubReply(action.replyDetail)
         }
     }
 }
