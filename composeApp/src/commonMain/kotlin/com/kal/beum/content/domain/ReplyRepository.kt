@@ -1,5 +1,6 @@
 package com.kal.beum.content.domain
 
+import com.kal.beum.content.data.dto.CommentDetailDto
 import com.kal.beum.core.domain.DataError
 import com.kal.beum.core.domain.Result
 import kotlinx.coroutines.flow.Flow
@@ -11,7 +12,7 @@ interface ReplyRepository {
         depth: Int,
         parentId: Int?,
         devil: Boolean
-    ): Flow<Result<Boolean, DataError.Remote>>
+    ): Flow<Result<CommentDetail, DataError.Remote>>
 
     suspend fun getReplyList(
         boardId: Int, commentId: Int? = null

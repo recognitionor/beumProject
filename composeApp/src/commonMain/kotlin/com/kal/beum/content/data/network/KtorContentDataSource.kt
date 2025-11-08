@@ -1,6 +1,7 @@
 package com.kal.beum.content.data.network
 
 import com.kal.beum.content.data.dto.BoardDetailDto
+import com.kal.beum.content.data.dto.CommentDetailDto
 import com.kal.beum.content.data.dto.CommentInfoDto
 import com.kal.beum.content.data.dto.CommentRequestDto
 import com.kal.beum.content.data.dto.ReportRequestDto
@@ -63,7 +64,7 @@ class KtorContentDataSource(private val httpClient: HttpClient) : RemoteContentD
         }
     }
 
-    override suspend fun sendReply(commentDto: CommentRequestDto): Result<Boolean, DataError.Remote> {
+    override suspend fun sendReply(commentDto: CommentRequestDto): Result<CommentDetailDto, DataError.Remote> {
         val response = httpClient.post(ApiConstants.Endpoints.COMMENT) {
             headers {
                 AppUserCache.userInfo?.accessToken?.let {
@@ -74,10 +75,8 @@ class KtorContentDataSource(private val httpClient: HttpClient) : RemoteContentD
                 commentDto
             )
         }
-        println("response.body() #####: $response")
-        println("response.body() !!!!!!!!: ${response.bodyAsText()}")
         return if (response.status.value == 200) {
-            Result.Success(true)
+            Result.Success(response.body<CommentDetailDto>())
         } else {
             Result.Error(DataError.Remote.FAILED_BOARD)
         }

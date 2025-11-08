@@ -1,8 +1,10 @@
 package com.kal.beum.content.data.repository
 
+import com.kal.beum.content.data.dto.CommentDetailDto
 import com.kal.beum.content.data.dto.CommentRequestDto
 import com.kal.beum.content.data.network.RemoteContentDataSource
 import com.kal.beum.content.data.toCommentInfo
+import com.kal.beum.content.data.toContentDetail
 import com.kal.beum.content.domain.CommentDetail
 import com.kal.beum.content.domain.CommentInfo
 import com.kal.beum.content.domain.ReplyRepository
@@ -19,15 +21,15 @@ class DefaultReplyRepository(private val remoteContentDataSource: RemoteContentD
 
     override suspend fun sendReply(
         boardId: Int, content: String, depth: Int, parentId: Int?, devil: Boolean
-    ): Flow<Result<Boolean, DataError.Remote>> = flow {
-        println("***************")
+    ): Flow<Result<CommentDetail, DataError.Remote>> = flow {
         emit(Result.Progress())
         val result = remoteContentDataSource.sendReply(
             CommentRequestDto(
                 boardId, content, depth, parentId, devil
             )
         )
-        result.onSuccess { emit(Result.Success(true)) }.onError {
+        result.onSuccess {
+            emit(Result.Success(it.toContentDetail())) }.onError {
             emit(Result.Error(DataError.Remote.REQUEST_ERROR))
         }
     }

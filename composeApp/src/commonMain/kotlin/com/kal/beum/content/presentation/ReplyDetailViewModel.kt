@@ -2,6 +2,7 @@ package com.kal.beum.content.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.kal.beum.content.data.dto.CommentDetailDto
 import com.kal.beum.content.domain.CommentDetail
 import com.kal.beum.content.domain.ReplyRepository
 import com.kal.beum.core.data.AppUserCache
@@ -100,8 +101,14 @@ class ReplyDetailViewModel(private val replyRepository: ReplyRepository) : ViewM
                     is Result.Progress -> {
                     }
 
-                    is Result.Success<Boolean> -> {
-                        // Optionally update state with new reply
+                    is Result.Success<CommentDetail> -> {
+                        _state.update { stateValue ->
+                            stateValue.copy(
+                                replyInfo = stateValue.replyInfo?.copy(
+                                    replyList = stateValue.replyInfo.replyList + result.data
+                                )
+                            )
+                        }
                     }
                 }
             }.launchIn(viewModelScope)

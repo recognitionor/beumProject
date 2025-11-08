@@ -5,6 +5,7 @@ import com.kal.beum.content.data.dto.CommentUserDto
 import com.kal.beum.content.data.dto.ReportRequestDto
 import com.kal.beum.content.data.network.RemoteContentDataSource
 import com.kal.beum.content.data.toCommentInfo
+import com.kal.beum.content.data.toContentDetail
 import com.kal.beum.content.domain.CommentDetail
 import com.kal.beum.content.domain.ContentDetail
 import com.kal.beum.content.domain.ContentsRepository
@@ -30,23 +31,7 @@ class DefaultContentDetailRepository(private val remoteContentDataSource: Remote
         )
         val result = remoteContentDataSource.sendReply(commentDto)
         result.onSuccess {
-            val contentDetailTemp = CommentDetail(
-                boardId = boardId,
-                content = content,
-                depth = 0,
-                id = -1,
-                likeCount = 0,
-                likeIsMe = false,
-                ord = 0,
-                parentId = null,
-                reReplyCount = 0,
-                user = CommentUserDto(
-                    id = AppUserCache.userInfo?.userId!!,
-                    nickname = AppUserCache.userInfo?.nickName!!
-                ),
-                createdAt = Clock.System.now().toEpochMilliseconds().toString(),
-            )
-            emit(Result.Success(contentDetailTemp))
+            emit(Result.Success(it.toContentDetail()))
         }.onError {
             emit(Result.Error(DataError.Remote.REQUEST_ERROR))
         }
@@ -90,9 +75,20 @@ class DefaultContentDetailRepository(private val remoteContentDataSource: Remote
     }
 
     override suspend fun reportContent(
-        boardId: Int, reportContent: String, reportId: Int, reportType: String, reportedUserId: String
+        boardId: Int,
+        reportContent: String,
+        reportId: Int,
+        reportType: String,
+        reportedUserId: String
     ): Flow<Result<ContentDetail, DataError.Remote>> = flow {
-        remoteContentDataSource.reportContent(ReportRequestDto(boardId, reportContent, reportId, reportType, reportedUserId))
+        remoteContentDataSource.reportContent(
+            ReportRequestDto(
+                boardId,
+                reportContent,
+                reportId,
+                reportType
+            )
+        )
     }
 
     override suspend fun likeBoardToggle(contentDetail: ContentDetail): Result<ContentDetail, DataError.Remote> {
