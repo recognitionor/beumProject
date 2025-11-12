@@ -111,6 +111,10 @@ fun NoticeScreen(action: (MainAction) -> Unit) {
                         modifier = Modifier.background(
                             color = if (isSelected) BeumColors.GrayGray900 else BeumColors.White,
                             shape = RoundedCornerShape(size = 83.33333.dp)
+                        ).border(
+                            width = 1.dp,
+                            color = if (isSelected) BeumColors.GrayGray900 else BeumColors.GrayGray500,
+                            shape = RoundedCornerShape(size = 83.33333.dp)
                         ).padding(vertical = 10.dp, horizontal = 10.dp).clickable {
                             viewModel.onAction(NoticeAction.FilterNotice(index))
                         }, contentAlignment = Alignment.Center
