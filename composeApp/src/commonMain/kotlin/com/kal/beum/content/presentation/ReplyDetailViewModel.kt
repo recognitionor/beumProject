@@ -30,10 +30,8 @@ class ReplyDetailViewModel(private val replyRepository: ReplyRepository) : ViewM
     }
 
     fun getReplyList(boardId: Int, commentId: Int) {
-        println("getReplyList~~~~~~~~~~~~~~~~~~~~~ : $boardId")
         viewModelScope.launch {
             replyRepository.getReplyList(boardId, commentId).onSuccess { commentInfo ->
-                println("getReplyList~~~~~~~~~~~~~~~~~~~~~Result : $commentInfo")
                 _state.update {
                     it.copy(
                         replyInfo = state.value.replyInfo?.copy(

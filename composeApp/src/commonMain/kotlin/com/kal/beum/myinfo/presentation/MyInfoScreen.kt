@@ -153,6 +153,7 @@ fun MyInfoScreen(devil: Boolean, viewModel: MyInfoViewModel, action: (MainAction
                             contentDescription = ""
                         )
                     }
+                    Spacer(modifier = Modifier.height(8.dp))
                     Row(
                         modifier = Modifier.width(110.dp),
                         verticalAlignment = Alignment.CenterVertically,

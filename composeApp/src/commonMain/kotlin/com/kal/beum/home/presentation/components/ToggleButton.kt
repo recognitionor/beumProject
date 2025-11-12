@@ -28,17 +28,19 @@ import beumproject.composeapp.generated.resources.angel_abled
 import beumproject.composeapp.generated.resources.angel_disabled
 import beumproject.composeapp.generated.resources.devil_abled
 import beumproject.composeapp.generated.resources.devil_disabled
+import com.kal.beum.core.presentation.BeumColors
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun ToggleButton(toggle: Boolean, toggleClicked: (Boolean) -> Unit) {
+fun ToggleButton(toggle: Boolean, backgroundColor: Color, toggleClicked: (Boolean) -> Unit) {
     var isToggled by remember { mutableStateOf(toggle) }
 
     Box(
-        modifier = Modifier.height(48.dp).width(104.dp).border(
+        modifier = Modifier.height(48.dp).border(
             width = 0.dp, color = Color.Transparent, shape = RoundedCornerShape(size = 100.dp)
         ).clip(RoundedCornerShape(size = 100.dp)).wrapContentSize(Alignment.Center)
-            .background(if (isToggled) Color.Black else Color.White).clickable {
+            .background(backgroundColor)
+            .clickable {
                 isToggled = !isToggled
                 toggleClicked.invoke(isToggled)
             }.padding(4.dp), contentAlignment = Alignment.Center
@@ -54,7 +56,7 @@ fun ToggleButton(toggle: Boolean, toggleClicked: (Boolean) -> Unit) {
                 contentAlignment = Alignment.Center
             ) {
                 Image(
-                    modifier = Modifier.size(32.dp),
+                    modifier = Modifier.size(48.dp),
                     painter = if (isToggled) painterResource(Res.drawable.angel_disabled) else painterResource(
                         Res.drawable.angel_abled
                     ),
@@ -68,7 +70,7 @@ fun ToggleButton(toggle: Boolean, toggleClicked: (Boolean) -> Unit) {
                 contentAlignment = Alignment.Center
             ) {
                 Image(
-                    modifier = Modifier.size(32.dp),
+                    modifier = Modifier.size(48.dp),
                     painter = if (isToggled) painterResource(Res.drawable.devil_abled) else painterResource(
                         Res.drawable.devil_disabled
                     ),

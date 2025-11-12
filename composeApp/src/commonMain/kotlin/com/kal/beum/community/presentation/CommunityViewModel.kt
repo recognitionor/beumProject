@@ -40,19 +40,16 @@ class CommunityViewModel(private val communityRepository: CommunityRepository) :
         viewModelScope.launch {
             communityRepository.getCommunityList(state.value.communityListPage, 10, isDevil, category).onEach { result ->
                 result.onSuccess { community ->
-                    _state.update { it.copy(onProgress = true) }
                     println("community.boardList.isNotEmpty() : ${community.boardList.isNotEmpty()}")
                     if (community.boardList.isNotEmpty()) {
                         _state.update { currentState ->
-                            currentState.copy(communityListTemp = community.boardList, onProgress = false)
+                            currentState.copy(communityListTemp = community.boardList)
                         }
                     }
                     println("onSuccess")
                 }.onError {
-                    _state.update { it.copy(onProgress = false) }
                     println("onError")
                 }.onProgress {
-                    _state.update { it.copy(onProgress = true) }
                     println("onProgress")
                 }
 //                _state.update { currentState ->

@@ -17,7 +17,7 @@ object BeumColors {
     val Gray_800 = Color(0xFF282828)
     val Gray_400 = Color(0xFFAEB1B8)
     val KaKaoColor = Color(0xFFFEE500)
-    val NaverColor = Color(0xFF5AC466)
+    val NaverColor = Color(0xFF03C75A)
     val Black = Color(0xFF111111)
     val baseAlphaBlackDarkBlack200A: Color = Color(0x33000000)
     val baseGrayLightGray800: Color = Color(0xFF282828)

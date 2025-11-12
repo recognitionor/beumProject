@@ -84,7 +84,7 @@ fun MyInfoFeedTab(
 
         Box(
             modifier = Modifier.fillMaxWidth().fillMaxHeight().padding(bottom = 10.dp)
-                .background(BeumColors.baseGrayLightGray75),
+                .background(BeumColors.baseAlphaBlackLightBlack50A),
             contentAlignment = Alignment.Center,
 
             ) {
@@ -107,17 +107,28 @@ fun MyInfoFeedTab(
 
                     Spacer(modifier = Modifier.height(10.dp))
 
-                    Text(
-                        modifier = Modifier.clickable {
-                            writeClick()
-                        }, text = "고민글 작성하기", style = TextStyle(
-                            fontSize = BeumTypo.TypoScaleText150,
-                            fontFamily = FontFamily(Font(Res.font.sf_pro)),
-                            fontWeight = FontWeight(500),
-                            color = BeumColors.baseGrayLightGray900,
-                            textAlign = TextAlign.Center,
+                    Box(
+                        modifier = Modifier.background(
+                            color = BeumColors.baseAlphaBlackLightBlack50A,
+                            shape = RoundedCornerShape(size = BeumDimen.radius100)
+                        ),
+                    ) {
+                        Text(
+                            modifier = Modifier.clickable {
+                                writeClick()
+                            }.padding(horizontal = 16.dp, vertical = 10.dp),
+                            text = "고민글 작성하기",
+                            style = TextStyle(
+                                fontSize = BeumTypo.TypoScaleText150,
+                                fontFamily = FontFamily(Font(Res.font.sf_pro)),
+                                fontWeight = FontWeight(500),
+                                color = BeumColors.baseGrayLightGray900,
+                                textAlign = TextAlign.Center,
+                            )
                         )
-                    )
+                    }
+
+
                 }
 
             } else {

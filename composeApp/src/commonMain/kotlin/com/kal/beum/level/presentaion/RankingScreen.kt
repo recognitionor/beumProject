@@ -62,7 +62,7 @@ fun RankingScreen(
                 )
             )
             Spacer(Modifier.weight(1f))
-            ToggleButton(isDevil) {
+            ToggleButton(isDevil, if (isDevil) Color.Black else BeumColors.baseCoolGrayLightGray100) {
                 onAction(MainAction.ToggleDevil(it))
             }
         }
@@ -75,15 +75,15 @@ fun RankingScreen(
                 }
             }
         }
-        if (showDetailInfoIndex >= 0) {
+
+        val selected = state.rankerUserList.getOrNull(showDetailInfoIndex)
+        if (selected != null) {
             ModalBottomSheet(
-                onDismissRequest = {
-                    showDetailInfoIndex = -1
-                }, // 닫힐 때 None으로 초기화
+                onDismissRequest = { showDetailInfoIndex = -1 },
                 containerColor = if (isDevil) Color(0xCC000000) else Color(0xCCFFFFFF),
                 dragHandle = null,
             ) {
-                RankDetailInfo(isDevil, state.rankerUserList[showDetailInfoIndex]) {}
+                RankDetailInfo(isDevil, selected) {}
             }
         }
     }

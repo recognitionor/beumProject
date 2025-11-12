@@ -105,7 +105,7 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                     NavHost(
                         navController = navController,
                         startDestination = Route.Home.toRoute(), // Home이 NavGraph의 시작점으로 정의됩니다.
-                        modifier = Modifier.fillMaxSize().padding(innerPadding)
+                        modifier = Modifier.fillMaxSize().padding(top = innerPadding.calculateTopPadding())
                     ) {
 
                         composable(Route.Home.toRoute()) {
@@ -274,9 +274,6 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
 @Composable
 fun BottomNavigationBar(navController: NavController, currentRoute: String?, devil: Boolean) {
     val shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)
-
-
-
     NavigationBar(
         modifier = Modifier.clip(shape).drawWithContent {
             val topStartRadius = 32.dp.toPx()
