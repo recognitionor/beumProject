@@ -50,7 +50,9 @@ class DefaultAppRepository(
                     refreshToken = it.refreshToken,
                     sessionKey = it.sessionKey,
                     profileImageId = it.profileImageId,
-                    needSignUp = it.needSignUp
+                    needSignUp = it.needSignUp,
+                    angelPoint = it.angelPoint,
+                    devilPoint = it.devilPoint
                 )
             )
             if (AppUserCache.updateFCMToken != null) {
@@ -80,7 +82,9 @@ class DefaultAppRepository(
                 refreshToken = userInfo.refreshToken,
                 sessionKey = userInfo.sessionKey,
                 profileImageId = userInfo.profileImageId,
-                needSignUp = userInfo.needSignUp
+                needSignUp = userInfo.needSignUp,
+                angelPoint = userInfo.angelPoint,
+                devilPoint = userInfo.devilPoint
             )
             appDao.setLoginInfo(userInfoEntity)
             AppUserCache.userInfo = userInfo
@@ -109,7 +113,9 @@ class DefaultAppRepository(
                 refreshToken = userInfo.refreshToken,
                 sessionKey = userInfo.sessionKey,
                 profileImageId = userInfo.profileImageId,
-                needSignUp = userInfo.needSignUp
+                needSignUp = userInfo.needSignUp,
+                angelPoint = userInfo.angelPoint,
+                devilPoint = userInfo.devilPoint
             )
             appDao.setLoginInfo(userInfoEntity)
             AppUserCache.userInfo = userInfo

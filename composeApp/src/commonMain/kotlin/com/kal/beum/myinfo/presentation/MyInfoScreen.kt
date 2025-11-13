@@ -32,6 +32,7 @@ import com.kal.beum.core.presentation.BeumTypo
 import com.kal.beum.main.presentation.FullScreenType
 import com.kal.beum.main.presentation.MainAction
 import com.kal.beum.myinfo.domain.MyContent
+import com.kal.beum.utils.formatWithComma
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
@@ -159,30 +160,18 @@ fun MyInfoScreen(devil: Boolean, viewModel: MyInfoViewModel, action: (MainAction
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
-// @TODO 천사 악마 포인트 다시 넣기
-//                        Text(
-//                            text = formatWithComma(
-//                                if (devil) state.myInfo?.devilPoint ?: 0 else state.myInfo?.angelPoint
-//                                    ?: 0
-//                            ), // Use formatWithComma function to format the number with commas , style = TextStyle(
-//                            fontSize = BeumTypo.TypoScaleText600,
-//                            lineHeight = BeumTypo.lineHeightCaption1,
-//                            fontFamily = FontFamily(Font(Res.font.sf_pro)),
-//                            fontWeight = FontWeight(700),
-//                            color = BeumColors.baseGrayLightGray800,
-//                            textAlign = TextAlign.Right,
-//                        )
-//                        Text(
-//                            text = formatWithComma(
-//                                state.myInfo?.angelPoint ?: 0
-//                            ), // Use formatWithComma function to format the number with commas , style = TextStyle(
-//                            fontSize = BeumTypo.TypoScaleText600,
-//                            lineHeight = BeumTypo.lineHeightCaption1,
-//                            fontFamily = FontFamily(Font(Res.font.sf_pro)),
-//                            fontWeight = FontWeight(700),
-//                            color = BeumColors.baseGrayLightGray800,
-//                            textAlign = TextAlign.Right,
-//                        )
+                        Text(
+                            text = formatWithComma(
+                                if (devil) state.myInfo?.devilPoint ?: 0 else state.myInfo?.angelPoint
+                                    ?: 0
+                            ), // Use formatWithComma function to format the number with commas , style = TextStyle(
+                            fontSize = BeumTypo.TypoScaleText600,
+                            lineHeight = BeumTypo.lineHeightCaption1,
+                            fontFamily = FontFamily(Font(Res.font.sf_pro)),
+                            fontWeight = FontWeight(700),
+                            color = BeumColors.baseGrayLightGray800,
+                            textAlign = TextAlign.Right,
+                        )
                         Spacer(modifier = Modifier.weight(1f))
                         Box(
                             modifier = Modifier.width(18.dp).height(18.dp).background(

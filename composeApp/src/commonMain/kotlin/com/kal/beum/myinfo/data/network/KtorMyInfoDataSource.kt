@@ -17,6 +17,7 @@ import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
+import io.ktor.client.statement.bodyAsText
 
 class KtorMyInfoDataSource(private val httpClient: HttpClient) : RemoteMyInfoDataSource {
     override suspend fun getMyContents(userId: Int): Result<MyBoardInfoDto, DataError.Remote> {
@@ -81,6 +82,7 @@ class KtorMyInfoDataSource(private val httpClient: HttpClient) : RemoteMyInfoDat
             )
         }
         if (response.status.value == 200) {
+            println("response.bodyAsText() : ${response.bodyAsText()}")
             val responseBody = response.body<LoginResponseDto>()
             val userInfo = UserInfo(
                 userId = responseBody.userId,
@@ -91,7 +93,9 @@ class KtorMyInfoDataSource(private val httpClient: HttpClient) : RemoteMyInfoDat
                 accessToken = responseBody.tokenSet?.accessToken ?: socialToken.accessToken,
                 refreshToken = responseBody.tokenSet?.refreshToken ?: socialToken.refreshToken,
                 profileImageId = responseBody.profileImageId,
-                needSignUp = responseBody.needSignUp
+                needSignUp = responseBody.needSignUp,
+                angelPoint = responseBody.angelPoint,
+                devilPoint = responseBody.devilPoint
             )
             return Result.Success(userInfo)
         } else {

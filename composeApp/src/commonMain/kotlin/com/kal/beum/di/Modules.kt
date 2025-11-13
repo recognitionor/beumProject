@@ -32,6 +32,7 @@ import com.kal.beum.login.data.client.NaverLoginClient
 import com.kal.beum.login.domain.LoginClient
 import com.kal.beum.main.data.DefaultAppRepository
 import com.kal.beum.main.data.database.AppDatabase
+import com.kal.beum.main.data.database.MIGRATION_3_4
 import com.kal.beum.main.data.network.RemoteLoginDataSource
 import com.kal.beum.main.data.network.SdkLoginDataSource
 import com.kal.beum.main.domain.AppRepository
@@ -71,8 +72,7 @@ val sharedModules = module {
 
     single {
         get<DatabaseFactory>().create().setDriver(BundledSQLiteDriver())
-//            .addMigrations(MIGRATION_1_2).build()
-            .fallbackToDestructiveMigration(true).build()
+            .addMigrations(MIGRATION_3_4).build()
     }
 
     single<Map<Int, LoginClient>> {
@@ -116,7 +116,6 @@ val sharedModules = module {
 
     single { get<AppDatabase>().appDao }
     single { get<AppDatabase>().writingDao }
-
 
 
 //    viewModelOf(::Select)

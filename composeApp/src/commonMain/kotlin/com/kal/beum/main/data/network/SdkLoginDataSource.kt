@@ -159,6 +159,7 @@ class SdkLoginDataSource(
         }
         when (response.status.value) {
             200 -> {
+                println("response 응답: ${response.bodyAsText()}")
                 val responseBody = response.body<LoginResponseDto>()
                 println("성공 응답: $responseBody")
                 return UserInfo(
@@ -170,7 +171,9 @@ class SdkLoginDataSource(
                     accessToken = responseBody.tokenSet?.accessToken ?: socialToken.accessToken,
                     refreshToken = responseBody.tokenSet?.refreshToken ?: socialToken.refreshToken,
                     profileImageId = responseBody.profileImageId,
-                    needSignUp = responseBody.needSignUp
+                    needSignUp = responseBody.needSignUp,
+                    angelPoint = responseBody.angelPoint,
+                    devilPoint = responseBody.devilPoint
                 )
             }
 

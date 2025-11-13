@@ -14,7 +14,9 @@ fun UserInfoEntity.toUserInfo(): UserInfo {
         accessToken = this.accessToken,
         refreshToken = this.refreshToken,
         profileImageId = this.profileImageId,
-        needSignUp = this.needSignUp
+        needSignUp = this.needSignUp,
+        angelPoint = this.angelPoint,
+        devilPoint = this.devilPoint
     )
 }
 
@@ -28,7 +30,9 @@ fun UserInfo.toUserInfoEntity(): UserInfoEntity {
         accessToken = this.accessToken,
         refreshToken = this.refreshToken,
         profileImageId = this.profileImageId,
-        needSignUp = this.needSignUp
+        needSignUp = this.needSignUp,
+        angelPoint = this.angelPoint,
+        devilPoint = this.devilPoint
     )
 }
 
@@ -38,8 +42,10 @@ private fun LoginResponseDto.toDomain() = UserInfo(
     socialType = this.socialType,
     email = this.email,
     sessionKey = "",
-    accessToken = this.tokenSet?.accessToken?:"",
-    refreshToken = this.tokenSet?.refreshToken?:"",
+    accessToken = this.tokenSet?.accessToken ?: "",
+    refreshToken = this.tokenSet?.refreshToken ?: "",
     profileImageId = this.profileImageId,
-    needSignUp = this.needSignUp
+    needSignUp = this.needSignUp,
+    angelPoint = this.angelPoint,
+    devilPoint = this.devilPoint
 )

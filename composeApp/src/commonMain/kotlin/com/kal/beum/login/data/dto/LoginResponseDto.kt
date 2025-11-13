@@ -12,5 +12,8 @@ data class LoginResponseDto(
     val email: String = "",
     val tokenSet: TokenSetDto? = null,
     val profileImageId: String = "",
-    val needSignUp: Boolean = false
+    val needSignUp: Boolean = false,
+    val angelPoint: Int = 0,
+    val devilPoint: Int = 0
+
 )

@@ -14,5 +14,7 @@ data class UserInfoEntity(
     val accessToken: String,
     val refreshToken: String,
     val profileImageId: String,
-    val needSignUp: Boolean
+    val needSignUp: Boolean,
+    val angelPoint: Int,
+    val devilPoint: Int
 )
