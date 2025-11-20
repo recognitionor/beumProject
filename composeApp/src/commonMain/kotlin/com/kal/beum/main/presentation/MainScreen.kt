@@ -206,7 +206,6 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                         }
 
                         is FullScreenType.WritingScreen -> {
-                            println("WritingScreen")
                             WritingScreen(
                                 content.tempWriting, viewModel::onAction, content.callBack
                             )

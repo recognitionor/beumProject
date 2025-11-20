@@ -11,8 +11,12 @@
           {
             "fieldPath": "id",
             "columnName": "id",
+
+
+
             "affinity": "INTEGER",
             "notNull": true
+
           },
           {
             "fieldPath": "isOnBoardingDone",

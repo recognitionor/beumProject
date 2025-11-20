@@ -32,6 +32,7 @@ import beumproject.composeapp.generated.resources.icon_arrow_right_black
 import beumproject.composeapp.generated.resources.sf_pro
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumTypo
+import com.kal.beum.core.presentation.CommonBackHandler
 import com.kal.beum.main.presentation.MainAction
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
@@ -44,6 +45,8 @@ fun TermScreen(
         .asPaddingValues()
         .calculateTopPadding()
     val scrollState = rememberScrollState()
+    CommonBackHandler(onBack = { action(MainAction.PopFullScreen) })
+
     Column(Modifier.fillMaxSize().background(BeumColors.baseGrayLightGray75)) {
         Spacer(modifier = Modifier.height(topSpace))
         Row(

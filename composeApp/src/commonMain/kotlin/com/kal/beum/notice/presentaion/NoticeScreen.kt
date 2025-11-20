@@ -42,6 +42,7 @@ import beumproject.composeapp.generated.resources.sf_pro
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumDimen
 import com.kal.beum.core.presentation.BeumTypo
+import com.kal.beum.core.presentation.CommonBackHandler
 import com.kal.beum.main.presentation.MainAction
 import com.kal.beum.utils.formatTimeAgoFromLong
 import org.jetbrains.compose.resources.Font
@@ -57,6 +58,7 @@ fun NoticeScreen(action: (MainAction) -> Unit) {
     val topSpace = WindowInsets.safeDrawing
         .asPaddingValues()
         .calculateTopPadding()
+    CommonBackHandler(onBack = { action(MainAction.PopFullScreen) })
 
     Column(Modifier.fillMaxSize().background(BeumColors.White)) {
         Spacer(modifier = Modifier.height(topSpace))

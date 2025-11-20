@@ -2,6 +2,7 @@ package com.kal.beum
 
 import android.content.Context
 import android.os.Build
+import androidx.compose.runtime.Composable
 
 class AndroidPlatform : Platform {
     override val name: String = "Android ${Build.VERSION.SDK_INT}"
@@ -15,3 +16,7 @@ fun initPlatformContext(context: Context) {
 
 actual fun getPlatform(): Platform = AndroidPlatform()
 actual fun getPlatformContext(): Any? = appContext
+
+@Composable
+actual fun PlatformBackHandler(enabled: Boolean, onBack: () -> Unit) {
+}

@@ -38,6 +38,7 @@ import beumproject.composeapp.generated.resources.kakao
 import beumproject.composeapp.generated.resources.sf_pro
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumTypo
+import com.kal.beum.core.presentation.CommonBackHandler
 import com.kal.beum.main.domain.SocialType
 import com.kal.beum.main.domain.UserInfo
 import com.kal.beum.main.presentation.MainAction
@@ -46,9 +47,9 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun MyInfoDetailScreen(info: UserInfo, action: (MainAction) -> Unit) {
-    val topSpace = WindowInsets.safeDrawing
-        .asPaddingValues()
-        .calculateTopPadding()
+    val topSpace = WindowInsets.safeDrawing.asPaddingValues().calculateTopPadding()
+    CommonBackHandler(onBack = { action(MainAction.PopFullScreen) })
+
     Column(modifier = Modifier.background(BeumColors.baseGrayLightGray75).fillMaxSize()) {
         Spacer(modifier = Modifier.height(topSpace))
         Column(
@@ -90,8 +91,10 @@ fun MyInfoDetailScreen(info: UserInfo, action: (MainAction) -> Unit) {
             )
 
             Row(
-                modifier = Modifier.fillMaxWidth().height(56.dp).background(color = BeumColors.White)
-                    .padding(start = 20.dp, top = 0.dp, end = 20.dp, bottom = 0.dp), verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier.fillMaxWidth().height(56.dp)
+                    .background(color = BeumColors.White)
+                    .padding(start = 20.dp, top = 0.dp, end = 20.dp, bottom = 0.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = "닉네임", style = TextStyle(
@@ -118,8 +121,10 @@ fun MyInfoDetailScreen(info: UserInfo, action: (MainAction) -> Unit) {
             }
 
             Row(
-                modifier = Modifier.fillMaxWidth().height(56.dp).background(color = BeumColors.White)
-                    .padding(start = 20.dp, top = 0.dp, end = 20.dp, bottom = 0.dp), verticalAlignment = Alignment.CenterVertically
+                modifier = Modifier.fillMaxWidth().height(56.dp)
+                    .background(color = BeumColors.White)
+                    .padding(start = 20.dp, top = 0.dp, end = 20.dp, bottom = 0.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = "이메일", style = TextStyle(
@@ -180,7 +185,8 @@ fun MyInfoDetailScreen(info: UserInfo, action: (MainAction) -> Unit) {
             }
 
             Row(
-                modifier = Modifier.fillMaxWidth().height(56.dp).background(color = BeumColors.White)
+                modifier = Modifier.fillMaxWidth().height(56.dp)
+                    .background(color = BeumColors.White)
                     .padding(start = 20.dp, top = 0.dp, end = 20.dp, bottom = 0.dp).clickable {
                         action(MainAction.Withdraw)
                     }, verticalAlignment = Alignment.CenterVertically

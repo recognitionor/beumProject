@@ -52,9 +52,11 @@ class SdkLoginDataSource(
             val userInfo = fetchUserInfoFromServer(socialToken, socialType)
             Result.Success(userInfo)
         } catch (e: CancellationException) {
+            println("e.message1")
             println(e.message)
             throw e
         } catch (e: Exception) {
+            println("e.message2")
             println(e.message)
             Result.Error(DataError.Remote.UNKNOWN)
         }
@@ -149,6 +151,8 @@ class SdkLoginDataSource(
             ApiConstants.Endpoints.SIGNIN
         }
 
+        println("fetchUserInfoFromServer")
+
         val response = httpClient.post(path) {
             setBody(
                 mapOf(
@@ -157,6 +161,7 @@ class SdkLoginDataSource(
                 )
             )
         }
+        println("fetchUserInfoFromServer : $response")
         when (response.status.value) {
             200 -> {
                 println("response 응답: ${response.bodyAsText()}")

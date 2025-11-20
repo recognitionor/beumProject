@@ -52,6 +52,7 @@ import com.kal.beum.community.presentation.ContentDetailViewModel
 import com.kal.beum.content.domain.ContentsRepository
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumTypo
+import com.kal.beum.core.presentation.CommonBackHandler
 import com.kal.beum.core.presentation.ToastInfo
 import com.kal.beum.main.presentation.FullScreenType
 import com.kal.beum.main.presentation.MainAction
@@ -69,6 +70,9 @@ fun ContentDetailScreen(id: Int, action: (MainAction) -> Unit, backBtnClick: () 
     val viewModel = remember { ContentDetailViewModel(contentDetailRepository) }
     var reportButton by remember { mutableStateOf(false) }
     var reportDetailButton by remember { mutableStateOf(false) }
+
+    CommonBackHandler(onBack = backBtnClick)
+
 
     println("ContentDetailScreen viewModel : $viewModel")
     val state by viewModel.state.collectAsStateWithLifecycle()

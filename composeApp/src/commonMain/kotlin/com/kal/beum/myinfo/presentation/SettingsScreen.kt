@@ -21,6 +21,7 @@ import beumproject.composeapp.generated.resources.Res
 import beumproject.composeapp.generated.resources.icon_arrow_right_black
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumTypo
+import com.kal.beum.core.presentation.CommonBackHandler
 import com.kal.beum.main.domain.UserInfo
 import com.kal.beum.main.presentation.FullScreenType
 import com.kal.beum.main.presentation.MainAction
@@ -31,6 +32,7 @@ import org.jetbrains.compose.resources.painterResource
 
 fun SettingsScreen(info: UserInfo, action: (MainAction) -> Unit) {
     val topSpace = WindowInsets.safeDrawing.asPaddingValues().calculateTopPadding()
+    CommonBackHandler(onBack = { action(MainAction.PopFullScreen) })
     Column(Modifier.fillMaxSize().background(BeumColors.baseGrayLightGray75)) {
         Spacer(modifier = Modifier.height(topSpace))
         Column {

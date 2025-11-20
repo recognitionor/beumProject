@@ -212,9 +212,8 @@ fun CommunityScreen(
                         Spacer(modifier = Modifier.height(16.dp))
                     }
                 }
-
                 Box(
-                    modifier = Modifier.padding(12.dp).align(Alignment.BottomEnd)
+                    modifier = Modifier.padding(start = 12.dp, end = 12.dp, bottom = 150.dp).align(Alignment.BottomEnd)
                 ) {
                     Box(
                         modifier = Modifier.width(52.dp).height(52.dp).background(
