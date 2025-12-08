@@ -65,6 +65,7 @@ fun SplashScreen(viewModel: MainViewModel) {
         val titleAlpha = remember { Animatable(0f) }
         val descriptionAlpha = remember { Animatable(0f) }
         val buttonAlpha = remember { Animatable(0f) }
+        viewModel.onAction(MainAction.OnBackKey { viewModel.onAction(MainAction.PopFullScreen) })
 
         LaunchedEffect(Unit) {
             val topSpacerHeightResult = topSpacerHeight.animateTo(

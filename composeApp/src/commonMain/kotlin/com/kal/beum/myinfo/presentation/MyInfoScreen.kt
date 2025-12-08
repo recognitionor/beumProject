@@ -36,7 +36,6 @@ import com.kal.beum.utils.formatWithComma
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
-import org.koin.compose.viewmodel.koinViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -276,7 +275,7 @@ fun MyInfoScreen(devil: Boolean, viewModel: MyInfoViewModel, action: (MainAction
                     3 -> {
                         action(
                             MainAction.PushFullScreen(
-                                FullScreenType.ReportConfirmDialog(onContinueClick = {
+                                FullScreenType.ReportConfirmDialog(title = "", onContinueClick = {
                                     action(MainAction.PopFullScreen)
                                     reportContent?.let {
                                         viewModel.reportUser(it)

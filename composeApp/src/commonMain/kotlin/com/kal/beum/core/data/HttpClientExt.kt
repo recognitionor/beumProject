@@ -4,6 +4,7 @@ import com.kal.beum.core.domain.DataError
 import com.kal.beum.core.domain.Result
 import io.ktor.client.call.NoTransformationFoundException
 import io.ktor.client.call.body
+import io.ktor.client.plugins.HttpRequestTimeoutException
 import io.ktor.client.network.sockets.SocketTimeoutException
 import io.ktor.client.statement.HttpResponse
 import io.ktor.util.network.UnresolvedAddressException
@@ -17,8 +18,10 @@ suspend inline fun <reified T> safeCall(
         execute()
     } catch (e: SocketTimeoutException) {
         return Result.Error(DataError.Remote.REQUEST_TIMEOUT)
-    } catch (e: UnresolvedAddressException) {
+    } catch (e: HttpRequestTimeoutException) {
         return Result.Error(DataError.Remote.REQUEST_TIMEOUT)
+    } catch (e: UnresolvedAddressException) {
+        return Result.Error(DataError.Remote.NO_INTERNET)
     } catch (e: Exception) {
         coroutineContext.ensureActive()
         return Result.Error(DataError.Remote.UNKNOWN)

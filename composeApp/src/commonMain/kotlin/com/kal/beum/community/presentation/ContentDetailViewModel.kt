@@ -76,24 +76,59 @@ class ContentDetailViewModel(private val contentDetailRepository: ContentsReposi
         }
     }
 
+    fun reportUser(reasonId: Int) {
+        val contentDetail = state.value.contentDetail
+        contentDetail?.let { it ->
+            viewModelScope.launch {
+                contentDetailRepository.reportUser(
+                    it.id,
+                    BeumConstants.CONTENT_REPORT_REASONS[reasonId],
+                    reasonId,
+                    "USER",
+                    it.writerId
+                ).onEach { result ->
+                    when (result) {
+                        is Result.Error<DataError.Remote> -> {
+                            println("reportUser error")
+                            _state.update { it.copy(reportMessage = "User 신고 실패 ") }
+                        }
+
+                        is Result.Progress -> {
+                        }
+
+                        is Result.Success<Boolean> -> {
+                            println("reportUser success")
+                            _state.update { it.copy(reportMessage = "User 신고 완료") }
+                        }
+                    }
+                }.launchIn(viewModelScope)
+            }
+        }
+    }
+
     fun reportContent(reasonId: Int) {
         val contentDetail = state.value.contentDetail
         contentDetail?.let {
             viewModelScope.launch {
                 contentDetailRepository.reportContent(
-                    it.id, BeumConstants.REPORT_REASONS[reasonId], reasonId, "BOARD", it.writer
+                    it.id,
+                    BeumConstants.CONTENT_REPORT_REASONS[reasonId],
+                    reasonId,
+                    "BOARD",
+                    it.writerId
                 ).onEach { result ->
                     when (result) {
                         is Result.Error<DataError.Remote> -> {
-                            println("reportContent Result.Error : ")
+                            println("error~!")
+                            _state.update { data -> data.copy(reportMessage = "콘텐츠 신고 실패 ") }
                         }
 
                         is Result.Progress -> {
                             println("reportContent Result.Progress : ")
                         }
 
-                        is Result.Success<ContentDetail> -> {
-                            println("reportContent Result.Success : ${result.data}")
+                        is Result.Success<Boolean> -> {
+                            _state.update { data -> data.copy(reportMessage = "콘텐츠 신고 완료") }
                         }
                     }
                 }.launchIn(viewModelScope)
@@ -188,5 +223,7 @@ class ContentDetailViewModel(private val contentDetailRepository: ContentsReposi
         }
     }
 
-
+    fun clearToast() {
+        _state.update { it.copy(reportMessage = null) }
+    }
 }

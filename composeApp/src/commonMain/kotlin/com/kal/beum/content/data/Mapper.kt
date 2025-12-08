@@ -46,6 +46,7 @@ fun CommunityItemDto.toCommunityItem(): CommunityItem {
         id = this.id,
         title = this.title,
         content = this.content,
+        writerId = this.writerId,
         writer = this.writer,
         categoryName = this.categoryName,
         isPopular = this.isPopular,

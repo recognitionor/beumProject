@@ -7,20 +7,21 @@ import com.kal.beum.core.data.AppUserCache
 import com.kal.beum.core.domain.DataError
 import com.kal.beum.core.domain.Result
 import io.ktor.client.HttpClient
-import io.ktor.client.call.body
+import com.kal.beum.core.data.safeCall
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
 
 class KtorCommunityDataSource(private val httpClient: HttpClient) : RemoteCommunityDataSource {
     override suspend fun getCategoryList(): Result<List<CategoryDto>, DataError.Remote> {
-        val response = httpClient.get(ApiConstants.Endpoints.CATEGORY_LIST) {
-            headers {
-                AppUserCache.userInfo?.accessToken?.let {
-                    append(ApiConstants.KEY.KEY_AUTH_TOKEN, it)
+        return safeCall {
+            httpClient.get(ApiConstants.Endpoints.CATEGORY_LIST) {
+                headers {
+                    AppUserCache.userInfo?.accessToken?.let {
+                        append(ApiConstants.KEY.KEY_AUTH_TOKEN, it)
+                    }
                 }
             }
         }
-        return Result.Success(response.body())
     }
 
     override suspend fun getCommunity(
@@ -30,26 +31,29 @@ class KtorCommunityDataSource(private val httpClient: HttpClient) : RemoteCommun
         isDevil: Boolean
     ): Result<CommunityDto, DataError.Remote> {
         println("KtorCommunityDataSource getCommunityList : $categoryId")
-        val response = httpClient.get(ApiConstants.Endpoints.BOARDS) {
-            headers {
-                AppUserCache.userInfo?.accessToken?.let {
-                    append(ApiConstants.KEY.KEY_AUTH_TOKEN, it)
+        val result = safeCall<CommunityDto> {
+            httpClient.get(ApiConstants.Endpoints.BOARDS) {
+                headers {
+                    AppUserCache.userInfo?.accessToken?.let {
+                        append(ApiConstants.KEY.KEY_AUTH_TOKEN, it)
+                    }
                 }
-            }
-            url {
-                parameters.append(ApiConstants.KEY.KEY_PAGE, page.toString())
-                parameters.append(ApiConstants.KEY.KEY_SIZE, size.toString())
-                parameters.append(ApiConstants.KEY.KEY_IS_DEVIL, isDevil.toString())
-                if (categoryId > 0) {
-                    parameters.append(ApiConstants.KEY.KEY_CATEGORY_ID, categoryId.toString())
-                }
+                url {
+                    parameters.append(ApiConstants.KEY.KEY_PAGE, page.toString())
+                    parameters.append(ApiConstants.KEY.KEY_SIZE, size.toString())
+                    parameters.append(ApiConstants.KEY.KEY_IS_DEVIL, isDevil.toString())
+                    if (categoryId > 0) {
+                        parameters.append(ApiConstants.KEY.KEY_CATEGORY_ID, categoryId.toString())
+                    }
 
+                }
             }
         }
-        return if (response.status.value == 200 && response.body<CommunityDto>().boardList.isNotEmpty()) {
-            Result.Success(response.body())
-        } else {
+
+        return if (result is Result.Success && result.data.boardList.isEmpty()) {
             Result.Error(DataError.Remote.REQUEST_ERROR)
+        } else {
+            result
         }
     }
 }

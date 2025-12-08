@@ -24,7 +24,7 @@ import org.jetbrains.compose.resources.Font
 
 
 @Composable
-fun ReportConfirmDialog(onDismiss: () -> Unit, onContinueClick: () -> Unit) {
+fun ReportConfirmDialog(title:String, onDismiss: () -> Unit, onContinueClick: () -> Unit) {
 
     Box(
         modifier = Modifier.fillMaxSize().background(Color.Black.copy(alpha = 0.5f)) // 배경 반투명 처리
@@ -45,7 +45,7 @@ fun ReportConfirmDialog(onDismiss: () -> Unit, onContinueClick: () -> Unit) {
             Column(modifier = Modifier.padding(horizontal = 20.dp)) {
                 Spacer(Modifier.height(20.dp))
                 Text(
-                    text = "해당 사용자를 신고하시겠습니까?", style = TextStyle(
+                    text = title, style = TextStyle(
                         fontSize = BeumTypo.TypoScaleText400,
                         lineHeight = BeumDimen.TypoLienheigtLineheight500,
                         fontFamily = FontFamily(Font(Res.font.sf_pro)),

@@ -15,5 +15,6 @@ data class BoardDetailDto(
     val tags: List<String> = emptyList(),
     val title: String = "",
     val viewCount: Int = 0,
+    val writerId: Int = 0,
     val writer: String =""
 )

@@ -59,7 +59,6 @@ fun HomeScreen(
             ToggleButton(toggle, if (toggle) Color.Black else BeumColors.White) {
                 onAction(MainAction.ToggleDevil(it))
             }
-
             Row(
                 modifier = Modifier.fillMaxSize(),
                 horizontalArrangement = Arrangement.End,

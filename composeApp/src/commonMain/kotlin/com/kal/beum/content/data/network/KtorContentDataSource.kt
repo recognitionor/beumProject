@@ -132,4 +132,23 @@ class KtorContentDataSource(private val httpClient: HttpClient) : RemoteContentD
             Result.Error(DataError.Remote.REQUEST_ERROR)
         }
     }
+
+    override suspend fun reportUser(reportRequestDto: ReportRequestDto): Result<Boolean, DataError.Remote> {
+        val response = httpClient.post(ApiConstants.Endpoints.REPORT) {
+            headers {
+                AppUserCache.userInfo?.accessToken?.let {
+                    append(ApiConstants.KEY.KEY_AUTH_TOKEN, it)
+                }
+            }
+            setBody(
+                reportRequestDto
+            )
+        }
+        println("reportContent response ${response.bodyAsText()}")
+        return if (response.status.value == 200) {
+            Result.Success(true)
+        } else {
+            Result.Error(DataError.Remote.REQUEST_ERROR)
+        }
+    }
 }

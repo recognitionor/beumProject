@@ -48,6 +48,7 @@ import beumproject.composeapp.generated.resources.sf_pro
 import com.kal.beum.community.domain.Category
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumTypo
+import com.kal.beum.core.presentation.ToastInfo
 import com.kal.beum.home.presentation.components.ToggleButton
 import com.kal.beum.main.presentation.FullScreenType
 import com.kal.beum.main.presentation.MainAction
@@ -62,6 +63,18 @@ fun CommunityScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val listState = rememberLazyListState()
+
+    LaunchedEffect(viewModel.sideEffect) {
+        viewModel.sideEffect.collect { effect ->
+            when (effect) {
+                // 뷰모델에서 보낸 ShowToast가 여기로 도착함
+                is CommunitySideEffect.ShowToast -> {
+                    // 여기서 실제 토스트를 띄우거나 상위로 전달
+                    onAction(MainAction.ToastMessage(ToastInfo(effect.message)))
+                }
+            }
+        }
+    }
 
     LaunchedEffect(isDevil) {
         viewModel.getCategory(isDevil)

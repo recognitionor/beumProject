@@ -6,6 +6,7 @@ import com.kal.beum.content.domain.ContentDetail
 data class ContentDetailState(
     val contentDetail: ContentDetail? = null,
     val selectedCommentDetail: CommentDetail? = null,
+    val reportMessage: String? = null,
     val isProgress: Boolean = false,
     val isError: Boolean = false,
 )

@@ -38,7 +38,7 @@ import org.jetbrains.compose.resources.Font
 
 
 @Composable
-fun ReportDetailBottomSheet(report: (Int) -> Unit) {
+fun ReportUserBottomSheet(report: (Int) -> Unit) {
     var reportReasonIndex by remember { mutableStateOf(0) }
 
     Column(modifier = Modifier.padding(horizontal = 20.dp)) {
@@ -68,7 +68,7 @@ fun ReportDetailBottomSheet(report: (Int) -> Unit) {
                 bottom = BeumDimen.Px075RemSpacing06
             )
         ) {
-            BeumConstants.CONTENT_REPORT_REASONS.forEachIndexed { i, s ->
+            BeumConstants.USER_REPORT_REASONS.forEachIndexed { i, s ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.fillMaxWidth().clickable {

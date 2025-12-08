@@ -8,5 +8,5 @@ data class ReportRequestDto(
     val reportContent: String,
     val reportId: Int,
     val reportType: String,
-//    val reportedUserId: String
+    val reportedUserId: Int
 )

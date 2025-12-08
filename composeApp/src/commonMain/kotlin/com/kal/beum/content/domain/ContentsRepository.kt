@@ -15,8 +15,12 @@ interface ContentsRepository {
     ): Flow<Result<ContentDetail, DataError.Remote>>
 
     suspend fun reportContent(
-        boardId: Int, reportContent: String, reportId: Int, reportType: String, reportedUserId: String
-    ): Flow<Result<ContentDetail, DataError.Remote>>
+        boardId: Int, reportContent: String, reportId: Int, reportType: String, reportedUserId: Int
+    ): Flow<Result<Boolean, DataError.Remote>>
+
+    suspend fun reportUser(
+        boardId: Int, reportContent: String, reportId: Int, reportType: String, reportedUserId: Int
+    ): Flow<Result<Boolean, DataError.Remote>>
 
     suspend fun likeBoardToggle(
         contentDetail: ContentDetail

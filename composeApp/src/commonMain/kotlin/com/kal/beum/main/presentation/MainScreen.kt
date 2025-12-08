@@ -63,6 +63,7 @@ import com.kal.beum.content.presentation.ContentDetailScreen
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumTypo
 import com.kal.beum.core.presentation.Toast
+import com.kal.beum.core.presentation.ToastInfo
 import com.kal.beum.home.presentation.HomeScreen
 import com.kal.beum.home.presentation.HomeViewModel
 import com.kal.beum.level.presentaion.RankingScreen
@@ -84,7 +85,9 @@ import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun MainScreen(navController: NavHostController = rememberNavController()) {
+fun MainScreen(
+    navController: NavHostController = rememberNavController(), viewMode: MainViewModel
+) {
     val viewModel = koinViewModel<MainViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -99,13 +102,13 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
             // NavHost 내에서 시작 화면을 정의합니다.
             Box(modifier = Modifier.fillMaxSize()) {
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = state.surfaceColor
+                    modifier = Modifier.fillMaxSize(), color = state.surfaceColor
                 ) {
                     NavHost(
                         navController = navController,
                         startDestination = Route.Home.toRoute(), // Home이 NavGraph의 시작점으로 정의됩니다.
-                        modifier = Modifier.fillMaxSize().padding(top = innerPadding.calculateTopPadding())
+                        modifier = Modifier.fillMaxSize()
+                            .padding(top = innerPadding.calculateTopPadding())
                     ) {
 
                         composable(Route.Home.toRoute()) {
@@ -160,18 +163,11 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
             }
             viewModel.onAction(MainAction.OnDraftDialog)
         }
-
-        state.showToast?.let {
-            Toast(it) {
-                viewModel.onAction(MainAction.ToastMessage())
-            }
-        }
     }
 
     // ✅ 여기에 전역 fullScreen 처리!
 
     Box(modifier = Modifier.fillMaxSize()) {
-
         if (state.isProgress) {
             ProgressDialog()
         } else {
@@ -182,6 +178,7 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                         .clickable(
                             indication = null,
                             interactionSource = remember { MutableInteractionSource() }) { /* 이벤트 소모만! */ }) {
+
                     when (content) {
                         is FullScreenType.MyInfoDetailScreen -> {
                             println("FullScreenType.MyInfoDetailScreen")
@@ -225,7 +222,9 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
                         }
 
                         is FullScreenType.ReportConfirmDialog -> {
-                            ReportConfirmDialog(content.onDismiss, content.onContinueClick)
+                            ReportConfirmDialog(
+                                content.title, content.onDismiss, content.onContinueClick
+                            )
                         }
 
                         is FullScreenType.ServicePolicyInfoScreen -> {
@@ -263,6 +262,11 @@ fun MainScreen(navController: NavHostController = rememberNavController()) {
 //                }
 //            }
         }
+        state.showToast?.let {
+            Toast(it) {
+                viewModel.onAction(MainAction.ToastMessage())
+            }
+        }
     }
 
 //    PermissionScreen()
@@ -291,10 +295,7 @@ fun BottomNavigationBar(navController: NavController, currentRoute: String?, dev
                     borderColor.copy(alpha = 0.1f),    // 0% 지점 (왼쪽 끝, 투명)
                     borderColor,                     // 80% 지점 (완전히 불투명)
                     borderColor.copy(alpha = 0.1f)     // 100% 지점 (오른쪽 끝, 투명)
-                ),
-                start = Offset(0f, 0f),
-                end = Offset(width, 0f),
-                tileMode = TileMode.Clamp
+                ), start = Offset(0f, 0f), end = Offset(width, 0f), tileMode = TileMode.Clamp
             )
 
             // 2. Path 정의 (이전 코드와 동일, 전체 상단 라인을 정의)
@@ -324,12 +325,10 @@ fun BottomNavigationBar(navController: NavController, currentRoute: String?, dev
 
             // 3. Path를 Brush로 그리기
             drawPath(
-                path = path,
-                brush = gradientBrush, // Color 대신 Brush 사용
+                path = path, brush = gradientBrush, // Color 대신 Brush 사용
                 style = Stroke(width = borderWidth, cap = StrokeCap.Round)
             )
-        },
-        containerColor = if (devil) BeumColors.baseGrayLightGray800 else Color.White // 여기 추가
+        }, containerColor = if (devil) BeumColors.baseGrayLightGray800 else Color.White // 여기 추가
     ) {
         val selectedTintColor = if (devil) Color.White else BeumColors.baseGrayLightGray800
         val unSelectedTintColor = if (devil) BeumColors.transparentWhite else Color.Unspecified

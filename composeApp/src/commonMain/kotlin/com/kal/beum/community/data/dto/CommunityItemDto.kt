@@ -7,6 +7,7 @@ data class CommunityItemDto(
     val id: Int,
     val title: String,
     val content: String,
+    val writerId: Int,
     val writer: String,
     val categoryName: String,
     val isPopular: Boolean,

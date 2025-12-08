@@ -23,4 +23,6 @@ sealed interface MainAction {
     data class NewWriting(val callback: () -> Unit) : MainAction
 
     object OnDraftDialog : MainAction
+
+    data class OnBackKey(val onBack: () -> Unit) : MainAction
 }

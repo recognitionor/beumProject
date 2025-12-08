@@ -4,6 +4,7 @@ data class ContentDetail(
     val id: Int,
     val title: String,
     val content: String,
+    val writerId: Int,
     val writer: String,
     val isDevil: Boolean,
     val categoryName: String,

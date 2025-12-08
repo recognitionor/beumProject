@@ -32,8 +32,9 @@ sealed class FullScreenType {
 
     object ServicePolicyInfoScreen : FullScreenType()
 
-    data class ReportConfirmDialog(val onDismiss: () -> Unit, val onContinueClick: () -> Unit) :
-        FullScreenType()
+    data class ReportConfirmDialog(
+        val title: String, val onDismiss: () -> Unit, val onContinueClick: () -> Unit
+    ) : FullScreenType()
 
     data class LogOutDialog(val onDismiss: () -> Unit, val logoutClick: () -> Unit) :
         FullScreenType()
@@ -52,4 +53,5 @@ data class MainState(
     val onWritingComplete: (() -> Unit)? = null,
     val isDraftDialog: Boolean = false,
     val surfaceColor: Color = Color.Transparent,
+    val onBackKey: (() -> Unit)? = null,
 )

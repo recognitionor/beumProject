@@ -8,14 +8,16 @@ import com.kal.beum.community.domain.CommunityRepository
 import com.kal.beum.core.domain.onError
 import com.kal.beum.core.domain.onProgress
 import com.kal.beum.core.domain.onSuccess
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import com.kal.beum.community.presentation.CommunityAction
 
 class CommunityViewModel(private val communityRepository: CommunityRepository) : ViewModel() {
     private var isCategoryLoaded: Boolean = false
@@ -25,6 +27,11 @@ class CommunityViewModel(private val communityRepository: CommunityRepository) :
         viewModelScope, SharingStarted.WhileSubscribed(5000L), _state.value
     )
 
+    // 1. 이벤트를 보낼 채널 생성 (Buffer가 없는 파이프라인)
+    private val _sideEffect = Channel<CommunitySideEffect>()
+    // 2. UI에서는 Flow 형태로 받기 위해 변환 (KMP 호환됨)
+    val sideEffect = _sideEffect.receiveAsFlow()
+
     fun getCategory(isDevil: Boolean) {
         println("getCategory : $isCategoryLoaded - $this")
         viewModelScope.launch {
@@ -33,12 +40,17 @@ class CommunityViewModel(private val communityRepository: CommunityRepository) :
                 _state.update { it.copy(categoryList = result, communityList = tempList) }
                 getItemsByCategoryTemp(category = result[state.value.selectedCategoryId], isDevil)
                 isCategoryLoaded = true
+            }.onError { error ->
+                _sideEffect.send(CommunitySideEffect.ShowToast("네트워크 에러"))
             }
         }.start()
     }
+
     fun getItemsByCategoryTemp(category: Category, isDevil: Boolean) {
         viewModelScope.launch {
-            communityRepository.getCommunityList(state.value.communityListPage, 10, isDevil, category).onEach { result ->
+            communityRepository.getCommunityList(
+                state.value.communityListPage, 10, isDevil, category
+            ).onEach { result ->
                 result.onSuccess { community ->
                     println("community.boardList.isNotEmpty() : ${community.boardList.isNotEmpty()}")
                     if (community.boardList.isNotEmpty()) {
@@ -77,7 +89,9 @@ class CommunityViewModel(private val communityRepository: CommunityRepository) :
     fun getItemsByCategory(category: Category, isDevil: Boolean) {
         println("getItemsByCategory")
         viewModelScope.launch {
-            communityRepository.getCommunityList(state.value.communityListPage, 10, isDevil, category).onEach { result ->
+            communityRepository.getCommunityList(
+                state.value.communityListPage, 10, isDevil, category
+            ).onEach { result ->
                 result.onSuccess { community ->
                     _state.update { it.copy(onProgress = true) }
                     println("community.boardList.isNotEmpty() : ${community.boardList.isNotEmpty()}")
@@ -137,9 +151,9 @@ class CommunityViewModel(private val communityRepository: CommunityRepository) :
     }
 
     private fun likeComment() {
-        viewModelScope.launch {
-        }.start()
+        viewModelScope.launch {}.start()
     }
+
     private fun loadMoreComments() {
     }
 

@@ -13,5 +13,6 @@ data class CommunityState(
     val communityListTemp: List<CommunityItem> = emptyList(),
     val writingTemp: WritingData? = null,
     val isDraftDialog: Boolean = false,
-    val onProgress: Boolean = false
+    val onProgress: Boolean = false,
+    val onError: String? = null
 )

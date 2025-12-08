@@ -2,6 +2,7 @@ package com.kal.beum
 
 import android.content.Context
 import android.os.Build
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 
 class AndroidPlatform : Platform {
@@ -19,4 +20,8 @@ actual fun getPlatformContext(): Any? = appContext
 
 @Composable
 actual fun PlatformBackHandler(enabled: Boolean, onBack: () -> Unit) {
+    BackHandler {
+        println("BackHandler")
+        onBack()
+    }
 }

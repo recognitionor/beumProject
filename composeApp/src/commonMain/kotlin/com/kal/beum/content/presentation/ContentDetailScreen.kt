@@ -46,18 +46,17 @@ import beumproject.composeapp.generated.resources.ic_more_vertical_medium
 import beumproject.composeapp.generated.resources.ic_reply
 import beumproject.composeapp.generated.resources.icon_arrow_right_black
 import beumproject.composeapp.generated.resources.sf_pro
-import com.kal.beum.common.BeumConstants
 import com.kal.beum.community.presentation.CommunityAction
 import com.kal.beum.community.presentation.ContentDetailViewModel
 import com.kal.beum.content.domain.ContentsRepository
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumTypo
-import com.kal.beum.core.presentation.CommonBackHandler
 import com.kal.beum.core.presentation.ToastInfo
 import com.kal.beum.main.presentation.FullScreenType
 import com.kal.beum.main.presentation.MainAction
 import com.kal.beum.myinfo.presentation.ReportBottomSheetPage
 import com.kal.beum.myinfo.presentation.ReportDetailBottomSheet
+import com.kal.beum.myinfo.presentation.ReportUserBottomSheet
 import com.kal.beum.utils.formatTimeAgoFromLong
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
@@ -70,11 +69,10 @@ fun ContentDetailScreen(id: Int, action: (MainAction) -> Unit, backBtnClick: () 
     val viewModel = remember { ContentDetailViewModel(contentDetailRepository) }
     var reportButton by remember { mutableStateOf(false) }
     var reportDetailButton by remember { mutableStateOf(false) }
+    var reportUserButton by remember { mutableStateOf(false) }
 
-    CommonBackHandler(onBack = backBtnClick)
+    action(MainAction.OnBackKey { action(MainAction.PopFullScreen) })
 
-
-    println("ContentDetailScreen viewModel : $viewModel")
     val state by viewModel.state.collectAsStateWithLifecycle()
 
     val sheetState = rememberModalBottomSheetState(
@@ -89,6 +87,12 @@ fun ContentDetailScreen(id: Int, action: (MainAction) -> Unit, backBtnClick: () 
 
     LaunchedEffect(Unit) {
         viewModel.getContentDetail(id)
+    }
+
+    if (state.reportMessage?.isNotEmpty() == true) {
+        println("toast : " + state.reportMessage!!)
+        action(MainAction.ToastMessage(ToastInfo(state.reportMessage!!, 2000)))
+        viewModel.clearToast()
     }
 
     if (state.isError) {
@@ -132,14 +136,7 @@ fun ContentDetailScreen(id: Int, action: (MainAction) -> Unit, backBtnClick: () 
                     Image(
                         modifier = Modifier.clickable {
                             println("clickable")
-                            reportButton = true
-//                            action(
-//                                MainAction.PushFullScreen(
-//                                    FullScreenType.ReportConfirmDialog(
-//                                        {},
-//                                        {})
-//                                )
-//                            )
+                            reportUserButton = true
                         },
                         painter = painterResource(Res.drawable.ic_more_vertical_medium),
                         contentDescription = ""
@@ -167,14 +164,17 @@ fun ContentDetailScreen(id: Int, action: (MainAction) -> Unit, backBtnClick: () 
                             Image(
                                 painter = painterResource(Res.drawable.ic_angel_emoji),
                                 contentDescription = "",
-                                modifier = Modifier.size(40.dp)
-                            )
+                                modifier = Modifier.size(40.dp).clickable {
+                                    reportUserButton = true
+                                })
                         }
 
                         Spacer(modifier = Modifier.width(8.dp))
                         Column {
                             Text(
-                                text = state.contentDetail?.writer ?: "", style = TextStyle(
+                                modifier = Modifier.clickable {
+                                    reportUserButton = true
+                                }, text = state.contentDetail?.writer ?: "", style = TextStyle(
                                     fontSize = BeumTypo.TypoScaleText150,
                                     fontFamily = FontFamily(Font(Res.font.sf_pro)),
                                     fontWeight = FontWeight(600),
@@ -402,11 +402,41 @@ fun ContentDetailScreen(id: Int, action: (MainAction) -> Unit, backBtnClick: () 
                 ) {
                     ReportDetailBottomSheet {
                         reportDetailButton = false
-                        action(MainAction.PushFullScreen(FullScreenType.ReportConfirmDialog({
-                            action(MainAction.PopFullScreen)
-                        }, {
-                            viewModel.reportContent(it)
-                        })))
+                        action(
+                            MainAction.PushFullScreen(
+                                FullScreenType.ReportConfirmDialog("해당 게시물을 신고 하시겠습니까?", {
+                                    action(MainAction.PopFullScreen)
+                                }, {
+                                    viewModel.reportContent(it)
+                                    action(MainAction.PopFullScreen)
+                                })
+                            )
+                        )
+                    }
+                }
+            }
+            if (reportUserButton) {
+                ModalBottomSheet(
+                    onDismissRequest = {
+                        reportUserButton = false
+                    }, // 닫힐 때 None으로 초기화
+                    sheetState = sheetState,
+                    dragHandle = null,
+                    containerColor = BeumColors.baseGrayLightGray75,
+                    modifier = Modifier.fillMaxWidth().fillMaxHeight(0.85f)
+                ) {
+                    ReportUserBottomSheet {
+                        reportUserButton = false
+                        action(
+                            MainAction.PushFullScreen(
+                                FullScreenType.ReportConfirmDialog("해당 사용자를 신고 하시겠습니까?", {
+                                    action(MainAction.PopFullScreen)
+                                }, {
+                                    action(MainAction.PopFullScreen)
+                                    viewModel.reportUser(it)
+                                })
+                            )
+                        )
                     }
                 }
             }

@@ -213,12 +213,24 @@ class MainViewModel(private val appRepository: AppRepository) : ViewModel() {
             is MainAction.OnDraftDialog -> {
                 _state.update { it.copy(isDraftDialog = !it.isDraftDialog) }
             }
+
             is MainAction.Withdraw -> withdraw()
-            is MainAction.CloseFullScreen -> { popFullScreen(action.fullScreen) }
+            is MainAction.CloseFullScreen -> {
+                popFullScreen(action.fullScreen)
+            }
+
             is MainAction.NewWriting -> newWriting(action.callback)
             is MainAction.SurfaceColor -> {
                 _state.update { it.copy(surfaceColor = action.surfaceColor) }
             }
+
+            is MainAction.OnBackKey -> {
+                _state.update { it.copy(onBackKey = action.onBack) }
+            }
         }
+    }
+
+    fun onBackKey() {
+        state.value.onBackKey?.invoke()
     }
 }

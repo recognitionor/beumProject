@@ -20,4 +20,5 @@ interface RemoteContentDataSource {
     suspend fun likeComment(replyId: Int): Result<Boolean, DataError.Remote>
 
     suspend fun reportContent(reportRequestDto: ReportRequestDto): Result<Boolean, DataError.Remote>
+    suspend fun reportUser(reportRequestDto: ReportRequestDto): Result<Boolean, DataError.Remote>
 }

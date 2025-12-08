@@ -48,7 +48,6 @@ import beumproject.composeapp.generated.resources.ic_close
 import beumproject.composeapp.generated.resources.icon_arrow_right
 import beumproject.composeapp.generated.resources.sf_pro
 import com.kal.beum.core.presentation.BeumColors
-import com.kal.beum.core.presentation.CommonBackHandler
 import com.kal.beum.core.presentation.ToastInfo
 import com.kal.beum.main.presentation.MainAction
 import com.kal.beum.write.domain.WritingData
@@ -73,7 +72,6 @@ fun WritingScreen(
             viewModel.onAction(WritingAction.InitTempWriting(writingData))
         }
     }
-    CommonBackHandler(onBack = { onAction(MainAction.PopFullScreen) })
 
     val state by viewModel.state.collectAsStateWithLifecycle()
     val sheetState = rememberModalBottomSheetState(

@@ -20,6 +20,7 @@ fun CommunityItemDto.toCommunityItem(): CommunityItem {
         id = this.id,
         title = this.title,
         content = this.content,
+        writerId = this.writerId,
         writer = this.writer,
         categoryName = this.categoryName,
         isPopular = this.isPopular,
@@ -29,10 +30,7 @@ fun CommunityItemDto.toCommunityItem(): CommunityItem {
 
 fun CommunityDto.toCommunity(): Community {
     return Community(
-        page = this.page,
-        size = this.size,
-        boardList = this.boardList.map { it.toCommunityItem() }
-    )
+        page = this.page, size = this.size, boardList = this.boardList.map { it.toCommunityItem() })
 }
 
 fun CommunityCommentItemDto.toCommunityItem(): CommunityItem {
@@ -40,6 +38,7 @@ fun CommunityCommentItemDto.toCommunityItem(): CommunityItem {
         id = this.id,
         title = this.title,
         content = this.content,
+        writerId = this.writerId,
         writer = this.writer,
         categoryName = this.categoryName,
         isPopular = this.like,
