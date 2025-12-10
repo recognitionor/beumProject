@@ -2,5 +2,5 @@ package com.kal.beum.home.domain
 
 
 data class HomeData(
-    val id: Int, val concernMsg: String
+    val boardId: Int = -1, val commentId: Int = -1, val content: String = ""
 )

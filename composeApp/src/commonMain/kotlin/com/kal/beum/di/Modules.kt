@@ -16,6 +16,7 @@ import com.kal.beum.content.presentation.ReplyDetailViewModel
 import com.kal.beum.core.data.HttpClientFactory
 import com.kal.beum.core.data.database.DatabaseFactory
 import com.kal.beum.getPlatformContext
+import com.kal.beum.home.data.network.KtorRemoteHomeDataSource
 import com.kal.beum.home.data.network.MockHomeDataSource
 import com.kal.beum.home.data.network.RemoteHomeDataSource
 import com.kal.beum.home.data.repository.DefaultHomeRepository
@@ -44,6 +45,7 @@ import com.kal.beum.myinfo.data.repository.DefaultMyInfoRepository
 import com.kal.beum.myinfo.domain.MyInfoRepository
 import com.kal.beum.myinfo.presentation.MyInfoViewModel
 import com.kal.beum.notice.data.DefaultNoticeRepository
+import com.kal.beum.notice.data.network.KtorRemoteNoticeDataSource
 import com.kal.beum.notice.data.network.MockRemoteNoticeDataSource
 import com.kal.beum.notice.data.network.RemoteNoticeDataSource
 import com.kal.beum.notice.domain.NoticeRepository
@@ -86,13 +88,16 @@ val sharedModules = module {
     singleOf(::KtorWriteDataSource).bind<RemoteWriteDataSource>()
     singleOf(::KtorContentDataSource).bind<RemoteContentDataSource>()
 
-    singleOf(::MockHomeDataSource).bind<RemoteHomeDataSource>()
+    singleOf(::KtorRemoteHomeDataSource).bind<RemoteHomeDataSource>()
+//    singleOf(::MockHomeDataSource).bind<RemoteHomeDataSource>()
     singleOf(::KtorCommunityDataSource).bind<RemoteCommunityDataSource>()
     singleOf(::MockWriteCategoryDataSource).bind<RemoteWriteCategoryDataSource>()
 
     singleOf(::MockRankerUserInfoDataSource).bind<RemoteRankerUserInfoDataSource>()
     singleOf(::KtorMyInfoDataSource).bind<RemoteMyInfoDataSource>()
-    singleOf(::MockRemoteNoticeDataSource).bind<RemoteNoticeDataSource>()
+//    singleOf(::MockRemoteNoticeDataSource).bind<RemoteNoticeDataSource>()
+    singleOf(::KtorRemoteNoticeDataSource).bind<RemoteNoticeDataSource>()
+
 
     singleOf(::DefaultAppRepository).bind<AppRepository>()
     singleOf(::DefaultHomeRepository).bind<HomeRepository>()

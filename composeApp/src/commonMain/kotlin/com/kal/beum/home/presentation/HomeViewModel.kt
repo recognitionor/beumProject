@@ -24,7 +24,7 @@ class HomeViewModel(
         viewModelScope, SharingStarted.WhileSubscribed(5000L), _state.value
     )
 
-    private fun fetchHomeCommentList() {
+    fun fetchHomeCommentList() {
         println("fetchHomeCommentList")
         viewModelScope.launch {
             homeRepository.getHomeCommentList(false).onSuccess { result ->

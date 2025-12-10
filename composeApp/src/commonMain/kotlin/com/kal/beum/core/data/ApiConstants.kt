@@ -34,6 +34,8 @@ object ApiConstants {
         const val REFRESH_ACCESS_TOKEN = "/refreshAccessToken"
         const val MY_BOARD_INFO = "/my-board-info"
         const val MY_COMMENT_LIST = "/my-comment-list"
+
+        const val TOP_100_COMMENTS = "/top-100/comments"
         const val COMMENTS = "/comments"
         const val SIGNUP = "/signup"
         const val WITHDRAW = "/withdraw"

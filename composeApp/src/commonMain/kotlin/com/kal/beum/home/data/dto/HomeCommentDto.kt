@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class HomeCommentDto(
-    val id: Int = -1, val comment: String = ""
+    val boardId: Int = -1, val commentId: Int = -1, val content: String = ""
 )

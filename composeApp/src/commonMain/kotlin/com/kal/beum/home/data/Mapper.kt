@@ -5,6 +5,6 @@ import com.kal.beum.home.domain.HomeData
 
 fun HomeCommentDto.toHomeData(): HomeData {
     return HomeData(
-        id = this.id, concernMsg = this.comment
+        boardId = this.boardId, commentId = this.commentId, content = this.content
     )
 }

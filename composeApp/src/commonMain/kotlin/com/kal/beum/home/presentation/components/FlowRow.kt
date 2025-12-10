@@ -66,7 +66,7 @@ fun FlowRow(
     repeatedList.forEach {
         println(it)
     }
-    MarqueeLazyRowStyled(isDevil, repeatedList.map { it.concernMsg }) {
+    MarqueeLazyRowStyled(isDevil, repeatedList.map { it.content }) {
         viewModel.updateHomeCommentList()
     }
 }
