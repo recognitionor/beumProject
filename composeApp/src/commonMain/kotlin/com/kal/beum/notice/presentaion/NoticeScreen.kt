@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -45,6 +46,7 @@ import com.kal.beum.core.presentation.BeumTypo
 import com.kal.beum.core.presentation.ToastInfo
 import com.kal.beum.main.presentation.MainAction
 import com.kal.beum.utils.formatTimeAgoFromLong
+import com.kal.beum.utils.timeAgoFromIsoString
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -120,7 +122,7 @@ fun NoticeScreen(action: (MainAction) -> Unit) {
                             shape = RoundedCornerShape(size = 83.33333.dp)
                         ).padding(vertical = 10.dp, horizontal = 10.dp).clickable {
                             viewModel.onAction(NoticeAction.FilterNotice(index))
-                        }, contentAlignment = Alignment.Center
+                        }.defaultMinSize(minWidth = 50.dp), contentAlignment = Alignment.Center
                     ) {
                         Text(
                             text = item.category, style = TextStyle(
@@ -160,7 +162,7 @@ fun NoticeScreen(action: (MainAction) -> Unit) {
                             Column(modifier = Modifier.weight(1f)) {
                                 Row {
                                     Text(
-                                        text = item.category, style = TextStyle(
+                                        text = item.content, style = TextStyle(
                                             fontSize = 13.sp,
                                             lineHeight = BeumTypo.lineHeightCaption1,
                                             fontFamily = FontFamily(Font(Res.font.sf_pro)),
@@ -172,7 +174,7 @@ fun NoticeScreen(action: (MainAction) -> Unit) {
                                     Spacer(modifier = Modifier.weight(1f))
 
                                     Text(
-                                        text = formatTimeAgoFromLong(item.createdAt), style = TextStyle(
+                                        text = timeAgoFromIsoString(item.createdAt), style = TextStyle(
                                             fontSize = 13.sp,
                                             lineHeight = BeumTypo.lineHeightCaption1,
                                             fontFamily = FontFamily(Font(Res.font.sf_pro)),

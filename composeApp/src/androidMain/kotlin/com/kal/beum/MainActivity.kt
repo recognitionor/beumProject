@@ -28,6 +28,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //test
         NaverIdLoginSDK.initialize(this, SocialKey.NAVER_CLIENT_ID, SocialKey.NAVER_CLIENT_SECRET, SocialKey.NAVER_CLIENT_NAME)
         initPlatformContext(this)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {

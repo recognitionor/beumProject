@@ -10,9 +10,21 @@ import io.ktor.client.HttpClient
 import com.kal.beum.core.data.safeCall
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
+import io.ktor.client.statement.bodyAsText
 
 class KtorCommunityDataSource(private val httpClient: HttpClient) : RemoteCommunityDataSource {
     override suspend fun getCategoryList(): Result<List<CategoryDto>, DataError.Remote> {
+        val test = httpClient.get(ApiConstants.Endpoints.CATEGORY_LIST) {
+            headers {
+                AppUserCache.userInfo?.accessToken?.let {
+                    append(ApiConstants.KEY.KEY_AUTH_TOKEN, it)
+                }
+            }
+        }
+
+        println("test : ${test.bodyAsText()}")
+
+
         return safeCall {
             httpClient.get(ApiConstants.Endpoints.CATEGORY_LIST) {
                 headers {

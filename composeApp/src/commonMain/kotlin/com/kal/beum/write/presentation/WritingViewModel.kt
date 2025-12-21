@@ -2,7 +2,6 @@ package com.kal.beum.write.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.kal.beum.core.domain.onError
 import com.kal.beum.core.domain.onSuccess
 import com.kal.beum.write.domain.WritingCategoryRepository
@@ -50,7 +49,7 @@ class WritingViewModel(
                 title = state.value.title,
                 content = state.value.content,
                 tags = parseTagsFromString(state.value.tags),
-                devil = state.value.isDevil,
+                isDevil = state.value.isDevil,
                 categoryId = state.value.selectedCategory?.categoryId ?: -1,
                 categoryName = categoryName,
                 rewardPoint = state.value.rewardPoint
@@ -104,6 +103,7 @@ class WritingViewModel(
             }
 
             is WritingAction.OnCommunityChanged -> {
+                println("action.isDevil : ${action.isDevil}")
                 _state.update { it.copy(isDevil = action.isDevil) }
                 viewModelScope.launch {
                     writingRepository.saveTempWritingIsDevil(action.isDevil)

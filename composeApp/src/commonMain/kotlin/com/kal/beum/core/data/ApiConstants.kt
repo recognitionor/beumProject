@@ -45,5 +45,7 @@ object ApiConstants {
         const val LIKE_REPLY = "/like-comment"
 
         const val REPORT = "/report"
+
+        const val MY_NOTICE = "/my-notice"
     }
 }

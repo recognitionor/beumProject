@@ -46,7 +46,6 @@ import com.kal.beum.myinfo.domain.MyInfoRepository
 import com.kal.beum.myinfo.presentation.MyInfoViewModel
 import com.kal.beum.notice.data.DefaultNoticeRepository
 import com.kal.beum.notice.data.network.KtorRemoteNoticeDataSource
-import com.kal.beum.notice.data.network.MockRemoteNoticeDataSource
 import com.kal.beum.notice.data.network.RemoteNoticeDataSource
 import com.kal.beum.notice.domain.NoticeRepository
 import com.kal.beum.notice.presentaion.NoticeViewModel

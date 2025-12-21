@@ -1,3 +1,7 @@
 package com.kal.beum.notice.domain
 
-data class NoticeData(val id: Int, val category: String, val content: String, val createdAt: Long)
+import kotlinx.serialization.Serializable
+
+
+@Serializable
+data class NoticeData(val id: Int, val noticeType: String, val content: String, val createdAt: String)
