@@ -1,6 +1,7 @@
 package com.kal.beum.community.data.network
 
 import com.kal.beum.community.data.dto.CategoryDto
+import com.kal.beum.community.data.dto.CategoryMapDto
 import com.kal.beum.community.data.dto.CommunityDto
 import com.kal.beum.core.data.ApiConstants
 import com.kal.beum.core.data.AppUserCache
@@ -13,7 +14,7 @@ import io.ktor.client.request.headers
 import io.ktor.client.statement.bodyAsText
 
 class KtorCommunityDataSource(private val httpClient: HttpClient) : RemoteCommunityDataSource {
-    override suspend fun getCategoryList(): Result<List<CategoryDto>, DataError.Remote> {
+    override suspend fun getCategoryList(): Result<CategoryMapDto, DataError.Remote> {
         val test = httpClient.get(ApiConstants.Endpoints.CATEGORY_LIST) {
             headers {
                 AppUserCache.userInfo?.accessToken?.let {
@@ -22,7 +23,7 @@ class KtorCommunityDataSource(private val httpClient: HttpClient) : RemoteCommun
             }
         }
 
-        println("test : ${test.bodyAsText()}")
+        println("test!!!! : ${test.bodyAsText()}")
 
 
         return safeCall {
@@ -62,10 +63,6 @@ class KtorCommunityDataSource(private val httpClient: HttpClient) : RemoteCommun
             }
         }
 
-        return if (result is Result.Success && result.data.boardList.isEmpty()) {
-            Result.Error(DataError.Remote.REQUEST_ERROR)
-        } else {
-            result
-        }
+        return result
     }
 }

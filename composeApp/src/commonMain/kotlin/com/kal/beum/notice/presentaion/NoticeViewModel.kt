@@ -31,7 +31,7 @@ class NoticeViewModel(private val noticeRepository: NoticeRepository) : ViewMode
                     NoticeCategory(
                         id = index + 1, category = key
                     )
-                }.toMutableList().apply { add(0, NoticeCategory(id = 0, category = "전체")) }
+                }.toMutableList()
 
                 // 2) NoticeMap 안의 NoticeData 들을 전부 펼쳐서 하나의 리스트로 만들기
                 val allNotices = result.noticeMap.values.flatten()

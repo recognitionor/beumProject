@@ -2,9 +2,11 @@ package com.kal.beum.community.data.repository
 
 import com.kal.beum.community.data.network.RemoteCommunityDataSource
 import com.kal.beum.community.data.toCategoryData
+import com.kal.beum.community.data.toCategoryMap
 import com.kal.beum.community.data.toCommunity
 import com.kal.beum.community.data.toCommunityItem
 import com.kal.beum.community.domain.Category
+import com.kal.beum.community.domain.CategoryMap
 import com.kal.beum.community.domain.Community
 import com.kal.beum.community.domain.CommunityItem
 import com.kal.beum.community.domain.CommunityRepository
@@ -13,6 +15,7 @@ import com.kal.beum.core.domain.Result
 import com.kal.beum.core.domain.map
 import com.kal.beum.core.domain.onError
 import com.kal.beum.core.domain.onSuccess
+import com.kal.beum.notice.data.toNoticeMap
 import com.kal.beum.write.data.database.WritingDao
 import com.kal.beum.write.data.toWritingData
 import com.kal.beum.write.domain.WritingData
@@ -33,18 +36,17 @@ class DefaultCommunityRepository(
         }
     }
 
-    override suspend fun getCategoryList(): Result<List<Category>, DataError.Remote> {
-        return remoteCommunityDataSource.getCategoryList().map { list ->
-            val allCategory = Category(id = -1, category = "전체")
-            list.map { it.toCategoryData() }.let { mutableListOf(allCategory).apply { addAll(it) } }
+    override suspend fun getCategoryList(): Result<CategoryMap, DataError.Remote> {
+        return remoteCommunityDataSource.getCategoryList().map { mapDto ->
+            mapDto.toCategoryMap()
         }
     }
 
     override suspend fun getCommunityList(
-        page: Int, size: Int, isDevil: Boolean, category: Category
+        page: Int, size: Int, isDevil: Boolean, categoryId: Int
     ): Flow<Result<Community, DataError.Remote>> = flow {
         emit(Result.Progress())
-        val result = remoteCommunityDataSource.getCommunity(page, size, category.id, isDevil)
+        val result = remoteCommunityDataSource.getCommunity(page, size, categoryId, isDevil)
         result.onSuccess {
             emit(Result.Success(it.toCommunity()))
         }.onError {

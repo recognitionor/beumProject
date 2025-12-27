@@ -13,7 +13,7 @@ import com.kal.beum.core.data.AppUserCache
 
 fun CategoryDto.toCategoryData(): Category {
     return Category(
-        id = this.id, category = this.name
+        id = this.id, name = this.name
     )
 }
 

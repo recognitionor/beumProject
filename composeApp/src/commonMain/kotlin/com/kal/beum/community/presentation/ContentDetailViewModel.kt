@@ -210,8 +210,11 @@ class ContentDetailViewModel(private val contentDetailRepository: ContentsReposi
                 likeContent(action.contentDetail)
             }
 
-            is CommunityAction.OnTabSelected -> {
+            is CommunityAction.OnCategorySelected -> {
+
             }
+
+
 
             is CommunityAction.OnCommentLikeClicked -> {
                 likeComment(action.commentDetail)
@@ -220,6 +223,8 @@ class ContentDetailViewModel(private val contentDetailRepository: ContentsReposi
             is CommunityAction.LoadMoreComments -> {
                 loadMoreComments()
             }
+
+            else -> {}
         }
     }
 

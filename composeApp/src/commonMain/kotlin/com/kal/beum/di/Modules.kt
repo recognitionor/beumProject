@@ -50,7 +50,7 @@ import com.kal.beum.notice.data.network.RemoteNoticeDataSource
 import com.kal.beum.notice.domain.NoticeRepository
 import com.kal.beum.notice.presentaion.NoticeViewModel
 import com.kal.beum.write.data.network.KtorWriteDataSource
-import com.kal.beum.write.data.network.MockWriteCategoryDataSource
+import com.kal.beum.write.data.network.KtorWriteCategoryDataSource
 import com.kal.beum.write.data.network.RemoteWriteCategoryDataSource
 import com.kal.beum.write.data.network.RemoteWriteDataSource
 import com.kal.beum.write.data.repository.DefaultWriteCategoryRepository
@@ -90,7 +90,7 @@ val sharedModules = module {
     singleOf(::KtorRemoteHomeDataSource).bind<RemoteHomeDataSource>()
 //    singleOf(::MockHomeDataSource).bind<RemoteHomeDataSource>()
     singleOf(::KtorCommunityDataSource).bind<RemoteCommunityDataSource>()
-    singleOf(::MockWriteCategoryDataSource).bind<RemoteWriteCategoryDataSource>()
+    singleOf(::KtorWriteCategoryDataSource).bind<RemoteWriteCategoryDataSource>()
 
     singleOf(::MockRankerUserInfoDataSource).bind<RemoteRankerUserInfoDataSource>()
     singleOf(::KtorMyInfoDataSource).bind<RemoteMyInfoDataSource>()

@@ -147,7 +147,6 @@ class WritingViewModel(
                     state.value.tags.isEmpty() && state.value.title.isEmpty() && state.value.content.isEmpty() && state.value.selectedCategory == null
                 if (isEmpty) {
                     viewModelScope.launch {
-                        println("clearTempWritingTitle")
                         writingRepository.clearTempWritingTitle()
                     }
                 }

@@ -8,8 +8,8 @@ import kotlinx.coroutines.flow.Flow
 interface CommunityRepository {
 
     suspend fun getTempWriting(): Result<WritingData, DataError.Local>
-    suspend fun getCategoryList(): Result<List<Category>, DataError.Remote>
+    suspend fun getCategoryList(): Result<CategoryMap, DataError.Remote>
     suspend fun getCommunityList(
-        page: Int, size: Int, isDevil: Boolean, category: Category
+        page: Int, size: Int, isDevil: Boolean, categoryId: Int
     ): Flow<Result<Community, DataError.Remote>>
 }

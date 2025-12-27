@@ -11,15 +11,16 @@ class DefaultWriteCategoryRepository(private val remoteWriteCategoryDataSource: 
     WritingCategoryRepository {
 
     override suspend fun getWriteCategory(): Result<Map<String, List<WritingCategory>>, DataError.Remote> {
-        return remoteWriteCategoryDataSource.getWriteCategoryList().map { dtoList ->
-            dtoList.groupBy { it.groupName } // 여기서 category가 빅카테고리!
-                .mapValues { entry ->
-                    entry.value.map { dto ->
-                        WritingCategory(
-                            categoryId = dto.id, category = dto.category
-                        )
-                    }
+        return remoteWriteCategoryDataSource.getWriteCategoryList().map { categoryMapDto ->
+            // categoryMapDto.categoryMap: Map<String, List<CategoryDto>>
+            categoryMapDto.categoryMap.mapValues { (_, categoryDtoList) ->
+                categoryDtoList.map { dto ->
+                    WritingCategory(
+                        categoryId = dto.id,
+                        category = dto.name  // 또는 dto.category (WriteCategoryDto 필드명에 따라)
+                    )
                 }
+            }
         }
     }
 }
