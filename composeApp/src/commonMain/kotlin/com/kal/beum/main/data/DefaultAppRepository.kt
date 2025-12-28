@@ -38,8 +38,6 @@ class DefaultAppRepository(
             emit(null)
         }
         result?.let {
-            println("setLoginInfo accessToken : ${it.accessToken}")
-            println("setLoginInfo refreshToken : ${it.refreshToken}")
             appDao.setLoginInfo(
                 UserInfoEntity(
                     userId = it.userId,

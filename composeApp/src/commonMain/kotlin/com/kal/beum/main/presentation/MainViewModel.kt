@@ -142,8 +142,6 @@ class MainViewModel(private val appRepository: AppRepository) : ViewModel() {
                             )
                         }
                     }
-
-
                 }
 
                 is Result.Progress -> {

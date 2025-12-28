@@ -17,17 +17,16 @@ import com.kal.beum.core.data.HttpClientFactory
 import com.kal.beum.core.data.database.DatabaseFactory
 import com.kal.beum.getPlatformContext
 import com.kal.beum.home.data.network.KtorRemoteHomeDataSource
-import com.kal.beum.home.data.network.MockHomeDataSource
 import com.kal.beum.home.data.network.RemoteHomeDataSource
 import com.kal.beum.home.data.repository.DefaultHomeRepository
 import com.kal.beum.home.domain.HomeRepository
 import com.kal.beum.home.presentation.HomeViewModel
-import com.kal.beum.level.data.network.KtorRankerUserInfoDataSource
 import com.kal.beum.level.data.network.MockRankerUserInfoDataSource
 import com.kal.beum.level.data.network.RemoteRankerUserInfoDataSource
 import com.kal.beum.level.data.repository.DefaultRankerUserInfoRepository
 import com.kal.beum.level.domain.RankerUserInfoRepository
 import com.kal.beum.level.presentaion.RankingViewModel
+import com.kal.beum.login.data.client.AppleLoginClient
 import com.kal.beum.login.data.client.KaKaoLoginClient
 import com.kal.beum.login.data.client.NaverLoginClient
 import com.kal.beum.login.domain.LoginClient
@@ -49,8 +48,8 @@ import com.kal.beum.notice.data.network.KtorRemoteNoticeDataSource
 import com.kal.beum.notice.data.network.RemoteNoticeDataSource
 import com.kal.beum.notice.domain.NoticeRepository
 import com.kal.beum.notice.presentaion.NoticeViewModel
-import com.kal.beum.write.data.network.KtorWriteDataSource
 import com.kal.beum.write.data.network.KtorWriteCategoryDataSource
+import com.kal.beum.write.data.network.KtorWriteDataSource
 import com.kal.beum.write.data.network.RemoteWriteCategoryDataSource
 import com.kal.beum.write.data.network.RemoteWriteDataSource
 import com.kal.beum.write.data.repository.DefaultWriteCategoryRepository
@@ -79,7 +78,9 @@ val sharedModules = module {
     single<Map<Int, LoginClient>> {
         mapOf(
             SocialType.KAKAO_CODE to KaKaoLoginClient(getPlatformContext()),
-            SocialType.NAVER_CODE to NaverLoginClient(getPlatformContext())
+            SocialType.NAVER_CODE to NaverLoginClient(getPlatformContext()),
+            SocialType.APPLE_CODE to AppleLoginClient(getPlatformContext())
+
         )
     }
 
