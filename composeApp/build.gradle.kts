@@ -58,7 +58,12 @@ kotlin {
             implementation(libs.android.kakao)
             implementation(project.dependencies.platform("com.google.firebase:firebase-bom:34.3.0"))
             implementation(libs.google.firebase.messaging)
+            implementation(libs.google.firebase.auth)
             implementation(libs.androidx.work.runtime.ktx)
+
+
+
+
 
         }
 

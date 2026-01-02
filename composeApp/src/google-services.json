@@ -12,7 +12,20 @@
           "package_name": "com.kal.beum.android"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "387621070251-kd58o0fejcnm0ptr4ouknk2pttdlidho.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kal.beum.android",
+            "certificate_hash": "e729f895fe58706bf9aa6279313ba45d0d676fff"
+          }
+        },
+        {
+          "client_id": "387621070251-34hs5roo12hma508enn8lqib16esu92v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyClMdbacNKCCBYQXnlUjsaN-p6hrMnBPM0"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "387621070251-34hs5roo12hma508enn8lqib16esu92v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

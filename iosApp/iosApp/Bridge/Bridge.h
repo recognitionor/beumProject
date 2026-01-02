@@ -1,9 +1,11 @@
-#import <Foundation/Foundation.h>
+#import "AppleLoginSDK.h"
 #import "KaKaoLoginSDK.h"
 #import "NaverLoginSDK.h"
+#import <Foundation/Foundation.h>
 
 @class KaKaoLoginSDK;
 @class NaverLoginSDK;
+@class AppleLoginSDK;
 
 NS_ASSUME_NONNULL_BEGIN
 
