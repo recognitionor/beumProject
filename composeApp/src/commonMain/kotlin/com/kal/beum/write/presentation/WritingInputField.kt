@@ -83,10 +83,12 @@ fun WriteEditText(
 
                 when (title) {
                     "제목", "내 고민" -> {
+                        val isMultiLine = title == "내 고민" // '내 고민'일 때만 여러 줄 허용하고 싶을 경우
                         BasicTextField(
                             value = content,
                             onValueChange = onTextChange,
-                            singleLine = true,
+                            singleLine = !isMultiLine,
+                            maxLines = if (isMultiLine) 10 else 1,
                             modifier = Modifier.fillMaxWidth().fillMaxHeight()
                         )
 

@@ -23,10 +23,10 @@ class KtorRemoteHomeDataSource(
                 }
             }
             url {
-                parameters.append(ApiConstants.KEY.KEY_IS_DEVIL, AppUserCache.isDevil.toString())
+                parameters.append(ApiConstants.KEY.KEY_IS_DEVIL, (isDevil).toString())
             }
         }
-        println("result : ${result.bodyAsText()}")
+        println("result!@!@!@!@!@! : ${result.bodyAsText()}")
         return Result.Success(result.body())
     }
 

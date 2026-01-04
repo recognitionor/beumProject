@@ -75,12 +75,10 @@ fun FlowRow(
 fun MarqueeLazyRowStyled(isDevil: Boolean, texts: List<String>, loadMore: () -> Unit) {
     if (texts.isEmpty()) return
 
-    val repeatedTexts = remember { texts }
+    val repeatedTexts = remember(texts) { texts }
     val listState = rememberLazyListState()
-
     val fullContentWidth = remember { mutableStateOf(0f) }
     val viewportWidth = remember { mutableStateOf(0f) }
-
     // 자동 스크롤 활성화 여부
     var autoScrollEnabled by remember { mutableStateOf(true) }
 

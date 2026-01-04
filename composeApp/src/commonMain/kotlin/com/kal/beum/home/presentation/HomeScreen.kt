@@ -57,8 +57,8 @@ fun HomeScreen(
             modifier = Modifier.fillMaxWidth().height(64.dp), contentAlignment = Alignment.Center
         ) {
             ToggleButton(toggle, if (toggle) Color.Black else BeumColors.White) {
-                viewModel.fetchHomeCommentList()
                 onAction(MainAction.ToggleDevil(it))
+                viewModel.fetchHomeCommentList()
             }
             Row(
                 modifier = Modifier.fillMaxSize(),

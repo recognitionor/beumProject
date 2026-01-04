@@ -28,6 +28,7 @@ class DefaultAppRepository(
         // 캐싱된 로그인 정보 가져 오기
         var result = appDao.getLoginInfo()?.toUserInfo()
         AppUserCache.userInfo = result
+
         if (result != null) {
             val refreshedUserInfo = remoteLoginDataSource.refreshAccessToken(result)
             println("한번에 : $refreshedUserInfo")
@@ -158,7 +159,6 @@ class DefaultAppRepository(
     }
 
     override fun getAppEntity(): Flow<AppEntity> = flow {
-        println("getAppEntity()")
         appDao.getAppEntity()?.let {
             emit(it)
         }

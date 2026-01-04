@@ -35,16 +35,18 @@ class MainViewModel(private val appRepository: AppRepository) : ViewModel() {
                     isDevil = result.isDevil, isOnboardingDone = result.isOnBoardingDone
                 )
             }
+            AppUserCache.isDevil = result.isDevil
         }.launchIn(viewModelScope)
     }
 
     private fun devilToggle(isDevil: Boolean) {
         viewModelScope.launch {
+            AppUserCache.isDevil = isDevil
             appRepository.setIsDevil(isDevil)
             appRepository.getAppEntity().onEach { result ->
                 println("result : $result")
                 _state.update { it.copy(isDevil = result.isDevil) }
-                AppUserCache.isDevil = result.isDevil
+
             }.launchIn(this)
         }
     }

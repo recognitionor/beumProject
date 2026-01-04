@@ -3,6 +3,7 @@ package com.kal.beum.home.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.kal.beum.core.data.AppUserCache
 import com.kal.beum.core.domain.onSuccess
 import com.kal.beum.home.domain.HomeRepository
 import com.kal.beum.main.domain.AppRepository
@@ -27,7 +28,7 @@ class HomeViewModel(
     fun fetchHomeCommentList() {
         println("fetchHomeCommentList")
         viewModelScope.launch {
-            homeRepository.getHomeCommentList(false).onSuccess { result ->
+            homeRepository.getHomeCommentList(AppUserCache.isDevil).onSuccess { result ->
                 println("fetchHomeCommentListResult : $result")
                 _state.update { it.copy(homeCommentList = result) }
             }
