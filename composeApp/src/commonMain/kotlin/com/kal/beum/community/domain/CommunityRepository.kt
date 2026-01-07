@@ -12,4 +12,6 @@ interface CommunityRepository {
     suspend fun getCommunityList(
         page: Int, size: Int, isDevil: Boolean, categoryId: Int
     ): Flow<Result<Community, DataError.Remote>>
+
+    suspend fun pickComment(targetUserId: String, boardId: String): Result<Boolean, DataError.Remote>
 }

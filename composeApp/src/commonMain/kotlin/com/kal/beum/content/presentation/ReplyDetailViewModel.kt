@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.kal.beum.content.data.dto.CommentDetailDto
 import com.kal.beum.content.domain.CommentDetail
+import com.kal.beum.content.domain.ContentsRepository
 import com.kal.beum.content.domain.ReplyRepository
 import com.kal.beum.core.data.AppUserCache
 import com.kal.beum.core.domain.DataError
@@ -18,7 +19,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlin.onSuccess
 
-class ReplyDetailViewModel(private val replyRepository: ReplyRepository) : ViewModel() {
+class ReplyDetailViewModel(
+    private val replyRepository: ReplyRepository,
+    private val contentsRepository: ContentsRepository
+) : ViewModel() {
     private val _state = MutableStateFlow(ReplyStateState())
 
     val state = _state.stateIn(
@@ -113,6 +117,45 @@ class ReplyDetailViewModel(private val replyRepository: ReplyRepository) : ViewM
         }
     }
 
+    fun reportContent(reportContent: String) {
+        viewModelScope.launch {
+            state.value.replyInfo?.let {
+                contentsRepository.reportContent(
+                    it.boardId,
+                    reportContent,
+                    it.id,
+                    "COMMENT",
+                    it.user.id.toInt()
+                ).collect {
+
+                }
+            }
+        }
+    }
+
+
+    fun reportUser(reportContent: String) {
+        viewModelScope.launch {
+            state.value.replyInfo?.let {
+                contentsRepository.reportUser(
+                    it.boardId,
+                    reportContent,
+                    it.id,
+                    "COMMENT",
+                    it.user.id.toInt()
+                ).collect {
+
+                }
+            }
+        }
+    }
+
+    fun pickComment(targetUserId: String, boardId: String) {
+        viewModelScope.launch {
+            contentsRepository.pickComment(targetUserId, boardId)
+        }
+    }
+
     fun onAction(action: ReplyAction) {
         when (action) {
             is ReplyAction.OnReplyLikeClicked -> likeReply(action.replyDetail)
@@ -120,6 +163,8 @@ class ReplyDetailViewModel(private val replyRepository: ReplyRepository) : ViewM
             is ReplyAction.OnSendReply -> sendReply(action.replyDetail, action.content)
 
             is ReplyAction.OnSubReplyLikeClicked -> likeSubReply(action.replyDetail)
+
+            is ReplyAction.PickComment -> pickComment(action.targetUserId, action.boardId)
         }
     }
 }

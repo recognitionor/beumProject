@@ -11,6 +11,7 @@
 		058557D9273AAEEB004C7B11 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */; };
 		2152FB042600AC8F00CF470E /* iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2152FB032600AC8F00CF470E /* iOSApp.swift */; };
 		7555FF83242A565900829871 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* ContentView.swift */; };
+		8745C6962F0D4E3500158DEF /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 8745C6952F0D4E3500158DEF /* FirebaseAuth */; };
 		D9648EA42E4C190F00FB3BB9 /* NidThirdPartyLogin in Frameworks */ = {isa = PBXBuildFile; productRef = D9648EA32E4C190F00FB3BB9 /* NidThirdPartyLogin */; };
 		D9823C392E5C92C2000CA96A /* KakaoSDK in Frameworks */ = {isa = PBXBuildFile; productRef = D9823C382E5C92C2000CA96A /* KakaoSDK */; };
 		D9823C3B2E5C92C2000CA96A /* KakaoSDKAuth in Frameworks */ = {isa = PBXBuildFile; productRef = D9823C3A2E5C92C2000CA96A /* KakaoSDKAuth */; };
@@ -47,6 +48,7 @@
 				D9823C3D2E5C92C2000CA96A /* KakaoSDKCommon in Frameworks */,
 				D98A3D422E8BB2A1004E3B3D /* FirebaseInAppMessaging-Beta in Frameworks */,
 				D9648EA42E4C190F00FB3BB9 /* NidThirdPartyLogin in Frameworks */,
+				8745C6962F0D4E3500158DEF /* FirebaseAuth in Frameworks */,
 				D9823C392E5C92C2000CA96A /* KakaoSDK in Frameworks */,
 				D9823C3F2E5C92C2000CA96A /* KakaoSDKUser in Frameworks */,
 				D98A3D402E8BB2A1004E3B3D /* FirebaseCore in Frameworks */,
@@ -142,6 +144,7 @@
 				D98A3D3F2E8BB2A1004E3B3D /* FirebaseCore */,
 				D98A3D412E8BB2A1004E3B3D /* FirebaseInAppMessaging-Beta */,
 				D98A3D432E8BB2A1004E3B3D /* FirebaseMessaging */,
+				8745C6952F0D4E3500158DEF /* FirebaseAuth */,
 			);
 			productName = iosApp;
 			productReference = 7555FF7B242A565900829871 /* beumProject.app */;
@@ -466,6 +469,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		8745C6952F0D4E3500158DEF /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D98A3D3E2E8BB2A1004E3B3D /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
 		D9648EA32E4C190F00FB3BB9 /* NidThirdPartyLogin */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = D9648EA22E4C190F00FB3BB9 /* XCRemoteSwiftPackageReference "naveridlogin-sdk-ios-swift" */;

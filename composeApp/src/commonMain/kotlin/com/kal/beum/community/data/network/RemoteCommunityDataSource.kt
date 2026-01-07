@@ -12,4 +12,8 @@ interface RemoteCommunityDataSource {
         page: Int, size: Int, categoryId: Int, isDevil: Boolean
     ): Result<CommunityDto, DataError.Remote>
 
+    suspend fun pickComment(
+        targetUserId: String, boardId: String
+    ): Result<Boolean, DataError.Remote>
+
 }

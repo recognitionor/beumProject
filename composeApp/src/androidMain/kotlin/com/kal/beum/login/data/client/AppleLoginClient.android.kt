@@ -57,13 +57,16 @@ actual class AppleLoginClient actual constructor(private val obj: Any?) : LoginC
             callback.invoke(null, DataError.Remote.LOGIN_FAILED)
             return
         }
-        
+
         user.getIdToken(false).addOnSuccessListener { tokenResult ->
             val idToken = tokenResult.token ?: ""
             val uid = user.uid
+            val email = user.email
+            val name = user.displayName
             Log.d("AppleLoginClient", "Apple login success - uid: $uid")
             Log.d("AppleLoginClient", "Apple login success - idToken: $idToken")
-            callback.invoke(SocialToken(idToken, uid), null)
+
+            callback.invoke(SocialToken(idToken, uid, email, name), null)
         }.addOnFailureListener { e ->
             Log.e("AppleLoginClient", "Failed to get token: ${e.message}")
             callback.invoke(null, DataError.Remote.LOGIN_FAILED)

@@ -6,9 +6,15 @@ import com.kal.beum.content.data.dto.CommentInfoDto
 import com.kal.beum.content.data.dto.CommentRequestDto
 import com.kal.beum.content.data.dto.ReportRequestDto
 import com.kal.beum.core.data.ApiConstants
+import com.kal.beum.core.data.ApiConstants.KEY.KEY_BOARD_ID
+import com.kal.beum.core.data.ApiConstants.KEY.KEY_TARGET_USER_ID
 import com.kal.beum.core.data.AppUserCache
+import com.kal.beum.core.data.safeCall
 import com.kal.beum.core.domain.DataError
 import com.kal.beum.core.domain.Result
+import com.kal.beum.core.domain.Result.Error
+import com.kal.beum.core.domain.Result.Progress
+import com.kal.beum.core.domain.Result.Success
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -149,6 +155,33 @@ class KtorContentDataSource(private val httpClient: HttpClient) : RemoteContentD
             Result.Success(true)
         } else {
             Result.Error(DataError.Remote.REQUEST_ERROR)
+        }
+    }
+
+    override suspend fun pickComment(
+        targetUserId: String, boardId: String
+    ): Result<Boolean, DataError.Remote> {
+        println("ktor : pickComment")
+        val result = safeCall<String> {
+            httpClient.post(ApiConstants.Endpoints.POINT) {
+                headers {
+                    AppUserCache.userInfo?.accessToken?.let {
+                        append(ApiConstants.KEY.KEY_AUTH_TOKEN, it)
+                    }
+                }
+                url {
+                    parameters.append(KEY_BOARD_ID, targetUserId)
+                    parameters.append(KEY_TARGET_USER_ID, boardId)
+                }
+            }
+        }
+
+        println("~~~~~~~~~~~~ : $result")
+
+        return when (result) {
+            is Success -> Success(true)
+            is Result.Error -> Error(result.error)
+            is Progress -> Progress()
         }
     }
 }

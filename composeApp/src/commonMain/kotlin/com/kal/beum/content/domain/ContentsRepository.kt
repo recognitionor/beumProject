@@ -29,4 +29,7 @@ interface ContentsRepository {
     suspend fun likeCommentToggle(
         commentDetail: CommentDetail
     ): Result<CommentDetail, DataError.Remote>
+
+    suspend fun pickComment(targetUserId: String, boardId: String): Result<Boolean, DataError.Remote>
+
 }

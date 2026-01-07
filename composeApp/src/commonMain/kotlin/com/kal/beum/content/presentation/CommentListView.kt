@@ -27,6 +27,7 @@ fun CommentListView(
     viewModel: ContentDetailViewModel,         // onAction(LoadMore) 같은 액션 처리
     isLoading: Boolean,             // 로딩 중 여부
     hasMore: Boolean,
+    onReplyOptionClicked: (com.kal.beum.content.domain.CommentDetail) -> Unit
 ) {
     val comments = state.contentDetail?.commentInfo?.comments.orEmpty()
     val listState = rememberLazyListState()
@@ -59,6 +60,9 @@ fun CommentListView(
                 },
                 selectedDetailReview = { replyList ->
                     viewModel.selectComment(replyList)
+                },
+                onOptionClicked = {
+                    onReplyOptionClicked(reply)
                 })
         }
 

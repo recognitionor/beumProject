@@ -124,4 +124,11 @@ class DefaultContentDetailRepository(private val remoteContentDataSource: Remote
         }
         return Result.Error(DataError.Remote.REQUEST_ERROR)
     }
+
+    override suspend fun pickComment(
+        targetUserId: String,
+        boardId: String
+    ): Result<Boolean, DataError.Remote> {
+        return remoteContentDataSource.pickComment(targetUserId, boardId)
+    }
 }

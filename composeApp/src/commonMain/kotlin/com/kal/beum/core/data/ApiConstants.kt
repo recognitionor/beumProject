@@ -7,6 +7,7 @@ object ApiConstants {
     object KEY {
         const val KEY_AUTH_TOKEN = "X-AUTH-TOKEN"
         const val KEY_IS_DEVIL = "isDevil"
+        const val KEY_TARGET_USER_ID = "targetUserId"
         const val KEY_SIZE = "size"
 
         const val KEY_BOARD_ID = "boardId"
@@ -34,7 +35,7 @@ object ApiConstants {
         const val REFRESH_ACCESS_TOKEN = "/refreshAccessToken"
         const val MY_BOARD_INFO = "/my-board-info"
         const val MY_COMMENT_LIST = "/my-comment-list"
-
+        const val POINT = "/point"
         const val TOP_100_COMMENTS = "/top-100/comments"
         const val COMMENTS = "/comments"
         const val SIGNUP = "/signup"

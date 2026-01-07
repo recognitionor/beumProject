@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -27,6 +28,7 @@ import beumproject.composeapp.generated.resources.Res
 import beumproject.composeapp.generated.resources.angel_abled
 import beumproject.composeapp.generated.resources.ic_angel_emoji
 import beumproject.composeapp.generated.resources.ic_dot
+import beumproject.composeapp.generated.resources.ic_more_medium
 import beumproject.composeapp.generated.resources.ic_reply
 import beumproject.composeapp.generated.resources.sf_pro
 import com.kal.beum.content.domain.CommentDetail
@@ -39,7 +41,12 @@ import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-fun ReplyView(replyInfo: CommentDetail, likeClicked: () -> Unit, selectedDetailReview: (CommentDetail) -> Unit) {
+fun ReplyView(
+    replyInfo: CommentDetail,
+    likeClicked: () -> Unit,
+    selectedDetailReview: (CommentDetail) -> Unit,
+    onOptionClicked: () -> Unit
+) {
     Row {
 
         Box(
@@ -74,7 +81,8 @@ fun ReplyView(replyInfo: CommentDetail, likeClicked: () -> Unit, selectedDetailR
                 Spacer(modifier = Modifier.width(6.dp))
 
                 Text(
-                    text = formatTimeAgoFromLong(stringTimeToLong(replyInfo.createdAt)), style = TextStyle(
+                    text = formatTimeAgoFromLong(stringTimeToLong(replyInfo.createdAt)),
+                    style = TextStyle(
                         fontSize = BeumTypo.TypoScaleText100,
                         lineHeight = 20.sp,
                         fontFamily = FontFamily(Font(Res.font.sf_pro)),
@@ -144,6 +152,14 @@ fun ReplyView(replyInfo: CommentDetail, likeClicked: () -> Unit, selectedDetailR
                     )
                 )
                 Spacer(modifier = Modifier.weight(1f))
+                Image(
+                    modifier = Modifier.size(24.dp).clickable {
+                        onOptionClicked()
+                    },
+                    painter = painterResource(Res.drawable.ic_more_medium),
+                    contentDescription = "",
+                    contentScale = ContentScale.Fit
+                )
             }
             Spacer(modifier = Modifier.height(12.dp))
 

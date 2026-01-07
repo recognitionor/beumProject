@@ -185,6 +185,14 @@ class ContentDetailViewModel(private val contentDetailRepository: ContentsReposi
 
     }
 
+    private fun pickComment(targetUserId: String, boardId: String) {
+        println("private fun pickComment(targetUserId: String, boardId: String)")
+        viewModelScope.launch {
+            println("launch")
+            contentDetailRepository.pickComment(targetUserId, boardId)
+        }.start()
+    }
+
     fun likeComment(commentDetail: CommentDetail) {
         viewModelScope.launch {
             contentDetailRepository.likeCommentToggle(commentDetail).onSuccess { result ->
@@ -224,7 +232,15 @@ class ContentDetailViewModel(private val contentDetailRepository: ContentsReposi
                 loadMoreComments()
             }
 
-            else -> {}
+            is CommunityAction.PickComment -> {
+                println("private fun pickComment(targetUserId: String, boardId: String)")
+                viewModelScope.launch {
+                    println("launch")
+                    contentDetailRepository.pickComment(action.targetUserId, action.boardId)
+                }.start()
+            }
+
+            is CommunityAction.OnCategoryGroupSelected -> {}
         }
     }
 

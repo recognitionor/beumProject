@@ -48,6 +48,7 @@ import beumproject.composeapp.generated.resources.icon_arrow_right_black
 import beumproject.composeapp.generated.resources.sf_pro
 import com.kal.beum.community.presentation.CommunityAction
 import com.kal.beum.community.presentation.ContentDetailViewModel
+import com.kal.beum.content.domain.CommentDetail
 import com.kal.beum.content.domain.ContentsRepository
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumTypo
@@ -70,6 +71,13 @@ fun ContentDetailScreen(id: Int, action: (MainAction) -> Unit, backBtnClick: () 
     var reportButton by remember { mutableStateOf(false) }
     var reportDetailButton by remember { mutableStateOf(false) }
     var reportUserButton by remember { mutableStateOf(false) }
+    // 답글 옵션 바텀시트 상태
+    var replyOptionButton by remember { mutableStateOf(false) }
+    var selectedReplyForOption by remember {
+        mutableStateOf<CommentDetail?>(
+            null
+        )
+    } // 선택된 답글
 
     action(MainAction.OnBackKey { action(MainAction.PopFullScreen) })
 
@@ -110,7 +118,7 @@ fun ContentDetailScreen(id: Int, action: (MainAction) -> Unit, backBtnClick: () 
 
     if (state.selectedCommentDetail != null) {
         state.selectedCommentDetail?.let {
-            ReplyDetailView(it, backBtnClick = {
+            ReplyDetailView(it, action, backBtnClick = {
                 viewModel.selectComment()
                 viewModel.updateContentDetail(it)
             })
@@ -317,7 +325,10 @@ fun ContentDetailScreen(id: Int, action: (MainAction) -> Unit, backBtnClick: () 
 
                     Column {
                         Box(modifier = Modifier.weight(1f)) {
-                            CommentListView(state, viewModel, false, true)
+                            CommentListView(state, viewModel, false, true) { reply ->
+                                selectedReplyForOption = reply
+                                replyOptionButton = true
+                            }
                         }
 
 //                        LazyColumn(modifier = Modifier.weight(1f)) {
@@ -440,7 +451,35 @@ fun ContentDetailScreen(id: Int, action: (MainAction) -> Unit, backBtnClick: () 
                     }
                 }
             }
+            // 답글 옵션 바텀시트
+            if (replyOptionButton) {
+                ModalBottomSheet(
+                    onDismissRequest = {
+                        replyOptionButton = false
+                        selectedReplyForOption = null
+                    },
+                    sheetState = sheetState,
+                    dragHandle = null,
+                    containerColor = BeumColors.baseGrayLightGray75,
+                    modifier = Modifier.wrapContentHeight().fillMaxWidth()
+                ) {
+                    ReplyOptionBottomSheet(onReport = {
+                        replyOptionButton = false
+                        reportDetailButton = true
+                    }, onAdopt = {
+                        println("onAdopt : $selectedReplyForOption")
+                        replyOptionButton = false
+                        selectedReplyForOption?.let {
+                            viewModel.onAction(
+                                CommunityAction.PickComment(
+                                    it.user.id, it.boardId.toString()
+                                )
+                            )
+                            //action(MainAction.ToastMessage(ToastInfo("채택되었습니다.", 2000))) // 임시 토스트
+                        }
+                    })
+                }
+            }
         }
     }
 }
-

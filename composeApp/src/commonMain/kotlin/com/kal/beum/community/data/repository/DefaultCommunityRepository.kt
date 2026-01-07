@@ -53,4 +53,11 @@ class DefaultCommunityRepository(
             emit(Result.Error(DataError.Remote.REQUEST_ERROR))
         }
     }
+
+    override suspend fun pickComment(
+        targetUserId: String, boardId: String
+    ): Result<Boolean, DataError.Remote> {
+        println("reposi pickComment")
+        return remoteCommunityDataSource.pickComment(targetUserId, boardId)
+    }
 }

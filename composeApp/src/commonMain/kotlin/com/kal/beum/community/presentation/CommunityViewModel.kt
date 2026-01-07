@@ -125,12 +125,20 @@ class CommunityViewModel(private val communityRepository: CommunityRepository) :
     private fun loadMoreComments() {
     }
 
+    private fun pickComment(targetUserId: String, boardId: String) {
+        println("private fun pickComment(targetUserId: String, boardId: String)")
+        viewModelScope.launch {
+            println("launch")
+            communityRepository.pickComment(targetUserId, boardId)
+        }.start()
+    }
+
     /**
      * 선택된 그룹으로 카테고리 리스트 필터링
      */
     private fun filterCategoriesByGroup(groupName: String) {
         val originalMap = state.value.categoryOriginalMap ?: return
-        
+
         val filteredCategories = originalMap.categoryMap[groupName] ?: emptyList()
         val filteredCategoryId = originalMap.categoryMap[groupName]?.firstOrNull()?.id ?: 0
         _state.update { old ->
@@ -176,6 +184,11 @@ class CommunityViewModel(private val communityRepository: CommunityRepository) :
 
             is CommunityAction.LoadMoreComments -> {
                 loadMoreComments()
+            }
+
+            is CommunityAction.PickComment -> {
+                println("is CommunityAction.PickComment -> {")
+                pickComment(action.targetUserId, action.boardId)
             }
         }
     }

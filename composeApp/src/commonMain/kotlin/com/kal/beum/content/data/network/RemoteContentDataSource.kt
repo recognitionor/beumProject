@@ -21,4 +21,8 @@ interface RemoteContentDataSource {
 
     suspend fun reportContent(reportRequestDto: ReportRequestDto): Result<Boolean, DataError.Remote>
     suspend fun reportUser(reportRequestDto: ReportRequestDto): Result<Boolean, DataError.Remote>
+
+    suspend fun pickComment(
+        targetUserId: String, boardId: String
+    ): Result<Boolean, DataError.Remote>
 }

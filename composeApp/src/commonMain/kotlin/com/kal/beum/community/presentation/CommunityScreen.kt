@@ -160,7 +160,7 @@ fun CommunityScreen(
                 val textColor = if (isDevil) {
                     if (state.selectedCategoryId == item.id) BeumColors.White else BeumColors.baseGrayLightGray600
                 } else {
-                    if (state.selectedCategoryId == item.id) BeumColors.Black else BeumColors.baseGrayLightGray300
+                    if (state.selectedCategoryId == item.id) BeumColors.White else BeumColors.baseGrayLightGray300
                 }
                 Box(
                     modifier = Modifier.clip(RoundedCornerShape(50)).background(
