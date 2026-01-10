@@ -2,14 +2,11 @@ package com.kal.beum.home.presentation.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.gestures.animateScrollBy
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.scrollBy
-import androidx.compose.foundation.horizontalScroll
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,7 +17,6 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -47,6 +43,7 @@ import beumproject.composeapp.generated.resources.Res
 import beumproject.composeapp.generated.resources.sf_pro
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumTypo
+import com.kal.beum.home.domain.HomeData
 import com.kal.beum.home.presentation.HomeViewModel
 import com.kal.beum.utils.pxToDp
 import kotlinx.coroutines.delay
@@ -59,23 +56,28 @@ import org.jetbrains.compose.resources.Font
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun FlowRow(
-    isDevil: Boolean, viewModel: HomeViewModel
+    isDevil: Boolean, viewModel: HomeViewModel, onItemClicked: (id: Int) -> Unit
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val repeatedList = state.homeCommentList
     repeatedList.forEach {
         println(it)
     }
-    MarqueeLazyRowStyled(isDevil, repeatedList.map { it.content }) {
+    MarqueeLazyRowStyled(isDevil, repeatedList, onItemClicked) {
         viewModel.updateHomeCommentList()
     }
 }
 
 @Composable
-fun MarqueeLazyRowStyled(isDevil: Boolean, texts: List<String>, loadMore: () -> Unit) {
-    if (texts.isEmpty()) return
+fun MarqueeLazyRowStyled(
+    isDevil: Boolean,
+    homeDataList: List<HomeData>,
+    onItemClicked: (id: Int) -> Unit,
+    loadMore: () -> Unit
+) {
+    if (homeDataList.isEmpty()) return
 
-    val repeatedTexts = remember(texts) { texts }
+    val repeatedHomeDataList = remember(homeDataList) { homeDataList }
     val listState = rememberLazyListState()
     val fullContentWidth = remember { mutableStateOf(0f) }
     val viewportWidth = remember { mutableStateOf(0f) }
@@ -133,16 +135,16 @@ fun MarqueeLazyRowStyled(isDevil: Boolean, texts: List<String>, loadMore: () -> 
             verticalAlignment = Alignment.Top,
         ) {
             // 두 줄로 나누기
-            val line1 = repeatedTexts.filterIndexed { i, _ -> i % 2 == 0 }
-            val line2 = repeatedTexts.filterIndexed { i, _ -> i % 2 == 1 }
+            val line1 = repeatedHomeDataList.filterIndexed { i, _ -> i % 2 == 0 }
+            val line2 = repeatedHomeDataList.filterIndexed { i, _ -> i % 2 == 1 }
 
             item {
                 Column(modifier = Modifier.onGloballyPositioned {
                     fullContentWidth.value = it.size.width.toFloat()
                 }) {
-                    MarqueeStyledRow(line1, isDevil)
+                    MarqueeStyledRow(line1, isDevil, onItemClicked)
                     Spacer(modifier = Modifier.height(10.dp))
-                    MarqueeStyledRow(line2, isDevil)
+                    MarqueeStyledRow(line2, isDevil, onItemClicked)
                 }
             }
         }
@@ -150,7 +152,7 @@ fun MarqueeLazyRowStyled(isDevil: Boolean, texts: List<String>, loadMore: () -> 
 }
 
 @Composable
-private fun MarqueeStyledRow(texts: List<String>, isDevil: Boolean) {
+private fun MarqueeStyledRow(texts: List<HomeData>, isDevil: Boolean, onItemClicked: (id: Int) -> Unit) {
     val devilColor = Brush.linearGradient(
         colors = listOf(
             Color(0xFF393E44), Color(0xFF2B3036)
@@ -160,7 +162,7 @@ private fun MarqueeStyledRow(texts: List<String>, isDevil: Boolean) {
 
     val devilBorderColor = Brush.linearGradient(
         colors = listOf(
-            Color(0xFF696C70), Color(0xFF33383E),Color(0xFF2B3036)
+            Color(0xFF696C70), Color(0xFF33383E), Color(0xFF2B3036)
         ), start = Offset(0f, 0f),          // 좌상단
         end = Offset(1000f, 1000f)       // 우하단 방향
     )
@@ -181,19 +183,21 @@ private fun MarqueeStyledRow(texts: List<String>, isDevil: Boolean) {
     )
 
     Row {
-        texts.forEach { msg ->
+        texts.forEach { item ->
             Box(
                 modifier = Modifier.height(40.dp).clip(RoundedCornerShape(pxToDp(100f))).border(
                     width = 1.dp,
                     brush = if (isDevil) devilBorderColor else angelBorderColor,
                     shape = RoundedCornerShape(pxToDp(100f))
-                ).background(brush = if (isDevil) devilColor else angelColor)
+                ).clickable {
+                    onItemClicked(item.boardId)
+                }.background(brush = if (isDevil) devilColor else angelColor)
                     .padding(end = 16.dp, bottom = 2.dp, start = 16.dp)
                     .wrapContentWidth(Alignment.CenterHorizontally),
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = msg,
+                    text = item.content,
                     maxLines = 1,
                     fontSize = 14.sp,
                     style = TextStyle(

@@ -21,6 +21,7 @@ import com.kal.beum.home.data.network.RemoteHomeDataSource
 import com.kal.beum.home.data.repository.DefaultHomeRepository
 import com.kal.beum.home.domain.HomeRepository
 import com.kal.beum.home.presentation.HomeViewModel
+import com.kal.beum.level.data.network.KtorRankerUserInfoDataSource
 import com.kal.beum.level.data.network.MockRankerUserInfoDataSource
 import com.kal.beum.level.data.network.RemoteRankerUserInfoDataSource
 import com.kal.beum.level.data.repository.DefaultRankerUserInfoRepository
@@ -93,9 +94,8 @@ val sharedModules = module {
     singleOf(::KtorCommunityDataSource).bind<RemoteCommunityDataSource>()
     singleOf(::KtorWriteCategoryDataSource).bind<RemoteWriteCategoryDataSource>()
 
-    singleOf(::MockRankerUserInfoDataSource).bind<RemoteRankerUserInfoDataSource>()
+    singleOf(::KtorRankerUserInfoDataSource).bind<RemoteRankerUserInfoDataSource>()
     singleOf(::KtorMyInfoDataSource).bind<RemoteMyInfoDataSource>()
-//    singleOf(::MockRemoteNoticeDataSource).bind<RemoteNoticeDataSource>()
     singleOf(::KtorRemoteNoticeDataSource).bind<RemoteNoticeDataSource>()
 
 

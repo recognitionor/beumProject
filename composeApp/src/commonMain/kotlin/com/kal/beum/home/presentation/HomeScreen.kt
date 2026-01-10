@@ -17,7 +17,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -28,7 +27,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import beumproject.composeapp.generated.resources.Res
 import beumproject.composeapp.generated.resources.angel
 import beumproject.composeapp.generated.resources.devil
@@ -43,7 +41,6 @@ import com.kal.beum.main.presentation.FullScreenType
 import com.kal.beum.main.presentation.MainAction
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
-import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun HomeScreen(
@@ -101,7 +98,13 @@ fun HomeScreen(
 
         Spacer(modifier = Modifier.height(60.dp).fillMaxWidth())
 
-        FlowRow(toggle, viewModel)
+        FlowRow(toggle, viewModel) {id->
+            onAction(
+                MainAction.PushFullScreen(
+                    FullScreenType.ContentDetailScreen(id)
+                )
+            )
+        }
 
         Spacer(modifier = Modifier.weight(1f))
         Row(

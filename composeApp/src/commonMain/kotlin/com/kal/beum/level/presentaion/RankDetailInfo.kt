@@ -29,6 +29,10 @@ import beumproject.composeapp.generated.resources.angel
 import beumproject.composeapp.generated.resources.devil
 import beumproject.composeapp.generated.resources.heart
 import beumproject.composeapp.generated.resources.ic_devil_fire
+import beumproject.composeapp.generated.resources.img_angel_ranker
+import beumproject.composeapp.generated.resources.img_angel_user
+import beumproject.composeapp.generated.resources.img_devil_ranker
+import beumproject.composeapp.generated.resources.img_devil_user
 import beumproject.composeapp.generated.resources.sf_pro
 import coil3.compose.AsyncImage
 import com.kal.beum.core.presentation.BeumColors
@@ -58,35 +62,22 @@ fun RankDetailInfo(isDevil: Boolean, ranker: RankerUserInfo, onClickItem: () -> 
         )
         Spacer(modifier = Modifier.width(12.dp))
 
-        if (ranker.profileImageUrl.isNotEmpty()) {
-            Box(
-                modifier = Modifier.width(48.dp).height(48.dp).background(
-                    color = Color.Transparent,
-                    shape = RoundedCornerShape(size = 20.dp)
-                )
-            ) {
-                AsyncImage(
-                    model = ranker.profileImageUrl,
-                    contentDescription = "",
-                    modifier = Modifier.size(48.dp)
-                )
-            }
-
-        } else {
-            Box(
-                modifier = Modifier.border(
-                    width = 0.625.dp,
-                    color = BeumColors.baseAlphaWhiteLightWhite500A,
-                    shape = RoundedCornerShape(size = 20.dp)
-                ).width(48.dp).height(48.dp).background(
-                    color = if (isDevil) BeumColors.DevilPrimary else Color(0xFF45CAF7),
-                    shape = RoundedCornerShape(size = 20.dp)
-                )
-            ) {
+        Box(
+            modifier = Modifier.border(
+                width = 0.625.dp,
+                color = Color.Transparent,
+                shape = RoundedCornerShape(size = 20.dp)
+            ).width(48.dp).height(48.dp)
+        ) {
+            if (ranker.rank <= 3) {
                 Image(
-                    painter = painterResource(if (isDevil) Res.drawable.devil else Res.drawable.angel),
-                    contentDescription = "",
-                    modifier = Modifier.size(48.dp)
+                    painter = painterResource(if (!isDevil) Res.drawable.img_angel_ranker else Res.drawable.img_devil_ranker),
+                    contentDescription = ""
+                )
+            } else {
+                Image(
+                    painter = painterResource(if (!isDevil) Res.drawable.img_angel_user else Res.drawable.img_devil_user),
+                    contentDescription = ""
                 )
             }
         }
