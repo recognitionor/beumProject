@@ -5,13 +5,13 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class LoginResponseDto(
-    val userId: String = "",
-    @SerialName("nickname")
-    val nickName: String = "",
-    val socialType: Int = 0,
+    val userId: Int = 0,
+    @SerialName("nickName")
+    val nickName: String? = null,
+    val socialType: String = "",
     val email: String = "",
     val tokenSet: TokenSetDto? = null,
-    val profileImageId: String = "",
+    val profileImageId: Int = 0,
     val needSignUp: Boolean = false,
     val angelPoint: Int = 0,
     val devilPoint: Int = 0

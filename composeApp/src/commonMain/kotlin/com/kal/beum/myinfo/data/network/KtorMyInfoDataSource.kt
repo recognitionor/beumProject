@@ -8,9 +8,7 @@ import com.kal.beum.login.data.dto.LoginResponseDto
 import com.kal.beum.login.domain.SocialToken
 import com.kal.beum.main.domain.SocialType
 import com.kal.beum.main.domain.UserInfo
-import com.kal.beum.main.domain.UserRequestDto
 import com.kal.beum.myinfo.data.dto.MyBoardInfoDto
-import com.kal.beum.myinfo.data.dto.MyContentDto
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
@@ -73,7 +71,7 @@ class KtorMyInfoDataSource(private val httpClient: HttpClient) : RemoteMyInfoDat
         socialType: Int, socialToken: SocialToken
     ): Result<UserInfo, DataError.Remote> {
 
-        val response = httpClient.post(ApiConstants.Endpoints.SIGNIN) {
+        val response = httpClient.post(ApiConstants.Endpoints.SOCIAL_SIGNIN) {
             setBody(
                 mapOf(
                     "accessToken" to socialToken.accessToken,
@@ -85,14 +83,14 @@ class KtorMyInfoDataSource(private val httpClient: HttpClient) : RemoteMyInfoDat
             println("response.bodyAsText() : ${response.bodyAsText()}")
             val responseBody = response.body<LoginResponseDto>()
             val userInfo = UserInfo(
-                userId = responseBody.userId,
-                nickName = responseBody.nickName,
+                userId = responseBody.userId.toString(),
+                nickName = responseBody.nickName?:"",
                 socialType = socialType,
                 email = responseBody.email,
                 sessionKey = "",
                 accessToken = responseBody.tokenSet?.accessToken ?: socialToken.accessToken,
                 refreshToken = responseBody.tokenSet?.refreshToken ?: socialToken.refreshToken,
-                profileImageId = responseBody.profileImageId,
+                profileImageId = responseBody.profileImageId.toString(),
                 needSignUp = responseBody.needSignUp,
                 angelPoint = responseBody.angelPoint,
                 devilPoint = responseBody.devilPoint

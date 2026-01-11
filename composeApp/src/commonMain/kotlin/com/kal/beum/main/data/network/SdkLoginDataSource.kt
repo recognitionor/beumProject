@@ -100,6 +100,7 @@ class SdkLoginDataSource(
     }
 
     override suspend fun refreshAccessToken(result: UserInfo): Result<UserInfo?, DataError.Remote> {
+        println("refreshAccessToken : ${result.accessToken}, ${result.refreshToken}")
         val response = httpClient.post(ApiConstants.Endpoints.REFRESH_ACCESS_TOKEN) {
             headers {
                 append(ApiConstants.KEY.KEY_AUTH_TOKEN, result.accessToken)
@@ -147,9 +148,9 @@ class SdkLoginDataSource(
         socialToken: SocialToken, socialType: Int, needSignup: Boolean = false
     ): UserInfo {
         val path = if (needSignup) {
-            ApiConstants.Endpoints.SIGNUP
+            ApiConstants.Endpoints.SOCIAL_SIGNUP
         } else {
-            ApiConstants.Endpoints.SIGNIN
+            ApiConstants.Endpoints.SOCIAL_SIGNIN
         }
 
         println("fetchUserInfoFromServer")
@@ -169,14 +170,14 @@ class SdkLoginDataSource(
                 val responseBody = response.body<LoginResponseDto>()
                 println("성공 응답: $responseBody")
                 return UserInfo(
-                    userId = responseBody.userId,
-                    nickName = responseBody.nickName,
-                    socialType = socialType,
+                    userId = responseBody.userId.toString(),
+                    nickName = responseBody.nickName ?: "",
+                    socialType = SocialType.toTypeCode(responseBody.socialType),
                     email = responseBody.email,
                     sessionKey = "",
                     accessToken = responseBody.tokenSet?.accessToken ?: socialToken.accessToken,
                     refreshToken = responseBody.tokenSet?.refreshToken ?: socialToken.refreshToken,
-                    profileImageId = responseBody.profileImageId,
+                    profileImageId = responseBody.profileImageId.toString(),
                     needSignUp = responseBody.needSignUp,
                     angelPoint = responseBody.angelPoint,
                     devilPoint = responseBody.devilPoint
