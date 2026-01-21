@@ -118,7 +118,8 @@ fun ContentDetailScreen(id: Int, action: (MainAction) -> Unit, backBtnClick: () 
 
     if (state.selectedCommentDetail != null) {
         state.selectedCommentDetail?.let {
-            ReplyDetailView(it, action, backBtnClick = {
+            val canSelected = state.contentDetail?.selectingStatus == 0
+            ReplyDetailView(canSelected, it, action, backBtnClick = {
                 viewModel.selectComment()
                 viewModel.updateContentDetail(it)
             })
@@ -463,7 +464,9 @@ fun ContentDetailScreen(id: Int, action: (MainAction) -> Unit, backBtnClick: () 
                     containerColor = BeumColors.baseGrayLightGray75,
                     modifier = Modifier.wrapContentHeight().fillMaxWidth()
                 ) {
-                    ReplyOptionBottomSheet(onReport = {
+                    val canSelected = state.contentDetail?.selectingStatus == 0
+
+                    ReplyOptionBottomSheet(canSelected, onReport = {
                         replyOptionButton = false
                         reportDetailButton = true
                     }, onAdopt = {

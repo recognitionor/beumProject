@@ -12,6 +12,7 @@ data class ContentDetail(
     val tags: String,
     val likeCount: Int = 0,
     val viewCount: Int = 0,
+    val selectingStatus: Int = 0,
     val lastModifiedTime: Long,
     val commentInfo: CommentInfo,
     val like: Boolean

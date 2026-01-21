@@ -64,6 +64,7 @@ class DefaultContentDetailRepository(private val remoteContentDataSource: Remote
             writerId = content.writerId,
             isDevil = AppUserCache.isDevil,
             categoryName = content.categoryName,
+            selectingStatus = content.selectingStatus,
             rewardPoint = 0,
             tags = "",
             viewCount = content.viewCount,
@@ -82,11 +83,13 @@ class DefaultContentDetailRepository(private val remoteContentDataSource: Remote
         reportType: String,
         reportedUserId: Int
     ): Flow<Result<Boolean, DataError.Remote>> = flow {
-        emit(remoteContentDataSource.reportContent(
-            ReportRequestDto(
-                boardId, reportContent, reportId, reportType, reportedUserId
+        emit(
+            remoteContentDataSource.reportContent(
+                ReportRequestDto(
+                    boardId, reportContent, reportId, reportType, reportedUserId
+                )
             )
-        ))
+        )
     }
 
     override suspend fun reportUser(
@@ -96,11 +99,13 @@ class DefaultContentDetailRepository(private val remoteContentDataSource: Remote
         reportType: String,
         reportedUserId: Int
     ): Flow<Result<Boolean, DataError.Remote>> = flow {
-        emit(remoteContentDataSource.reportUser(
-            ReportRequestDto(
-                boardId, reportContent, reportId, reportType, reportedUserId
+        emit(
+            remoteContentDataSource.reportUser(
+                ReportRequestDto(
+                    boardId, reportContent, reportId, reportType, reportedUserId
+                )
             )
-        ))
+        )
     }
 
     override suspend fun likeBoardToggle(contentDetail: ContentDetail): Result<ContentDetail, DataError.Remote> {

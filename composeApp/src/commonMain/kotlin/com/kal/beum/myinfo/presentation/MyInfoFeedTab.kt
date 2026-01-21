@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -28,6 +29,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import beumproject.composeapp.generated.resources.Res
@@ -132,9 +134,9 @@ fun MyInfoFeedTab(
                 }
 
             } else {
-                Column(modifier = Modifier.padding(horizontal = 20.dp)) {
-                    Spacer(modifier = Modifier.height(20.dp))
+                Column {
                     LazyColumn(
+                        contentPadding = PaddingValues(top = 20.dp, start = 20.dp, end = 20.dp, bottom = 100.dp),
                         verticalArrangement = Arrangement.spacedBy(16.dp) // 아이템 사이 16dp 간격
                     ) {
                         items(list.size) { index ->
@@ -146,7 +148,7 @@ fun MyInfoFeedTab(
                                     ambientColor = Color(0x0D000000)
                                 ).clickable {
                                     onItemClick.invoke(item)
-                                }.fillMaxWidth().height(180.dp).background(
+                                }.fillMaxWidth().background(
                                     color = BeumColors.White,
                                     shape = RoundedCornerShape(size = BeumDimen.radius100)
                                 ).padding(start = 20.dp, end = 20.dp, top = 16.dp),
@@ -177,7 +179,9 @@ fun MyInfoFeedTab(
                                         fontFamily = FontFamily(Font(Res.font.sf_pro)),
                                         fontWeight = FontWeight(500),
                                         color = BeumColors.Black,
-                                    )
+                                    ),
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis
                                 )
 
                                 Spacer(modifier = Modifier.height(8.dp))
@@ -189,10 +193,12 @@ fun MyInfoFeedTab(
                                         fontFamily = FontFamily(Font(Res.font.sf_pro)),
                                         fontWeight = FontWeight(400),
                                         color = BeumColors.GrayGray500,
-                                    )
+                                    ),
+                                    maxLines = 3,
+                                    overflow = TextOverflow.Ellipsis
                                 )
 
-                                Spacer(modifier = Modifier.weight(1f))
+                                Spacer(modifier = Modifier.height(20.dp))
 
                                 Row(
                                     modifier = Modifier.height(20.dp).fillMaxWidth(),

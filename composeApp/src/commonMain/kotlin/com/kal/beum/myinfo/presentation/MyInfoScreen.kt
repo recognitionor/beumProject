@@ -121,7 +121,7 @@ fun MyInfoScreen(devil: Boolean, viewModel: MyInfoViewModel, action: (MainAction
                 )
             )
             Spacer(modifier = Modifier.height(20.dp))
-            Box(
+            Row(
                 modifier = Modifier.padding(20.dp).border(
                     width = 1.dp,
                     color = BeumColors.baseCoolGrayLightGray200,
@@ -129,16 +129,19 @@ fun MyInfoScreen(devil: Boolean, viewModel: MyInfoViewModel, action: (MainAction
                 ).fillMaxWidth().height(80.dp).background(
                     color = BeumColors.baseCoolGrayLightGray75,
                     shape = RoundedCornerShape(size = BeumDimen.radius100)
-                ), contentAlignment = Alignment.Center
+                )
             ) {
-                Column {
+                Box(modifier = Modifier.weight(1f))
+                Column(
+                    modifier = Modifier.fillMaxHeight(), verticalArrangement = Arrangement.Center
+                ) {
                     Row(
                         modifier = Modifier.width(110.dp),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.Center
                     ) {
                         Text(
-                            text = if (devil) "악마 활동 점수" else "천사 활동 점수", style = TextStyle(
+                            text = "천사 활동 점수", style = TextStyle(
                                 fontSize = BeumTypo.TypoScaleText100,
                                 fontFamily = FontFamily(Font(Res.font.sf_pro)),
                                 fontWeight = FontWeight(500),
@@ -161,8 +164,7 @@ fun MyInfoScreen(devil: Boolean, viewModel: MyInfoViewModel, action: (MainAction
                     ) {
                         Text(
                             text = formatWithComma(
-                                if (devil) state.myInfo?.devilPoint ?: 0 else state.myInfo?.angelPoint
-                                    ?: 0
+                                state.myInfo?.angelPoint ?: 0
                             ), // Use formatWithComma function to format the number with commas , style = TextStyle(
                             fontSize = BeumTypo.TypoScaleText600,
                             lineHeight = BeumTypo.lineHeightCaption1,
@@ -187,6 +189,71 @@ fun MyInfoScreen(devil: Boolean, viewModel: MyInfoViewModel, action: (MainAction
                         }
                     }
                 }
+                Box(modifier = Modifier.weight(1f))
+                Box(
+                    modifier = Modifier.width(3.dp).fillMaxHeight()
+                        .padding(top = 10.dp, bottom = 10.dp)
+                        .background(BeumColors.baseCoolGrayLightGray100)
+                )
+                Box(modifier = Modifier.weight(1f))
+                Column(
+                    modifier = Modifier.fillMaxHeight(), verticalArrangement = Arrangement.Center
+                ) {
+                    Row(
+                        modifier = Modifier.width(110.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = "악마 활동 점수", style = TextStyle(
+                                fontSize = BeumTypo.TypoScaleText100,
+                                fontFamily = FontFamily(Font(Res.font.sf_pro)),
+                                fontWeight = FontWeight(500),
+                                color = BeumColors.baseGrayLightGray600,
+                            )
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+
+                        Image(
+                            modifier = Modifier.size(16.dp),
+                            painter = painterResource(Res.drawable.ic_info),
+                            contentDescription = ""
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(8.dp))
+                    Row(
+                        modifier = Modifier.width(110.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = formatWithComma(
+                                state.myInfo?.devilPoint ?: 0
+                            ), // Use formatWithComma function to format the number with commas , style = TextStyle(
+                            fontSize = BeumTypo.TypoScaleText600,
+                            lineHeight = BeumTypo.lineHeightCaption1,
+                            fontFamily = FontFamily(Font(Res.font.sf_pro)),
+                            fontWeight = FontWeight(700),
+                            color = BeumColors.baseGrayLightGray800,
+                            textAlign = TextAlign.Right,
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                        Box(
+                            modifier = Modifier.width(18.dp).height(18.dp).background(
+                                color = BeumColors.baseCoolGrayLightGray700,
+                                shape = RoundedCornerShape(size = 75.00002.dp)
+                            ).padding(start = 3.dp, top = 3.dp, end = 3.dp, bottom = 3.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Image(
+                                painter = painterResource(Res.drawable.heart),
+                                contentDescription = "image description",
+                                contentScale = ContentScale.None
+                            )
+                        }
+                    }
+                }
+                Box(modifier = Modifier.weight(1f))
             }
 
             Spacer(modifier = Modifier.height(20.dp))

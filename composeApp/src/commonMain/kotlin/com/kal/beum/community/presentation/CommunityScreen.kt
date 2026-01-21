@@ -197,7 +197,6 @@ fun CommunityScreen(
                 ) {
                     items(communityList.size) {
                         val item = communityList[it]
-                        println("item~~~~~~~ : $item")
                         Column(
                             modifier = Modifier.shadow(
                                 elevation = 8.dp,
@@ -259,6 +258,9 @@ fun CommunityScreen(
                             )
                         }
                         Spacer(modifier = Modifier.height(16.dp))
+                    }
+                    item {
+                        Spacer(modifier = Modifier.height(100.dp))
                     }
                 }
                 Box(

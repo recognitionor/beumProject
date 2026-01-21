@@ -36,6 +36,7 @@ import beumproject.composeapp.generated.resources.google
 import beumproject.composeapp.generated.resources.icon_arrow_right_black
 import beumproject.composeapp.generated.resources.kakao
 import beumproject.composeapp.generated.resources.sf_pro
+import com.kal.beum.core.data.AppUserCache
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumTypo
 import com.kal.beum.main.domain.SocialType
@@ -46,6 +47,7 @@ import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun MyInfoDetailScreen(info: UserInfo, action: (MainAction) -> Unit) {
+    println("MyInfoDetailScreen : $info")
     val topSpace = WindowInsets.safeDrawing.asPaddingValues().calculateTopPadding()
 
     Column(modifier = Modifier.background(BeumColors.baseGrayLightGray75).fillMaxSize()) {
@@ -107,6 +109,7 @@ fun MyInfoDetailScreen(info: UserInfo, action: (MainAction) -> Unit) {
                 Spacer(modifier = Modifier.weight(1f))
 
                 Text(
+
                     text = info.nickName, style = TextStyle(
                         fontSize = 14.sp,
                         lineHeight = 20.96.sp,

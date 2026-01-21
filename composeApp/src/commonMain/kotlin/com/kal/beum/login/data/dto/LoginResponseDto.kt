@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class LoginResponseDto(
     val userId: Int = 0,
-    @SerialName("nickName")
+    @SerialName("nickname")
     val nickName: String? = null,
     val socialType: String = "",
     val email: String = "",

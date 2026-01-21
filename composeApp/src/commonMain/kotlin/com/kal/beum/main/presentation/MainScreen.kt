@@ -1,5 +1,7 @@
 package com.kal.beum.main.presentation
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -19,6 +21,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -91,6 +94,12 @@ fun MainScreen(
     val viewModel = koinViewModel<MainViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
 
+    LaunchedEffect(state.isSplashDone) {
+        if (state.isSplashDone) {
+            // 스플래시(로그인)가 끝나고 메인 화면이 뜰 때 홈으로 이동 & 백스택 초기화
+            navController.navigate(Route.Home.toRoute())
+        }
+    }
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
     if (!state.isSplashDone) {
         SplashScreen(viewModel)
@@ -108,7 +117,11 @@ fun MainScreen(
                         navController = navController,
                         startDestination = Route.Home.toRoute(), // Home이 NavGraph의 시작점으로 정의됩니다.
                         modifier = Modifier.fillMaxSize()
-                            .padding(top = innerPadding.calculateTopPadding())
+                            .padding(top = innerPadding.calculateTopPadding()),
+                        enterTransition = { EnterTransition.None },
+                        exitTransition = { ExitTransition.None },
+                        popEnterTransition = { EnterTransition.None },
+                        popExitTransition = { ExitTransition.None }
                     ) {
 
                         composable(Route.Home.toRoute()) {

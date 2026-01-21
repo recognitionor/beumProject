@@ -13,8 +13,9 @@ data class BoardDetailDto(
     val like: Boolean = false,
     val likeCount: Int = 0,
     val tags: List<String> = emptyList(),
+    val selectingStatus: Int = 0,
     val title: String = "",
     val viewCount: Int = 0,
     val writerId: Int = 0,
-    val writer: String =""
+    val writer: String = ""
 )

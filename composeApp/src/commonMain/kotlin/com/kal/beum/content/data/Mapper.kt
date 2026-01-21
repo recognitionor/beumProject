@@ -35,6 +35,7 @@ fun CommentDetailDto.toContentDetail(): CommentDetail {
         ord = this.ord,
         parentId = this.parentId,
         reReplyCount = this.reReplyCount,
+        isSelected = this.isSelected,
         createdAt = this.createdAt,
         user = this.user
     )

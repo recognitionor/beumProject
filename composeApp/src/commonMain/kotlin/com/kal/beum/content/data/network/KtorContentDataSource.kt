@@ -33,11 +33,12 @@ class KtorContentDataSource(private val httpClient: HttpClient) : RemoteContentD
                 }
             }
         }
+        println("response.bodyAsText() : ${response.bodyAsText()}")
         if (response.status.value == 200) {
             val rest = response.body<BoardDetailDto>()
-            return Result.Success(rest)
+            return Success(rest)
         } else {
-            return Result.Error(DataError.Remote.REQUEST_ERROR)
+            return Error(DataError.Remote.REQUEST_ERROR)
         }
     }
 
@@ -60,13 +61,13 @@ class KtorContentDataSource(private val httpClient: HttpClient) : RemoteContentD
                 }
             }
         }
-        println("getReply : $response" )
+        println("getReply : ${response.bodyAsText()}" )
         if (response.status.value == 200) {
             val replyInfo = response.body<CommentInfoDto>()
             println("getReply replyInfo : $replyInfo" )
-            return Result.Success(replyInfo)
+            return Success(replyInfo)
         } else {
-            return Result.Error(DataError.Remote.REQUEST_ERROR)
+            return Error(DataError.Remote.REQUEST_ERROR)
         }
     }
 
@@ -82,9 +83,9 @@ class KtorContentDataSource(private val httpClient: HttpClient) : RemoteContentD
             )
         }
         return if (response.status.value == 200) {
-            Result.Success(response.body<CommentDetailDto>())
+            Success(response.body<CommentDetailDto>())
         } else {
-            Result.Error(DataError.Remote.FAILED_BOARD)
+            Error(DataError.Remote.FAILED_BOARD)
         }
     }
 
@@ -98,9 +99,9 @@ class KtorContentDataSource(private val httpClient: HttpClient) : RemoteContentD
         }
         println("likeBoard response ${response.bodyAsText()}")
         return if (response.status.value == 200) {
-            Result.Success(true)
+            Success(true)
         } else {
-            Result.Error(DataError.Remote.FAILED_BOARD)
+            Error(DataError.Remote.FAILED_BOARD)
         }
     }
 
@@ -114,9 +115,9 @@ class KtorContentDataSource(private val httpClient: HttpClient) : RemoteContentD
         }
         println("likeComment response ${response.bodyAsText()}")
         return if (response.status.value == 200) {
-            Result.Success(true)
+            Success(true)
         } else {
-            Result.Error(DataError.Remote.FAILED_BOARD)
+            Error(DataError.Remote.FAILED_BOARD)
         }
     }
 
@@ -133,9 +134,9 @@ class KtorContentDataSource(private val httpClient: HttpClient) : RemoteContentD
         }
         println("reportContent response ${response.bodyAsText()}")
         return if (response.status.value == 200) {
-            Result.Success(true)
+            Success(true)
         } else {
-            Result.Error(DataError.Remote.REQUEST_ERROR)
+            Error(DataError.Remote.REQUEST_ERROR)
         }
     }
 
@@ -152,9 +153,9 @@ class KtorContentDataSource(private val httpClient: HttpClient) : RemoteContentD
         }
         println("reportContent response ${response.bodyAsText()}")
         return if (response.status.value == 200) {
-            Result.Success(true)
+            Success(true)
         } else {
-            Result.Error(DataError.Remote.REQUEST_ERROR)
+            Error(DataError.Remote.REQUEST_ERROR)
         }
     }
 
@@ -170,8 +171,8 @@ class KtorContentDataSource(private val httpClient: HttpClient) : RemoteContentD
                     }
                 }
                 url {
-                    parameters.append(KEY_BOARD_ID, targetUserId)
-                    parameters.append(KEY_TARGET_USER_ID, boardId)
+                    parameters.append(KEY_BOARD_ID, boardId)
+                    parameters.append(KEY_TARGET_USER_ID, targetUserId)
                 }
             }
         }
@@ -180,7 +181,7 @@ class KtorContentDataSource(private val httpClient: HttpClient) : RemoteContentD
 
         return when (result) {
             is Success -> Success(true)
-            is Result.Error -> Error(result.error)
+            is Error -> Error(result.error)
             is Progress -> Progress()
         }
     }

@@ -103,15 +103,17 @@ fun ReplyView(
                 }
 
                 Spacer(modifier = Modifier.width(6.dp))
-                Text(
-                    text = "채택", style = TextStyle(
-                        fontSize = BeumTypo.TypoScaleText100,
-                        lineHeight = 20.sp,
-                        fontFamily = FontFamily(Font(Res.font.sf_pro)),
-                        fontWeight = FontWeight(700),
-                        color = BeumColors.angelSkyblue,
+                if (replyInfo.isSelected) {
+                    Text(
+                        text = "채택", style = TextStyle(
+                            fontSize = BeumTypo.TypoScaleText100,
+                            lineHeight = 20.sp,
+                            fontFamily = FontFamily(Font(Res.font.sf_pro)),
+                            fontWeight = FontWeight(700),
+                            color = BeumColors.angelSkyblue,
+                        )
                     )
-                )
+                }
             }
             Spacer(modifier = Modifier.height(5.dp))
             Text(

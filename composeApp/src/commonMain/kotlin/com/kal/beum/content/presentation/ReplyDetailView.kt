@@ -68,6 +68,7 @@ import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun ReplyDetailView(
+    canSelected: Boolean,
     replyInfoParam: CommentDetail,
     action: (MainAction) -> Unit,
     backBtnClick: (replyInfo: CommentDetail) -> Unit
@@ -451,7 +452,7 @@ fun ReplyDetailView(
                 containerColor = BeumColors.baseGrayLightGray75,
                 modifier = Modifier.wrapContentHeight().fillMaxWidth()
             ) {
-                ReplyOptionBottomSheet(onReport = {
+                ReplyOptionBottomSheet(canSelected, onReport = {
                     replyOptionButton = false
                     reportDetailButton = true
                 }, onAdopt = {

@@ -9,6 +9,7 @@ data class CommentDetail(
     val id: Int,
     val likeCount: Int,
     val likeIsMe: Boolean,
+    val isSelected: Boolean,
     val ord: Int,
     val parentId: Int? = null,
     val reReplyCount: Int,
