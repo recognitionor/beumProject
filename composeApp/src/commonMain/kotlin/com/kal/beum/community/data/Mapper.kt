@@ -24,19 +24,6 @@ fun CategoryMapDto.toCategoryMap(): CategoryMap {
         })
 }
 
-fun CommunityItemDto.toCommunityItem(): CommunityItem {
-    return CommunityItem(
-        id = this.id,
-        title = this.title,
-        content = this.content,
-        writerId = this.writerId,
-        writer = this.writer,
-        categoryName = this.categoryName,
-        isPopular = this.isPopular,
-        lastModifiedTime = this.lastModifiedTime.toString()
-    )
-}
-
 fun CommunityDto.toCommunity(): Community {
     return Community(
         page = this.page, size = this.size, boardList = this.boardList.map { it.toCommunityItem() })
@@ -51,6 +38,8 @@ fun CommunityCommentItemDto.toCommunityItem(): CommunityItem {
         writer = this.writer,
         categoryName = this.categoryName,
         isPopular = this.like,
+        replyCount = this.replyCount,
+        likeCount = this.likeCount,
         lastModifiedTime = this.createTime
     )
 }

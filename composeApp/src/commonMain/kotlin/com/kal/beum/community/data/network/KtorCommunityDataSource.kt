@@ -59,7 +59,6 @@ class KtorCommunityDataSource(private val httpClient: HttpClient) : RemoteCommun
     override suspend fun pickComment(
         targetUserId: String, boardId: String
     ): Result<Boolean, DataError.Remote> {
-        println("ktor : pickComment")
         val result = safeCall<String> {
             httpClient.post(ApiConstants.Endpoints.POINT) {
                 headers {

@@ -77,17 +77,14 @@ class CommunityViewModel(private val communityRepository: CommunityRepository) :
     }
 
     fun getItemsByCategoryTemp(categoryId: Int, isDevil: Boolean) {
-        println("getItemsByCategoryTemp~~~~$categoryId")
         viewModelScope.launch {
             communityRepository.getCommunityList(
                 state.value.communityListPage, 10, isDevil, categoryId
             ).onEach { result ->
-                println("getItemsByCategoryTemp~~~~result ^^ $result")
                 result.onSuccess { community ->
                     _state.update { currentState ->
                         currentState.copy(communityListTemp = community.boardList)
                     }
-                    println("onSuccess")
                 }.onError {
                     _state.update { currentState ->
                         currentState.copy(communityListTemp = emptyList())
@@ -96,24 +93,6 @@ class CommunityViewModel(private val communityRepository: CommunityRepository) :
                 }.onProgress {
                     println("onProgress")
                 }
-//                _state.update { currentState ->
-//                    // 카테고리 id로 index 찾기
-//                    val index = currentState.categoryList.indexOfFirst { it.id == category.id }
-//                    if (index == -1) return@onSuccess // 해당 카테고리가 없으면 패스
-//
-//                    // communityList 복사해서 해당 index만 새로운 itemList로 교체
-//                    val newCommunityList = currentState.communityList.toMutableList().apply {
-//                        if (size > index) {
-//                            this[index] = itemList.boardList // index 위치의 리스트만 덮어쓰기
-//                        } else {
-//                            // 예외처리: communityList의 사이즈가 index보다 작으면, null 리스트로 채우고 마지막에 추가
-//                            repeat(index - size) { add(emptyList()) }
-//                            add(itemList.boardList)
-//                        }
-//                    }
-//                    // 새로운 state로 업데이트
-//                    currentState.copy(communityList = newCommunityList)
-//                }
             }.launchIn(this)
         }.start()
     }

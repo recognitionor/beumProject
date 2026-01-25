@@ -8,5 +8,7 @@ data class CommunityItem(
     val writer: String,
     val categoryName: String,
     val isPopular: Boolean,
+    val replyCount: Int,
+    val likeCount: Int,
     val lastModifiedTime: String
 )

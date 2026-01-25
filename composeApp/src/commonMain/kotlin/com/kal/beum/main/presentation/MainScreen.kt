@@ -7,7 +7,11 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
@@ -290,8 +294,15 @@ fun MainScreen(
 @Composable
 fun BottomNavigationBar(navController: NavController, currentRoute: String?, devil: Boolean) {
     val shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp)
+    // 💡 시스템 내비게이션 바(제스처/버튼) 높이를 동적으로 가져옵니다.
+    val bottomPadding = WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding()
+
+    // 기본 높이 80.dp에서 7.dp를 줄인 높이
+    val reducedHeight = 80.dp - 7.dp
+
+    // 전체 높이 = (줄인 높이) + (시스템 내비게이션 영역 높이)
     NavigationBar(
-        modifier = Modifier.clip(shape).drawWithContent {
+        modifier = Modifier.height(reducedHeight + bottomPadding).clip(shape).drawWithContent {
             val topStartRadius = 32.dp.toPx()
             val topEndRadius = 32.dp.toPx()
             val borderWidth = 2.dp.toPx()
@@ -345,8 +356,9 @@ fun BottomNavigationBar(navController: NavController, currentRoute: String?, dev
     ) {
         val selectedTintColor = if (devil) Color.White else BeumColors.baseGrayLightGray800
         val unSelectedTintColor = if (devil) BeumColors.transparentWhite else Color.Unspecified
+        val isHomeSelected = currentRoute == Route.Home.toRoute()
         NavigationBarItem(
-            selected = currentRoute == Route.Home.toRoute(), // 상태 업데이트 필요
+            selected = isHomeSelected, // 상태 업데이트 필요
             onClick = {
                 navController.navigate(Route.Home.toRoute()) {
                     launchSingleTop = true
@@ -356,27 +368,28 @@ fun BottomNavigationBar(navController: NavController, currentRoute: String?, dev
                 indicatorColor = Color.Transparent
             ), label = {
                 Text(
-                    "홈", style = TextStyle(
-                        fontSize = BeumTypo.TypoScaleText25,
+                    modifier = Modifier.offset(y = (-2).dp),
+                    text = "홈", style = TextStyle(
+                        fontSize = 10.sp,
                         lineHeight = 10.sp,
                         fontFamily = FontFamily(Font(Res.font.sf_pro)),
-                        fontWeight = FontWeight(500),
-                        color = BeumColors.baseGrayLightGray500,
+                        fontWeight = if (isHomeSelected) FontWeight.Bold else FontWeight(500),
+                        color = if (isHomeSelected) BeumColors.baseGrayLightGray800 else BeumColors.baseGrayLightGray500,
                         textAlign = TextAlign.Center,
                     )
                 )
             }, icon = {
-                val isSelected = currentRoute == Route.Home.toRoute()
                 Icon(
-                    painter = if (isSelected) painterResource(Res.drawable.home_selected) else painterResource(
+                    painter = if (isHomeSelected) painterResource(Res.drawable.home_selected) else painterResource(
                         Res.drawable.home
                     ),
-                    tint = if (isSelected) selectedTintColor else unSelectedTintColor,
+                    tint = if (isHomeSelected) selectedTintColor else unSelectedTintColor,
                     contentDescription = "Home"
                 )
             })
+        val isCommunitySelected = currentRoute == Route.Community.toRoute()
         NavigationBarItem(
-            selected = currentRoute == Route.Community.toRoute(), // 상태 업데이트 필요
+            selected = isCommunitySelected, // 상태 업데이트 필요
             onClick = {
                 navController.navigate(Route.Community.toRoute()) {
                     launchSingleTop = true
@@ -384,29 +397,30 @@ fun BottomNavigationBar(navController: NavController, currentRoute: String?, dev
                 }
             }, label = {
                 Text(
-                    "커뮤니티", style = TextStyle(
-                        fontSize = BeumTypo.TypoScaleText25,
+                    modifier = Modifier.offset(y = (-2).dp),
+                    text = "커뮤니티", style = TextStyle(
+                        fontSize = 10.sp,
                         lineHeight = 10.sp,
                         fontFamily = FontFamily(Font(Res.font.sf_pro)),
-                        fontWeight = FontWeight(500),
-                        color = BeumColors.baseGrayLightGray500,
+                        fontWeight = if (isCommunitySelected) FontWeight.Bold else FontWeight(500),
+                        color = if (isCommunitySelected) BeumColors.baseGrayLightGray800 else BeumColors.baseGrayLightGray500,
                         textAlign = TextAlign.Center,
                     )
                 )
             }, colors = NavigationBarItemDefaults.colors(
                 indicatorColor = Color.Transparent
             ), icon = {
-                val isSelected = currentRoute == Route.Community.toRoute()
                 Icon(
-                    painter = if (isSelected) painterResource(Res.drawable.wing_selected) else painterResource(
+                    painter = if (isCommunitySelected) painterResource(Res.drawable.wing_selected) else painterResource(
                         Res.drawable.wing
                     ),
-                    tint = if (isSelected) selectedTintColor else unSelectedTintColor,
+                    tint = if (isCommunitySelected) selectedTintColor else unSelectedTintColor,
                     contentDescription = "Community"
                 )
             })
+        val isRankingSelected = currentRoute == Route.Level("1").toRoute()
         NavigationBarItem(
-            selected = currentRoute == Route.Level("1").toRoute(), // 상태 업데이트 필요
+            selected = isRankingSelected, // 상태 업데이트 필요
             onClick = {
                 navController.navigate(Route.Level("1").toRoute()) {
                     launchSingleTop = true
@@ -414,29 +428,30 @@ fun BottomNavigationBar(navController: NavController, currentRoute: String?, dev
                 }
             }, label = {
                 Text(
-                    "랭킹", style = TextStyle(
-                        fontSize = BeumTypo.TypoScaleText25,
+                    modifier = Modifier.offset(y = (-2).dp),
+                    text = "랭킹", style = TextStyle(
+                        fontSize = 10.sp,
                         lineHeight = 10.sp,
                         fontFamily = FontFamily(Font(Res.font.sf_pro)),
-                        fontWeight = FontWeight(500),
-                        color = BeumColors.baseGrayLightGray500,
+                        fontWeight = if (isRankingSelected) FontWeight.Bold else FontWeight(500),
+                        color = if (isRankingSelected) BeumColors.baseGrayLightGray800 else BeumColors.baseGrayLightGray500,
                         textAlign = TextAlign.Center,
                     )
                 )
             }, colors = NavigationBarItemDefaults.colors(
                 indicatorColor = Color.Transparent
             ), icon = {
-                val isSelected = currentRoute == Route.Level("1").toRoute()
                 Icon(
-                    painter = if (isSelected) painterResource(Res.drawable.level_selected) else painterResource(
+                    painter = if (isRankingSelected) painterResource(Res.drawable.level_selected) else painterResource(
                         Res.drawable.level
                     ),
-                    tint = if (isSelected) selectedTintColor else unSelectedTintColor,
+                    tint = if (isRankingSelected) selectedTintColor else unSelectedTintColor,
                     contentDescription = "Level"
                 )
             })
+        val isMyInfoSelected = currentRoute == Route.MyInfo("userId").toRoute()
         NavigationBarItem(
-            selected = currentRoute == Route.MyInfo("userId").toRoute(), // 상태 업데이트 필요
+            selected = isMyInfoSelected, // 상태 업데이트 필요
             onClick = {
                 navController.navigate(Route.MyInfo("userId").toRoute()) {
                     launchSingleTop = true
@@ -444,24 +459,24 @@ fun BottomNavigationBar(navController: NavController, currentRoute: String?, dev
                 }
             }, label = {
                 Text(
-                    "마이", style = TextStyle(
-                        fontSize = BeumTypo.TypoScaleText25,
+                    modifier = Modifier.offset(y = (-2).dp),
+                    text = "마이", style = TextStyle(
+                        fontSize = 10.sp,
                         lineHeight = 10.sp,
                         fontFamily = FontFamily(Font(Res.font.sf_pro)),
-                        fontWeight = FontWeight(500),
-                        color = BeumColors.baseGrayLightGray500,
+                        fontWeight = if (isMyInfoSelected) FontWeight.Bold else FontWeight(500),
+                        color = if (isMyInfoSelected) BeumColors.baseGrayLightGray800 else BeumColors.baseGrayLightGray500,
                         textAlign = TextAlign.Center,
                     )
                 )
             }, colors = NavigationBarItemDefaults.colors(
                 indicatorColor = Color.Transparent
             ), icon = {
-                val isSelected = currentRoute == Route.MyInfo("userId").toRoute()
                 Icon(
-                    painter = if (isSelected) painterResource(
+                    painter = if (isMyInfoSelected) painterResource(
                         Res.drawable.info_selected
                     ) else painterResource(Res.drawable.info),
-                    tint = if (isSelected) selectedTintColor else unSelectedTintColor,
+                    tint = if (isMyInfoSelected) selectedTintColor else unSelectedTintColor,
                     contentDescription = "My Info"
                 )
             })

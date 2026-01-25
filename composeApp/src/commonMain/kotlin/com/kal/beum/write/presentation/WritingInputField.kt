@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
@@ -60,13 +61,14 @@ fun WriteEditText(
     onTextChange: (String) -> Unit
 ) {
     Box(
-        modifier = Modifier.height(height).border(
+        modifier = Modifier.border(
             width = 1.dp, color = BeumColors.baseGrayLightGray200, shape = RoundedCornerShape(12.dp)
         ).clip(RoundedCornerShape(16.dp)).background(Color.White)
     ) {
         Column(
-            modifier = Modifier.padding(20.dp).fillMaxWidth()
+            modifier = Modifier.padding(start = 20.dp, end = 20.dp).fillMaxWidth()
         ) {
+            Box(modifier = Modifier.height(20.dp).fillMaxWidth())
             Text(
                 text = title, fontWeight = FontWeight.Bold, style = TextStyle(
                     fontSize = BeumTypo.TypoScaleText200,
@@ -89,7 +91,7 @@ fun WriteEditText(
                             onValueChange = onTextChange,
                             singleLine = !isMultiLine,
                             maxLines = if (isMultiLine) 10 else 1,
-                            modifier = Modifier.fillMaxWidth().fillMaxHeight()
+                            modifier = Modifier.fillMaxWidth().fillMaxHeight().defaultMinSize(minHeight = 50.dp)
                         )
 
                         if (content.isEmpty()) {
@@ -119,14 +121,14 @@ fun WriteEditText(
                         Row {
                             val isDevil = content.toBoolean()
                             Row(
-                                modifier = Modifier.height(32.dp).defaultMinSize(minWidth = 55.dp)
+                                modifier = Modifier.height(35.dp)
                                     .clip(RoundedCornerShape(82.dp)) // 먼저 모양을 깎고
                                     .background(color = if (isDevil) Color.White else Color.Black) // 그 위에 배경 색상
                                     .border(
                                         width = 1.dp,
                                         color = if (!isDevil) BeumColors.Black else BeumColors.baseGrayLightGray300,
                                         shape = RoundedCornerShape(82.dp)
-                                    ).padding(start = 10.dp, end = 10.dp)
+                                    ).padding(start = 10.dp, end = 10.dp, top = 4.5.dp, bottom = 4.5.dp)
                                     .align(Alignment.CenterVertically)
                                     .clip(RoundedCornerShape(82.dp)).clickable {
                                         onTextChange(false.toString())
@@ -136,7 +138,7 @@ fun WriteEditText(
                             ) {
                                 if (!isDevil) {
                                     Image(
-                                        modifier = Modifier.fillMaxHeight(),
+                                        modifier = Modifier.size(24.dp),
                                         painter = painterResource(Res.drawable.angel_abled),
                                         contentDescription = ""
                                     )
@@ -152,15 +154,16 @@ fun WriteEditText(
                                     )
                                 )
                             }
+                            Spacer(modifier = Modifier.width(4.dp))
                             Row(
-                                modifier = Modifier.height(32.dp).defaultMinSize(minWidth = 55.dp)
+                                modifier = Modifier.height(35.dp).defaultMinSize(minWidth = 55.dp)
                                     .clip(RoundedCornerShape(82.dp)) // 먼저 모양을 깎고
                                     .background(color = if (!isDevil) Color.White else Color.Black) // 그 위에 배경 색상
                                     .border(
                                         width = 1.dp,
                                         color = if (isDevil) BeumColors.Black else BeumColors.baseGrayLightGray300,
                                         shape = RoundedCornerShape(82.dp)
-                                    ).padding(start = 10.dp, end = 10.dp)
+                                    ).padding(start = 10.dp, end = 10.dp, top = 4.5.dp, bottom = 4.5.dp)
                                     .clip(RoundedCornerShape(82.dp)).clickable {
                                         onTextChange(true.toString())
                                     }.align(Alignment.CenterVertically),
@@ -169,7 +172,7 @@ fun WriteEditText(
                             ) {
                                 if (isDevil) {
                                     Image(
-                                        modifier = Modifier.fillMaxHeight(),
+                                        modifier = Modifier.size(24.dp),
                                         painter = painterResource(Res.drawable.devil_abled),
                                         contentDescription = ""
                                     )
@@ -297,6 +300,7 @@ fun WriteEditText(
                     }
                 }
             }
+            Box(modifier = Modifier.height(22.dp).fillMaxWidth())
         }
         if (infoClick != null) {
             Image(

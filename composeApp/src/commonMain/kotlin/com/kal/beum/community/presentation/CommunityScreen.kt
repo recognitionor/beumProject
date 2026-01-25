@@ -45,6 +45,8 @@ import com.kal.beum.core.presentation.ToastInfo
 import com.kal.beum.home.presentation.components.ToggleButton
 import com.kal.beum.main.presentation.FullScreenType
 import com.kal.beum.main.presentation.MainAction
+import com.kal.beum.content.presentation.LikeButton
+import beumproject.composeapp.generated.resources.ic_reply
 import org.jetbrains.compose.resources.Font
 import org.jetbrains.compose.resources.painterResource
 
@@ -122,14 +124,14 @@ fun CommunityScreen(
                                     groupName, isDevil
                                 )
                             )
-                        }.padding(start = 22.dp, end = 22.dp), // IntrinsicSize 계산 후 패딩 적용
+                        }.padding(start = 17.dp, end = 17.dp), // IntrinsicSize 계산 후 패딩 적용
                     verticalArrangement = Arrangement.Center
                 ) {
                     Spacer(modifier = Modifier.weight(1f))
                     Text(
                         modifier = Modifier, // 여기는 수정할 필요 없습니다.
                         text = state.categoryGroupList[it], style = TextStyle(
-                            fontSize = BeumTypo.TypoScaleText150,
+                            fontSize = BeumTypo.TypoScaleText200,
                             lineHeight = 20.96.sp,
                             fontFamily = FontFamily(Font(Res.font.sf_pro)),
                             fontWeight = FontWeight(700),
@@ -152,8 +154,8 @@ fun CommunityScreen(
         LazyRow(
             modifier = Modifier.height(52.dp),
             verticalAlignment = Alignment.CenterVertically,
-            contentPadding = PaddingValues(horizontal = 20.dp),
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
+            contentPadding = PaddingValues(horizontal = 12.dp),
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             items(state.categoryList.size) {
                 val item = state.categoryList[it]
@@ -177,7 +179,7 @@ fun CommunityScreen(
                 ) {
                     Text(
                         text = item.name, style = TextStyle(
-                            fontSize = 14.sp,
+                            fontSize = 15.sp,
                             fontFamily = FontFamily(Font(Res.font.sf_pro)),
                             fontWeight = FontWeight.Medium,
                             color = textColor
@@ -191,15 +193,16 @@ fun CommunityScreen(
             val communityList = state.communityListTemp
             Box(modifier = Modifier.background(if (isDevil) BeumColors.DarkGray50 else BeumColors.baseGrayLightGray75)) {
                 LazyColumn(
-                    modifier = Modifier.fillMaxSize()
-                        .padding(start = 20.dp, end = 20.dp, top = 16.dp, bottom = 24.dp),
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(start = 20.dp, end = 20.dp, top = 16.dp, bottom = 24.dp),
                     state = listState
                 ) {
                     items(communityList.size) {
                         val item = communityList[it]
                         Column(
                             modifier = Modifier.shadow(
-                                elevation = 8.dp,
+                                elevation = 4.dp,
+                                shape = RoundedCornerShape(9.dp),
                                 spotColor = Color(0x0D000000),
                                 ambientColor = Color(0x0D000000)
                             ).clip(RoundedCornerShape(9.dp)).clickable {
@@ -230,7 +233,7 @@ fun CommunityScreen(
                                 }
 
                                 TagCard(
-                                    color = BeumColors.baseGrayLightGray75,
+                                    color = BeumColors.baseGrayLightGray100,
                                     textColor = BeumColors.baseGrayLightGray700,
                                     text = item.categoryName
                                 )
@@ -240,12 +243,12 @@ fun CommunityScreen(
                                     fontSize = 16.sp,
                                     lineHeight = 18.sp,
                                     fontFamily = FontFamily(Font(Res.font.sf_pro)),
-                                    fontWeight = FontWeight(500),
+                                    fontWeight = FontWeight(700),
                                     color = if (isDevil) BeumColors.White else BeumColors.Black,
                                 )
                             )
 
-                            Spacer(modifier = Modifier.height(8.dp))
+                            Spacer(modifier = Modifier.height(4.dp))
 
                             Text(
                                 text = item.content, style = TextStyle(
@@ -256,6 +259,43 @@ fun CommunityScreen(
                                     color = BeumColors.GrayGray500,
                                 )
                             )
+
+                            Spacer(modifier = Modifier.height(24.dp))
+
+                            Row(
+                                modifier = Modifier.height(20.dp).fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                LikeButton(false) {
+                                    onAction(MainAction.ToastMessage(ToastInfo("좋아요 기능은 준비중입니다.")))
+                                }
+                                Spacer(modifier = Modifier.width(2.dp))
+                                Text(
+                                    text = item.likeCount.toString(),
+                                    style = TextStyle(
+                                        fontSize = 13.sp,
+                                        lineHeight = 20.sp,
+                                        fontFamily = FontFamily(Font(Res.font.sf_pro)),
+                                        fontWeight = FontWeight(400),
+                                        color = BeumColors.GrayGray500,
+                                    )
+                                )
+                                Spacer(modifier = Modifier.width(12.dp))
+                                Image(
+                                    painter = painterResource(Res.drawable.ic_reply),
+                                    contentDescription = ""
+                                )
+                                Text(
+                                    text = item.replyCount.toString(),
+                                    style = TextStyle(
+                                        fontSize = 13.sp,
+                                        lineHeight = 20.sp,
+                                        fontFamily = FontFamily(Font(Res.font.sf_pro)),
+                                        fontWeight = FontWeight(400),
+                                        color = BeumColors.GrayGray500,
+                                    )
+                                )
+                            }
                         }
                         Spacer(modifier = Modifier.height(16.dp))
                     }
@@ -264,7 +304,7 @@ fun CommunityScreen(
                     }
                 }
                 Box(
-                    modifier = Modifier.padding(start = 12.dp, end = 12.dp, bottom = 150.dp)
+                    modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 150.dp)
                         .align(Alignment.BottomEnd)
                 ) {
                     Box(
@@ -319,7 +359,7 @@ fun CommunityScreen(
                 // 글쓰기 FAB 버튼
                 Box(
                     modifier = Modifier
-                        .padding(start = 12.dp, end = 12.dp, bottom = 150.dp)
+                        .padding(start = 20.dp, end = 20.dp, bottom = 150.dp)
                         .align(Alignment.BottomEnd)
                 ) {
                     Box(

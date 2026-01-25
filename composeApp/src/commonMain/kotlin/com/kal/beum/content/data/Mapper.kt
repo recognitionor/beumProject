@@ -40,17 +40,3 @@ fun CommentDetailDto.toContentDetail(): CommentDetail {
         user = this.user
     )
 }
-
-
-fun CommunityItemDto.toCommunityItem(): CommunityItem {
-    return CommunityItem(
-        id = this.id,
-        title = this.title,
-        content = this.content,
-        writerId = this.writerId,
-        writer = this.writer,
-        categoryName = this.categoryName,
-        isPopular = this.isPopular,
-        lastModifiedTime = this.lastModifiedTime.toString()
-    )
-}
