@@ -96,7 +96,8 @@ fun WritingScreen(
     }
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
-            modifier = Modifier.fillMaxSize().background(Color.White).padding(top = 40.dp, start = 16.dp, end = 16.dp)
+            modifier = Modifier.fillMaxSize().background(Color.White)
+                .padding(top = 40.dp, start = 16.dp, end = 16.dp)
                 .verticalScroll(
                     rememberScrollState()
                 ), horizontalAlignment = Alignment.CenterHorizontally
@@ -171,7 +172,7 @@ fun WritingScreen(
                 300.dp,
                 state.content,
                 "내 고민",
-                "커뮤니티 가이드라인에 맞지 않는 콘텐츠는 통보 없이 숨겨질 수 있습니다.\n\n예시) 착한 말투로 가젼다\n\n예시) 아.. 개"
+                "커뮤니티 가이드라인에 맞지 않는 콘텐츠는 통보 없이 숨겨질 수 있습니다."
             ) {
                 viewModel.onAction(WritingAction.OnContentChanged(it))
             }

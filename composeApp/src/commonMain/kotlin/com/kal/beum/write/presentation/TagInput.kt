@@ -34,7 +34,6 @@ import org.jetbrains.compose.resources.Font
 fun TagInput(
     tags: String = "", onTagsChanged: (List<String>) -> Unit
 ) {
-    println("tags : ${tags}")
     var text by remember { mutableStateOf("") }
     var tagList by remember(tags) { // key로 tagsStringFromParent를 주면, 이 값이 바뀔 때마다 재초기화
         val initialList =
@@ -48,8 +47,8 @@ fun TagInput(
         tagList.forEach {
             Text(
                 text = it, style = TextStyle(
-                    fontSize = 21.sp,
-                    lineHeight = 33.sp,
+                    fontSize = BeumTypo.TypoScaleText150,
+                    lineHeight = BeumDimen.TypoLienheigtLineheight200,
                     fontFamily = FontFamily(Font(Res.font.sf_pro)),
                     fontWeight = FontWeight(400),
                     color = BeumColors.angelSkyblue,
@@ -59,7 +58,6 @@ fun TagInput(
         Box {
             BasicTextField(
                 value = text, onValueChange = { input ->
-                println(input)
                 val delimiters = listOf(' ', ',', '\n')
                 if (input.isNotEmpty() && delimiters.any { input.last() == it }) {
                     // 구분자 앞의 텍스트(공백, 쉼표, 개행 제거)
