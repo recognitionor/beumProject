@@ -191,7 +191,6 @@ fun MainScreen(
             state.fullScreenStack.forEach { content ->
                 Box(
                     Modifier.fillMaxSize()
-                        .windowInsetsPadding(WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom))
                         .clickable(
                             indication = null,
                             interactionSource = remember { MutableInteractionSource() }) { /* 이벤트 소모만! */ }) {

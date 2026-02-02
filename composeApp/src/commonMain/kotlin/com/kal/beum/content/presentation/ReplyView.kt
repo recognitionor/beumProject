@@ -130,7 +130,7 @@ fun ReplyView(
                 LikeButton(replyInfo.likeIsMe) {
                     likeClicked()
                 }
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = replyInfo.likeCount.toString(), style = TextStyle(
                         fontSize = 13.sp,
@@ -143,7 +143,7 @@ fun ReplyView(
                 Spacer(modifier = Modifier.width(24.dp))
 
                 Image(painter = painterResource(Res.drawable.ic_reply), contentDescription = "")
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.width(4.dp))
                 Text(
                     text = replyInfo.reReplyCount.toString(), style = TextStyle(
                         fontSize = 13.sp,

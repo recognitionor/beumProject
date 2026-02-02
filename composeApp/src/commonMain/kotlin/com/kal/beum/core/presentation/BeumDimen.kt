@@ -21,7 +21,8 @@ object BeumDimen {
     val radius150: Dp = 12.dp
     val TypoLienheigtLineheight500 = 26.sp
 
-
-
+    val BottomNavigationBaseHeight: Dp = 80.dp
+    val BottomNavigationReduced: Dp = 7.dp
+    val BottomNavigationHeight: Dp = BottomNavigationBaseHeight - BottomNavigationReduced
 }
 

@@ -37,6 +37,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -207,10 +208,11 @@ fun ContentDetailScreen(id: Int, action: (MainAction) -> Unit, backBtnClick: () 
                     Spacer(modifier = Modifier.height(20.dp).fillMaxWidth())
 
                     Box(
-                        modifier = Modifier.width(44.dp).height(20.dp).background(
+                        modifier = Modifier.height(20.dp).background(
                             color = BeumColors.baseGrayLightGray75,
                             shape = RoundedCornerShape(size = 4.dp)
-                        ).padding(start = 4.dp, top = 2.dp, end = 4.dp, bottom = 2.dp)
+                        ).padding(start = 12.dp, end = 12.dp),
+                        contentAlignment = Alignment.Center
                     ) {
                         Text(
                             text = state.contentDetail?.categoryName ?: "", style = TextStyle(
@@ -219,6 +221,7 @@ fun ContentDetailScreen(id: Int, action: (MainAction) -> Unit, backBtnClick: () 
                                 fontFamily = FontFamily(Font(Res.font.sf_pro)),
                                 fontWeight = FontWeight(400),
                                 color = BeumColors.baseGrayLightGray700,
+                                textAlign = TextAlign.Center
                             )
                         )
                     }
@@ -268,7 +271,7 @@ fun ContentDetailScreen(id: Int, action: (MainAction) -> Unit, backBtnClick: () 
                                 viewModel.onAction(CommunityAction.OnContentLikeClicked(it))
                             }
                         }
-                        Spacer(modifier = Modifier.width(2.dp))
+                        Spacer(modifier = Modifier.width(4.dp))
                         Text(
                             text = state.contentDetail?.likeCount?.toString() ?: "0",
                             style = TextStyle(
@@ -284,6 +287,7 @@ fun ContentDetailScreen(id: Int, action: (MainAction) -> Unit, backBtnClick: () 
                             painter = painterResource(Res.drawable.ic_reply),
                             contentDescription = ""
                         )
+                        Spacer(modifier = Modifier.width(4.dp))
                         Text(
                             text = state.contentDetail?.commentInfo?.comments?.size?.toString()
                                 ?: "0", style = TextStyle(
@@ -332,19 +336,6 @@ fun ContentDetailScreen(id: Int, action: (MainAction) -> Unit, backBtnClick: () 
                             }
                         }
 
-//                        LazyColumn(modifier = Modifier.weight(1f)) {
-//                            items(state.contentDetail?.commentInfo?.comments?.size ?: 0) { index ->
-//                                val reply = state.contentDetail?.commentInfo?.comments?.get(index)
-//                                reply?.let {
-//                                    Spacer(modifier = Modifier.height(16.dp))
-//                                    ReplyView(it, {
-//                                        viewModel.onAction(CommunityAction.OnCommentLikeClicked(it))
-//                                    }) { replyList ->
-//                                        detailReplyInfo = replyList
-//                                    }
-//                                }
-//                            }
-//                        }
 
                         Box(
                             modifier = Modifier.fillMaxWidth().height(2.dp)
@@ -478,7 +469,6 @@ fun ContentDetailScreen(id: Int, action: (MainAction) -> Unit, backBtnClick: () 
                                     it.user.id, it.boardId.toString()
                                 )
                             )
-                            //action(MainAction.ToastMessage(ToastInfo("채택되었습니다.", 2000))) // 임시 토스트
                         }
                     })
                 }

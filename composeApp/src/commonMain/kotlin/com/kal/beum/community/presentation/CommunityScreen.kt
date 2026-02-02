@@ -216,9 +216,11 @@ fun CommunityScreen(
                             }.background(
                                 color = if (isDevil) BeumColors.baseGrayLightGray800 else BeumColors.baseGrayLightGray50,
                                 shape = RoundedCornerShape(9.dp)
-                            ).padding(start = 20.dp, top = 16.dp, end = 20.dp, bottom = 24.dp)
+                            ).padding(start = 20.dp, end = 20.dp)
                                 .fillMaxWidth()
                         ) {
+
+                            Box(modifier = Modifier.fillMaxWidth().height(10.dp))
                             Row(
                                 modifier = Modifier.fillMaxWidth().height(20.dp),
                                 verticalAlignment = Alignment.CenterVertically
@@ -238,6 +240,7 @@ fun CommunityScreen(
                                     text = item.categoryName
                                 )
                             }
+                            Box(modifier = Modifier.fillMaxWidth().height(2.dp))
                             Text(
                                 text = item.title, style = TextStyle(
                                     fontSize = 16.sp,
@@ -260,7 +263,7 @@ fun CommunityScreen(
                                 )
                             )
 
-                            Spacer(modifier = Modifier.height(24.dp))
+                            Spacer(modifier = Modifier.height(16.dp))
 
                             Row(
                                 modifier = Modifier.height(20.dp).fillMaxWidth(),
@@ -269,7 +272,7 @@ fun CommunityScreen(
                                 LikeButton(false) {
                                     onAction(MainAction.ToastMessage(ToastInfo("좋아요 기능은 준비중입니다.")))
                                 }
-                                Spacer(modifier = Modifier.width(2.dp))
+                                Spacer(modifier = Modifier.width(4.dp))
                                 Text(
                                     text = item.likeCount.toString(),
                                     style = TextStyle(
@@ -285,6 +288,7 @@ fun CommunityScreen(
                                     painter = painterResource(Res.drawable.ic_reply),
                                     contentDescription = ""
                                 )
+                                Spacer(modifier = Modifier.width(4.dp))
                                 Text(
                                     text = item.replyCount.toString(),
                                     style = TextStyle(
@@ -296,6 +300,7 @@ fun CommunityScreen(
                                     )
                                 )
                             }
+                            Spacer(modifier = Modifier.height(16.dp))
                         }
                         Spacer(modifier = Modifier.height(16.dp))
                     }
@@ -385,17 +390,26 @@ fun CommunityScreen(
 
 @Composable
 fun TagCard(color: Color, textColor: Color, text: String) {
-    Text(
-        modifier = Modifier.height(20.dp).background(
-            color = color, shape = RoundedCornerShape(size = 4.dp)
-        ).padding(
-            start = 4.dp, top = 2.dp, end = 4.dp, bottom = 2.dp
-        ), text = text, style = TextStyle(
-            fontSize = 9.sp,
-            lineHeight = 16.sp,
-            fontFamily = FontFamily(Font(Res.font.sf_pro)),
-            fontWeight = FontWeight(400),
-            color = textColor,
+    Box(
+        modifier = Modifier
+            .height(20.dp)
+            .background(
+                color = color,
+                shape = RoundedCornerShape(size = 4.dp)
+            )
+            .padding(horizontal = 4.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = text,
+            style = TextStyle(
+                fontSize = 9.sp,
+                lineHeight = 16.sp,
+                fontFamily = FontFamily(Font(Res.font.sf_pro)),
+                fontWeight = FontWeight(400),
+                textAlign = TextAlign.Center,
+                color = textColor,
+            )
         )
-    )
+    }
 }

@@ -53,10 +53,10 @@ fun MyInfoScreen(devil: Boolean, viewModel: MyInfoViewModel, action: (MainAction
     val scope = rememberCoroutineScope()
     action(MainAction.SurfaceColor(BeumColors.baseCoolGrayLightGray100))
 
-    Box {
+    Box(modifier = Modifier.fillMaxSize()) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.background(BeumColors.baseCoolGrayLightGray100),
+            modifier = Modifier.fillMaxSize().background(BeumColors.baseCoolGrayLightGray100),
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth().height(64.dp).padding(horizontal = 20.dp),
@@ -92,22 +92,10 @@ fun MyInfoScreen(devil: Boolean, viewModel: MyInfoViewModel, action: (MainAction
             }
             Spacer(modifier = Modifier.fillMaxWidth().height(32.dp))
 
-            if (state.myInfo?.profileImageId?.isNotEmpty() == true) {
-                AsyncImage(model = state.myInfo?.profileImageId!!, contentDescription = "")
-            } else {
-                Image(
-                    modifier = Modifier.size(64.dp).border(
-                        width = 1.dp,
-                        color = BeumColors.baseAlphaWhiteLightWhite500A,
-                        shape = RoundedCornerShape(size = 32.dp)
-                    ).background(
-                        color = if (devil) BeumColors.DevilPrimary else BeumColors.angelSkyblue,
-                        shape = RoundedCornerShape(size = 32.dp)
-                    ),
-                    painter = painterResource(if (devil) Res.drawable.ic_devil_emoji else Res.drawable.ic_angel_emoji),
-                    contentDescription = "profile image",
-                )
-            }
+            Image(
+                painter = painterResource(if (!devil) Res.drawable.img_angel_user else Res.drawable.img_devil_user),
+                contentDescription = ""
+            )
 
             Spacer(modifier = Modifier.height(10.dp))
 
@@ -131,150 +119,88 @@ fun MyInfoScreen(devil: Boolean, viewModel: MyInfoViewModel, action: (MainAction
                     shape = RoundedCornerShape(size = BeumDimen.radius100)
                 )
             ) {
-                Box(modifier = Modifier.weight(1f))
-                Column(
-                    modifier = Modifier.fillMaxHeight(), verticalArrangement = Arrangement.Center
-                ) {
-                    Row(
-                        modifier = Modifier.width(110.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
+                Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
+                    Column(
+                        modifier = Modifier.fillMaxHeight(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text(
-                            text = "천사 활동 점수", style = TextStyle(
-                                fontSize = BeumTypo.TypoScaleText100,
-                                fontFamily = FontFamily(Font(Res.font.sf_pro)),
-                                fontWeight = FontWeight(500),
-                                color = BeumColors.baseGrayLightGray600,
-                            )
-                        )
-                        Spacer(modifier = Modifier.weight(1f))
-
-                        Image(
-                            modifier = Modifier.size(16.dp),
-                            painter = painterResource(Res.drawable.ic_info),
-                            contentDescription = ""
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Row(
-                        modifier = Modifier.width(110.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = formatWithComma(
-                                state.myInfo?.angelPoint ?: 0
-                            ), // Use formatWithComma function to format the number with commas , style = TextStyle(
-                            fontSize = BeumTypo.TypoScaleText600,
-                            lineHeight = BeumTypo.lineHeightCaption1,
-                            fontFamily = FontFamily(Font(Res.font.sf_pro)),
-                            fontWeight = FontWeight(700),
-                            color = BeumColors.baseGrayLightGray800,
-                            textAlign = TextAlign.Right,
-                        )
-                        Spacer(modifier = Modifier.weight(1f))
-                        Box(
-                            modifier = Modifier.width(18.dp).height(18.dp).background(
-                                color = BeumColors.baseCoolGrayLightGray700,
-                                shape = RoundedCornerShape(size = 75.00002.dp)
-                            ).padding(start = 3.dp, top = 3.dp, end = 3.dp, bottom = 3.dp),
-                            contentAlignment = Alignment.Center
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
                         ) {
-                            Image(
-                                painter = painterResource(Res.drawable.heart),
-                                contentDescription = "image description",
-                                contentScale = ContentScale.None
+                            Text(
+                                text = if (!devil) "천사 활동 점수" else "악마 활동 점수", style = TextStyle(
+                                    fontSize = BeumTypo.TypoScaleText100,
+                                    fontFamily = FontFamily(Font(Res.font.sf_pro)),
+                                    fontWeight = FontWeight(500),
+                                    color = BeumColors.baseGrayLightGray600,
+                                )
                             )
+                            Spacer(modifier = Modifier.width(4.dp))
+
+                            Image(
+                                modifier = Modifier.size(16.dp),
+                                painter = painterResource(Res.drawable.ic_info),
+                                contentDescription = ""
+                            )
+                        }
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.Center
+                        ) {
+                            Text(
+                                text = formatWithComma(
+                                    if (!devil) state.myInfo?.angelPoint ?: 0 else state.myInfo?.devilPoint ?: 0
+                                ), // Use formatWithComma function to format the number with commas , style = TextStyle(
+                                fontSize = BeumTypo.TypoScaleText600,
+                                lineHeight = BeumTypo.lineHeightCaption1,
+                                fontFamily = FontFamily(Font(Res.font.sf_pro)),
+                                fontWeight = FontWeight(700),
+                                color = BeumColors.baseGrayLightGray800,
+                                textAlign = TextAlign.Right,
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Box(
+                                modifier = Modifier.width(18.dp).height(18.dp).background(
+                                    color = BeumColors.baseCoolGrayLightGray700,
+                                    shape = RoundedCornerShape(size = 75.00002.dp)
+                                ).padding(start = 3.dp, top = 3.dp, end = 3.dp, bottom = 3.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Image(
+                                    painter = painterResource(Res.drawable.heart),
+                                    contentDescription = "image description",
+                                    contentScale = ContentScale.None
+                                )
+                            }
                         }
                     }
                 }
-                Box(modifier = Modifier.weight(1f))
-                Box(
-                    modifier = Modifier.width(3.dp).fillMaxHeight()
-                        .padding(top = 10.dp, bottom = 10.dp)
-                        .background(BeumColors.baseCoolGrayLightGray100)
-                )
-                Box(modifier = Modifier.weight(1f))
-                Column(
-                    modifier = Modifier.fillMaxHeight(), verticalArrangement = Arrangement.Center
-                ) {
-                    Row(
-                        modifier = Modifier.width(110.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = "악마 활동 점수", style = TextStyle(
-                                fontSize = BeumTypo.TypoScaleText100,
-                                fontFamily = FontFamily(Font(Res.font.sf_pro)),
-                                fontWeight = FontWeight(500),
-                                color = BeumColors.baseGrayLightGray600,
-                            )
-                        )
-                        Spacer(modifier = Modifier.weight(1f))
-
-                        Image(
-                            modifier = Modifier.size(16.dp),
-                            painter = painterResource(Res.drawable.ic_info),
-                            contentDescription = ""
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Row(
-                        modifier = Modifier.width(110.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = formatWithComma(
-                                state.myInfo?.devilPoint ?: 0
-                            ), // Use formatWithComma function to format the number with commas , style = TextStyle(
-                            fontSize = BeumTypo.TypoScaleText600,
-                            lineHeight = BeumTypo.lineHeightCaption1,
-                            fontFamily = FontFamily(Font(Res.font.sf_pro)),
-                            fontWeight = FontWeight(700),
-                            color = BeumColors.baseGrayLightGray800,
-                            textAlign = TextAlign.Right,
-                        )
-                        Spacer(modifier = Modifier.weight(1f))
-                        Box(
-                            modifier = Modifier.width(18.dp).height(18.dp).background(
-                                color = BeumColors.baseCoolGrayLightGray700,
-                                shape = RoundedCornerShape(size = 75.00002.dp)
-                            ).padding(start = 3.dp, top = 3.dp, end = 3.dp, bottom = 3.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Image(
-                                painter = painterResource(Res.drawable.heart),
-                                contentDescription = "image description",
-                                contentScale = ContentScale.None
-                            )
-                        }
-                    }
-                }
-                Box(modifier = Modifier.weight(1f))
             }
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            MyInfoFeedTab(
-                devil,
-                list = if (myInfoSelectedTabIndex == 0) state.myContent else state.myReply,
-                selectedTabIndex = myInfoSelectedTabIndex,
-                writeClick = {
-                    state.myInfo?.userId?.let { userId ->
-                        action(MainAction.NewWriting {
-                            viewModel.getMyContent(userId.toInt())
-                        })
-                    }
-                },
-                onItemClick = {
-                    action(MainAction.PushFullScreen(FullScreenType.ContentDetailScreen(it.id)))
-                },
-                onTabSelected = {
-                    myInfoSelectedTabIndex = it
-                })
+            Box(modifier = Modifier.weight(1f)) {
+                MyInfoFeedTab(
+                    devil,
+                    list = if (myInfoSelectedTabIndex == 0) state.myContent else state.myReply,
+                    selectedTabIndex = myInfoSelectedTabIndex,
+                    writeClick = {
+                        state.myInfo?.userId?.let { userId ->
+                            action(MainAction.NewWriting {
+                                viewModel.getMyContent(userId.toInt())
+                            })
+                        }
+                    },
+                    onItemClick = {
+                        action(MainAction.PushFullScreen(FullScreenType.ContentDetailScreen(it.id)))
+                    },
+                    onTabSelected = {
+                        myInfoSelectedTabIndex = it
+                    })
+            }
             if (selectModeBottomSheet) {
                 ModalBottomSheet(
                     onDismissRequest = {
@@ -361,9 +287,9 @@ fun MyInfoScreen(devil: Boolean, viewModel: MyInfoViewModel, action: (MainAction
         }
 
         Box(
-            modifier = Modifier.padding(
-                20.dp
-            ).align(Alignment.BottomEnd),
+            modifier = Modifier.padding(20.dp)
+                .padding(bottom = BeumDimen.BottomNavigationHeight + WindowInsets.navigationBars.asPaddingValues().calculateBottomPadding())
+                .align(Alignment.BottomEnd),
             contentAlignment = Alignment.Center,
         ) {
             Row(

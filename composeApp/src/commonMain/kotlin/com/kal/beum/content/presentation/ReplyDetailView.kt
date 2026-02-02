@@ -238,10 +238,8 @@ fun ReplyDetailView(
                         )
                     )
                     Spacer(modifier = Modifier.weight(1f))
-
                     Image(
                         modifier = Modifier.clickable {
-                            //println("~~~~~~~~~~~~~~~~~~")
                             replyOptionButton = true
                         },
                         painter = painterResource(Res.drawable.ic_more_medium),

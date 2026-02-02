@@ -208,6 +208,7 @@ fun MyInfoFeedTab(
                                         painter = painterResource(Res.drawable.ic_heart_empty),
                                         contentDescription = ""
                                     )
+                                    Spacer(modifier = Modifier.width(4.dp))
                                     Text(
                                         text = item.likeCount.toString(), style = TextStyle(
                                             fontSize = 13.sp,
@@ -222,6 +223,7 @@ fun MyInfoFeedTab(
                                         painter = painterResource(Res.drawable.ic_reply),
                                         contentDescription = ""
                                     )
+                                    Spacer(modifier = Modifier.width(4.dp))
                                     Text(
                                         text = item.replyCount.toString(), style = TextStyle(
                                             fontSize = 13.sp,

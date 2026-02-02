@@ -60,7 +60,6 @@ fun NoticeScreen(action: (MainAction) -> Unit) {
     val topSpace = WindowInsets.safeDrawing
         .asPaddingValues()
         .calculateTopPadding()
-    action(MainAction.ToastMessage(ToastInfo("알림", 5000)))
 
     action(MainAction.OnBackKey { action(MainAction.PopFullScreen) })
     Column(Modifier.fillMaxSize().background(BeumColors.White)) {

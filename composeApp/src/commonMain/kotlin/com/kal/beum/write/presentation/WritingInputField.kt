@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -42,7 +41,6 @@ import beumproject.composeapp.generated.resources.angel_abled
 import beumproject.composeapp.generated.resources.devil_abled
 import beumproject.composeapp.generated.resources.heart
 import beumproject.composeapp.generated.resources.ic_clear
-import beumproject.composeapp.generated.resources.ic_close
 import beumproject.composeapp.generated.resources.icon_arrow_right
 import beumproject.composeapp.generated.resources.icon_arrow_right_black
 import beumproject.composeapp.generated.resources.img_info
@@ -50,9 +48,7 @@ import beumproject.composeapp.generated.resources.sf_pro
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumDimen
 import com.kal.beum.core.presentation.BeumTypo
-import com.kal.beum.utils.pxToDp
 import org.jetbrains.compose.resources.Font
-import org.jetbrains.compose.resources.imageResource
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
@@ -88,7 +84,7 @@ fun WriteEditText(
                     )
                 )
 
-                Spacer(modifier = Modifier.height(8.dp))
+                Box(modifier = Modifier.height(10.dp).fillMaxWidth())
                 // KMP Compose에서는 backgroundColor만 커스텀
 
                 Box(modifier = Modifier.fillMaxWidth()) {
@@ -316,7 +312,10 @@ fun WriteEditText(
             }
             if (infoClick != null) {
                 Image(
-                    modifier = Modifier.align(Alignment.TopEnd).padding(20.dp).size(24.dp).clickable {
+                    modifier = Modifier.align(Alignment.TopEnd).padding(20.dp).size(24.dp).clickable(
+                        interactionSource = remember { MutableInteractionSource() },
+                        indication = null
+                    ) {
                         infoClick.invoke()
                     }, painter = painterResource(Res.drawable.img_info), contentDescription = ""
                 )
