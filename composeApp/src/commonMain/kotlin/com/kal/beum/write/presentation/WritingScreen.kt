@@ -287,7 +287,7 @@ fun WritingScreen(
                 ) {
                     // 아래에 들어가는 UI가 이미지랑 비슷하게 작성
 
-                    CategorySelectBottomSheet(state.writeCategoryMap) {
+                    CategorySelectBottomSheet(state.writeCategoryMap, state.selectedCategory) {
                         viewModel.onAction(WritingAction.OnCategoryChanged(it))
                         showCategorySheet = false
 

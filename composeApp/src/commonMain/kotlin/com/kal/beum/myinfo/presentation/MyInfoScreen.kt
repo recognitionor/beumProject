@@ -72,23 +72,7 @@ fun MyInfoScreen(devil: Boolean, viewModel: MyInfoViewModel, action: (MainAction
                     )
                 )
                 Spacer(modifier = Modifier.weight(1f))
-                Box(
-                    modifier = Modifier.size(48.dp).clickable(
-                        indication = null,
-                        interactionSource = remember { MutableInteractionSource() }) {
-                        println("state.myInfo ${state.myInfo}")
-                        state.myInfo?.let {
-                            action(MainAction.PushFullScreen(FullScreenType.SettingsScreen(it)))
-                        }
-                    }, contentAlignment = Alignment.Center
-                ) {
-                    Image(
-                        modifier = Modifier.size(24.dp),
-                        painter = painterResource(Res.drawable.ic_setting),
-                        colorFilter = ColorFilter.tint(Color.Black),
-                        contentDescription = ""
-                    )
-                }
+
             }
             Spacer(modifier = Modifier.fillMaxWidth().height(32.dp))
 

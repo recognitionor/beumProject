@@ -64,6 +64,18 @@ class NoticeViewModel(private val noticeRepository: NoticeRepository) : ViewMode
         }
     }
 
+    fun toggleNotification(isEnabled: Boolean) {
+        viewModelScope.launch {
+            noticeRepository.toggleAlarm(isEnabled).onSuccess {
+                _state.update { it.copy(isNotificationEnabled = isEnabled) }
+            }.onError {
+                // TODO: Handle error (e.g., show toast)
+                // Revert state if necessary, but for now we just log it
+                println("Failed to toggle alarm: $it")
+            }
+        }
+    }
+
     fun onAction(action: NoticeAction) {
         when (action) {
             is NoticeAction.FilterNotice -> {

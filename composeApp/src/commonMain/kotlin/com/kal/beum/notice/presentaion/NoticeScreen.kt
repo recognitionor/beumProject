@@ -35,9 +35,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import beumproject.composeapp.generated.resources.Pretendard_Medium
 import beumproject.composeapp.generated.resources.Res
 import beumproject.composeapp.generated.resources.angel_abled
+import beumproject.composeapp.generated.resources.ic_setting
 import beumproject.composeapp.generated.resources.icon_arrow_right_black
 import beumproject.composeapp.generated.resources.sf_pro
 import com.kal.beum.core.presentation.BeumColors
@@ -52,6 +62,7 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview
 @Composable
 fun NoticeScreen(action: (MainAction) -> Unit) {
@@ -60,6 +71,9 @@ fun NoticeScreen(action: (MainAction) -> Unit) {
     val topSpace = WindowInsets.safeDrawing
         .asPaddingValues()
         .calculateTopPadding()
+
+    var showSettingBottomSheet by remember { mutableStateOf(false) }
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     action(MainAction.OnBackKey { action(MainAction.PopFullScreen) })
     Column(Modifier.fillMaxSize().background(BeumColors.White)) {
@@ -96,6 +110,21 @@ fun NoticeScreen(action: (MainAction) -> Unit) {
                         textAlign = TextAlign.Center
                     )
                 )
+                Spacer(modifier = Modifier.weight(1f))
+                Box(
+                    modifier = Modifier.size(48.dp).clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() }) {
+                        showSettingBottomSheet = true
+                    }, contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        modifier = Modifier.size(24.dp),
+                        painter = painterResource(Res.drawable.ic_setting),
+                        colorFilter = ColorFilter.tint(Color.Black),
+                        contentDescription = ""
+                    )
+                }
             }
             Box(
                 modifier = Modifier.fillMaxWidth().height(1.dp)
@@ -196,6 +225,22 @@ fun NoticeScreen(action: (MainAction) -> Unit) {
                         }
                     }
                 }
+            }
+        }
+        if (showSettingBottomSheet) {
+            ModalBottomSheet(
+                onDismissRequest = {
+                    showSettingBottomSheet = false
+                },
+                sheetState = sheetState,
+                containerColor = Color.White,
+                dragHandle = null,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                NotificationSettingBottomSheet(
+                    isNotificationEnabled = state.isNotificationEnabled,
+                    onToggle = { viewModel.toggleNotification(it) }
+                )
             }
         }
     }

@@ -2,7 +2,7 @@ package com.kal.beum.core.data
 
 object ApiConstants {
 
-    const val BASE_URL = "https://dev.winning-lotto.com"
+    const val BASE_URL = "https://api.bium-place.com"
 
     object KEY {
         const val KEY_AUTH_TOKEN = "X-AUTH-TOKEN"
@@ -48,5 +48,7 @@ object ApiConstants {
         const val REPORT = "/report"
 
         const val MY_NOTICE = "/my-notice"
+        const val ALARM = "/alarm"
+        const val NOTICE = "/notice"
     }
 }

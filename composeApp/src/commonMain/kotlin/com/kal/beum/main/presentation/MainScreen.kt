@@ -3,6 +3,7 @@ package com.kal.beum.main.presentation
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
@@ -16,6 +17,8 @@ import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -97,6 +100,7 @@ fun MainScreen(
 ) {
     val viewModel = koinViewModel<MainViewModel>()
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val focusManager = LocalFocusManager.current
 
     LaunchedEffect(state.isSplashDone) {
         if (state.isSplashDone) {
@@ -108,9 +112,15 @@ fun MainScreen(
     if (!state.isSplashDone) {
         SplashScreen(viewModel)
     } else {
-        Scaffold(topBar = {}, bottomBar = {
-            BottomNavigationBar(navController = navController, currentRoute, state.isDevil)
-        }) { innerPadding ->
+        Scaffold(
+            modifier = Modifier.pointerInput(Unit) {
+                detectTapGestures(onTap = {
+                    focusManager.clearFocus()
+                })
+            },
+            topBar = {}, bottomBar = {
+                BottomNavigationBar(navController = navController, currentRoute, state.isDevil)
+            }) { innerPadding ->
 
             // NavHost 내에서 시작 화면을 정의합니다.
             Box(modifier = Modifier.fillMaxSize()) {
@@ -193,7 +203,9 @@ fun MainScreen(
                     Modifier.fillMaxSize()
                         .clickable(
                             indication = null,
-                            interactionSource = remember { MutableInteractionSource() }) { /* 이벤트 소모만! */ }) {
+                            interactionSource = remember { MutableInteractionSource() }) {
+                            focusManager.clearFocus()
+                        }) {
 
                     when (content) {
                         is FullScreenType.MyInfoDetailScreen -> {

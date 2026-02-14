@@ -16,4 +16,8 @@ class DefaultNoticeRepository(
             noticeMapDto.toNoticeMap()
         }
     }
+
+    override suspend fun toggleAlarm(enable: Boolean): Result<Boolean, DataError.Remote> {
+        return remoteNoticeDataSource.toggleAlarm(enable)
+    }
 }

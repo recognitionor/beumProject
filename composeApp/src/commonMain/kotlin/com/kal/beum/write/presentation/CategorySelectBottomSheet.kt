@@ -1,5 +1,6 @@
 package com.kal.beum.write.presentation
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -26,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import beumproject.composeapp.generated.resources.Res
 import beumproject.composeapp.generated.resources.sf_pro
+import com.kal.beum.community.domain.Category
 import com.kal.beum.core.presentation.BeumColors
 import com.kal.beum.core.presentation.BeumTypo
 import com.kal.beum.write.domain.WritingCategory
@@ -35,6 +37,7 @@ import org.jetbrains.compose.resources.Font
 @Composable
 fun CategorySelectBottomSheet(
     writeCategoryMap: Map<String, List<WritingCategory>>,
+    selectedCategory: WritingCategory?,
     onDismissRequest: (writeCategoryItem: WritingCategory) -> Unit
 ) {
     Column(
@@ -42,7 +45,7 @@ fun CategorySelectBottomSheet(
     ) {
         Text(
             text = "카테고리를 선택해주세요.", style = TextStyle(
-                fontSize = BeumTypo.TypoScaleText500,
+                fontSize = 20.sp,
                 lineHeight = 32.sp,
                 fontFamily = FontFamily(Font(Res.font.sf_pro)),
                 fontWeight = FontWeight(700),
@@ -62,26 +65,28 @@ fun CategorySelectBottomSheet(
                 )
             )
             Spacer(modifier = Modifier.height(20.dp))
-
             Column {
                 FlowRow(
                     modifier = Modifier.wrapContentWidth(),
                 ) {
                     it.value.forEach { item ->
+                        val isSelectedCategory = selectedCategory?.category == item.category
                         Box(
                             modifier = Modifier.padding(
                                 end = 10.dp, bottom = 10.dp
                             ).clip(RoundedCornerShape(50)).border(
                                 width = 1.dp,
-                                color = Color.LightGray,
+                                color = if (isSelectedCategory) BeumColors.PrimarySkyBlue else Color.LightGray,
                                 shape = RoundedCornerShape(50)
                             ).clickable {
                                 onDismissRequest(item)
-                            }.padding(horizontal = 20.dp, vertical = 10.dp)
+                            }.background(if (isSelectedCategory) BeumColors.PrimarySkyBlue else Color.White).padding(horizontal = 20.dp, vertical = 10.dp)
+
                         ) {
 
                             Text(
-                                text = item.category
+                                text = item.category,
+                                color = if (isSelectedCategory) Color.White else BeumColors.Black
                             )
                         }
                     }

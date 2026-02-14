@@ -9,5 +9,6 @@ data class NoticeState(
     val filteredNoticeList: List<NoticeData> = emptyList(),
     val noticeList: List<NoticeData> = emptyList(),
     val noticeMap: NoticeMap? = null,
-    val selectedIndex: Int = 0
+    val selectedIndex: Int = 0,
+    val isNotificationEnabled: Boolean = true
 )

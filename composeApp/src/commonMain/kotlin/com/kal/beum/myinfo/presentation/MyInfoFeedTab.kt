@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.PaddingValues
@@ -87,12 +88,11 @@ fun MyInfoFeedTab(
         Box(
             modifier = Modifier.fillMaxWidth().fillMaxHeight().padding(bottom = 10.dp)
                 .background(BeumColors.baseAlphaBlackLightBlack50A),
-            contentAlignment = Alignment.Center,
-
             ) {
 
             if (list.isEmpty()) {
                 Column(
+                    modifier = Modifier.fillMaxSize(),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
                 ) {
@@ -134,7 +134,7 @@ fun MyInfoFeedTab(
                 }
 
             } else {
-                Column {
+                Column(modifier = Modifier.fillMaxSize()) {
                     LazyColumn(
                         contentPadding = PaddingValues(top = 20.dp, start = 20.dp, end = 20.dp, bottom = 100.dp),
                         verticalArrangement = Arrangement.spacedBy(16.dp) // 아이템 사이 16dp 간격
