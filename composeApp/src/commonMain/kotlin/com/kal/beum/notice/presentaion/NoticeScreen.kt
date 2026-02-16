@@ -191,8 +191,8 @@ fun NoticeScreen(action: (MainAction) -> Unit) {
                                 Row {
                                     Text(
                                         text = item.content, style = TextStyle(
-                                            fontSize = 13.sp,
-                                            lineHeight = BeumTypo.lineHeightCaption1,
+                                            fontSize = 14.sp,
+                                            lineHeight = 20.sp,
                                             fontFamily = FontFamily(Font(Res.font.sf_pro)),
                                             fontWeight = FontWeight(400),
                                             color = BeumColors.GrayGray500,
@@ -203,8 +203,8 @@ fun NoticeScreen(action: (MainAction) -> Unit) {
 
                                     Text(
                                         text = timeAgoFromIsoString(item.createdAt), style = TextStyle(
-                                            fontSize = 13.sp,
-                                            lineHeight = BeumTypo.lineHeightCaption1,
+                                            fontSize = 14.sp,
+                                            lineHeight = 20.sp,
                                             fontFamily = FontFamily(Font(Res.font.sf_pro)),
                                             fontWeight = FontWeight(400),
                                             color = BeumColors.baseGrayLightGray400,
@@ -214,8 +214,8 @@ fun NoticeScreen(action: (MainAction) -> Unit) {
                                 Spacer(modifier = Modifier.height(6.dp))
                                 Text(
                                     text = item.content, style = TextStyle(
-                                        fontSize = BeumTypo.TypoScaleText200,
-                                        lineHeight = BeumTypo.lineHeightBody3,
+                                        fontSize = 17.sp,
+                                        lineHeight = 24.sp,
                                         fontFamily = FontFamily(Font(Res.font.sf_pro)),
                                         fontWeight = FontWeight(700),
                                         color = BeumColors.baseAlphaBlackDarkBlack700A,

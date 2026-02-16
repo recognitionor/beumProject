@@ -219,9 +219,9 @@ fun MainScreen(
                         }
 
                         is FullScreenType.ContentDetailScreen -> {
-                            ContentDetailScreen(content.id, viewModel::onAction) {
+                            ContentDetailScreen(content.id, viewModel::onAction, {
                                 viewModel.onAction(MainAction.PopFullScreen)
-                            }
+                            }, content.onDelete)
                         }
 
                         is FullScreenType.DraftDialog -> {

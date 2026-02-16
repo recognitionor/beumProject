@@ -94,7 +94,7 @@ fun ReportConfirmDialog(title:String, onDismiss: () -> Unit, onContinueClick: ()
                         ), contentAlignment = Alignment.Center
                     ) {
                         Text(
-                            text = "신고", style = TextStyle(
+                            text = "확인", style = TextStyle(
                                 fontSize = BeumTypo.TypoScaleText150,
                                 fontFamily = FontFamily(Font(Res.font.sf_pro)),
                                 fontWeight = FontWeight(700),

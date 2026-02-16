@@ -27,7 +27,8 @@ fun CommentListView(
     viewModel: ContentDetailViewModel,         // onAction(LoadMore) 같은 액션 처리
     isLoading: Boolean,             // 로딩 중 여부
     hasMore: Boolean,
-    onReplyOptionClicked: (com.kal.beum.content.domain.CommentDetail) -> Unit
+    onReplyOptionClicked: (com.kal.beum.content.domain.CommentDetail) -> Unit,
+    headerContent: @Composable () -> Unit = {}
 ) {
     val comments = state.contentDetail?.commentInfo?.comments.orEmpty()
     val listState = rememberLazyListState()
@@ -48,7 +49,11 @@ fun CommentListView(
         }
     }
 
-    LazyColumn(state = listState) {
+    LazyColumn(
+        state = listState,
+        contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 20.dp)
+    ) {
+        item { headerContent() }
         items(count = comments.size, key = { idx -> comments[idx].id } // ✅ 키 지정(스크롤 안정성)
         ) { index ->
             val reply = comments[index]

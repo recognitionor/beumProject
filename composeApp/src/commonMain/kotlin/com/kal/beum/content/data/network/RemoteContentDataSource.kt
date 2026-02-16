@@ -25,4 +25,6 @@ interface RemoteContentDataSource {
     suspend fun pickComment(
         targetUserId: String, boardId: String
     ): Result<Boolean, DataError.Remote>
+
+    suspend fun deleteBoard(boardId: Int, isDevil: Boolean): Result<Boolean, DataError.Remote>
 }

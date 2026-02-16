@@ -179,7 +179,11 @@ fun MyInfoScreen(devil: Boolean, viewModel: MyInfoViewModel, action: (MainAction
                         }
                     },
                     onItemClick = {
-                        action(MainAction.PushFullScreen(FullScreenType.ContentDetailScreen(it.id)))
+                        action(MainAction.PushFullScreen(FullScreenType.ContentDetailScreen(it.id, onDelete = {
+                            state.myInfo?.userId?.let { userId ->
+                                viewModel.getMyContent(userId.toInt())
+                            }
+                        })))
                     },
                     onTabSelected = {
                         myInfoSelectedTabIndex = it

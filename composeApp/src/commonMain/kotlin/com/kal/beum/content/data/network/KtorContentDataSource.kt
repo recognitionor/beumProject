@@ -17,6 +17,7 @@ import com.kal.beum.core.domain.Result.Progress
 import com.kal.beum.core.domain.Result.Success
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
+import io.ktor.client.request.delete
 import io.ktor.client.request.get
 import io.ktor.client.request.headers
 import io.ktor.client.request.post
@@ -183,6 +184,25 @@ class KtorContentDataSource(private val httpClient: HttpClient) : RemoteContentD
             is Success -> Success(true)
             is Error -> Error(result.error)
             is Progress -> Progress()
+        }
+    }
+
+    override suspend fun deleteBoard(boardId: Int, isDevil: Boolean): Result<Boolean, DataError.Remote> {
+        val response = httpClient.delete(ApiConstants.Endpoints.BOARD + "/$boardId") {
+            headers {
+                AppUserCache.userInfo?.accessToken?.let {
+                    append(ApiConstants.KEY.KEY_AUTH_TOKEN, it)
+                }
+            }
+            url {
+                parameters.append(ApiConstants.KEY.KEY_IS_DEVIL, isDevil.toString())
+            }
+        }
+        println("deleteBoard response ${response.bodyAsText()}")
+        return if (response.status.value == 200) {
+            Success(true)
+        } else {
+            Error(DataError.Remote.FAILED_BOARD)
         }
     }
 }

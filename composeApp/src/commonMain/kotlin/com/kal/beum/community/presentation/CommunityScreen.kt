@@ -209,7 +209,10 @@ fun CommunityScreen(
                                 onAction(
                                     MainAction.PushFullScreen(
                                         FullScreenType.ContentDetailScreen(
-                                            item.id
+                                            item.id,
+                                            onDelete = {
+                                                viewModel.getCategory(isDevil)
+                                            }
                                         )
                                     )
                                 )

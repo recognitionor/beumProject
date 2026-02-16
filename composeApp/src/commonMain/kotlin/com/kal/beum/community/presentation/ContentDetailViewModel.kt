@@ -106,6 +106,19 @@ class ContentDetailViewModel(private val contentDetailRepository: ContentsReposi
         }
     }
 
+    fun deleteContent() {
+        val contentDetail = state.value.contentDetail
+        contentDetail?.let {
+            viewModelScope.launch {
+                contentDetailRepository.deleteBoard(it.id).onSuccess {
+                    _state.update { data -> data.copy(reportMessage = "게시글이 삭제되었습니다.") }
+                }.onError {
+                    _state.update { data -> data.copy(reportMessage = "게시글 삭제 실패") }
+                }
+            }
+        }
+    }
+
     fun reportContent(reasonId: Int) {
         val contentDetail = state.value.contentDetail
         contentDetail?.let {

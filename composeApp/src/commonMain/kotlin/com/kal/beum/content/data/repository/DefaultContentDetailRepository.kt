@@ -136,4 +136,8 @@ class DefaultContentDetailRepository(private val remoteContentDataSource: Remote
     ): Result<Boolean, DataError.Remote> {
         return remoteContentDataSource.pickComment(targetUserId, boardId)
     }
+
+    override suspend fun deleteBoard(boardId: Int): Result<Boolean, DataError.Remote> {
+        return remoteContentDataSource.deleteBoard(boardId, AppUserCache.isDevil)
+    }
 }

@@ -32,4 +32,6 @@ interface ContentsRepository {
 
     suspend fun pickComment(targetUserId: String, boardId: String): Result<Boolean, DataError.Remote>
 
+    suspend fun deleteBoard(boardId: Int): Result<Boolean, DataError.Remote>
+
 }

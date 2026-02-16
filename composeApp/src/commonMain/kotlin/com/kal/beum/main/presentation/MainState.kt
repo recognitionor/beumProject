@@ -9,7 +9,7 @@ import com.kal.beum.write.domain.WritingData
 sealed class FullScreenType {
     data class MyInfoDetailScreen(val info: UserInfo) : FullScreenType()
     data class SettingsScreen(val info: UserInfo) : FullScreenType()
-    data class ContentDetailScreen(val id: Int) : FullScreenType()
+    data class ContentDetailScreen(val id: Int, val onDelete: () -> Unit = {}) : FullScreenType()
     data class DraftDialog(
         val onNewClick: () -> Unit,
         val onContinueClick: () -> Unit,
