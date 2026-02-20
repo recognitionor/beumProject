@@ -381,11 +381,11 @@ fun BottomNavigationBar(navController: NavController, currentRoute: String?, dev
                 Text(
                     modifier = Modifier.offset(y = (-2).dp),
                     text = "홈", style = TextStyle(
-                        fontSize = 10.sp,
+                        fontSize = if (isHomeSelected) 11.sp else 10.sp,
                         lineHeight = 10.sp,
                         fontFamily = FontFamily(Font(Res.font.sf_pro)),
                         fontWeight = if (isHomeSelected) FontWeight.Bold else FontWeight(500),
-                        color = if (isHomeSelected) BeumColors.baseGrayLightGray800 else BeumColors.baseGrayLightGray500,
+                        color = if (isHomeSelected) if (devil) BeumColors.White else BeumColors.baseGrayLightGray800 else BeumColors.baseGrayLightGray500,
                         textAlign = TextAlign.Center,
                     )
                 )
@@ -410,11 +410,11 @@ fun BottomNavigationBar(navController: NavController, currentRoute: String?, dev
                 Text(
                     modifier = Modifier.offset(y = (-2).dp),
                     text = "커뮤니티", style = TextStyle(
-                        fontSize = 10.sp,
+                        fontSize = if (isCommunitySelected) 11.sp else 10.sp,
                         lineHeight = 10.sp,
                         fontFamily = FontFamily(Font(Res.font.sf_pro)),
                         fontWeight = if (isCommunitySelected) FontWeight.Bold else FontWeight(500),
-                        color = if (isCommunitySelected) BeumColors.baseGrayLightGray800 else BeumColors.baseGrayLightGray500,
+                        color = if (isCommunitySelected) if (devil) BeumColors.White else BeumColors.baseGrayLightGray800 else BeumColors.baseGrayLightGray500,
                         textAlign = TextAlign.Center,
                     )
                 )
@@ -441,11 +441,11 @@ fun BottomNavigationBar(navController: NavController, currentRoute: String?, dev
                 Text(
                     modifier = Modifier.offset(y = (-2).dp),
                     text = "랭킹", style = TextStyle(
-                        fontSize = 10.sp,
+                        fontSize = if (isRankingSelected) 11.sp else 10.sp,
                         lineHeight = 10.sp,
                         fontFamily = FontFamily(Font(Res.font.sf_pro)),
                         fontWeight = if (isRankingSelected) FontWeight.Bold else FontWeight(500),
-                        color = if (isRankingSelected) BeumColors.baseGrayLightGray800 else BeumColors.baseGrayLightGray500,
+                        color = if (isRankingSelected) if (devil) BeumColors.White else BeumColors.baseGrayLightGray800 else BeumColors.baseGrayLightGray500,
                         textAlign = TextAlign.Center,
                     )
                 )
@@ -472,11 +472,11 @@ fun BottomNavigationBar(navController: NavController, currentRoute: String?, dev
                 Text(
                     modifier = Modifier.offset(y = (-2).dp),
                     text = "마이", style = TextStyle(
-                        fontSize = 10.sp,
+                        fontSize = if (isMyInfoSelected) 11.sp else 10.sp,
                         lineHeight = 10.sp,
                         fontFamily = FontFamily(Font(Res.font.sf_pro)),
                         fontWeight = if (isMyInfoSelected) FontWeight.Bold else FontWeight(500),
-                        color = if (isMyInfoSelected) BeumColors.baseGrayLightGray800 else BeumColors.baseGrayLightGray500,
+                        color = if (isMyInfoSelected) if (devil) BeumColors.White else BeumColors.baseGrayLightGray800 else BeumColors.baseGrayLightGray500,
                         textAlign = TextAlign.Center,
                     )
                 )
